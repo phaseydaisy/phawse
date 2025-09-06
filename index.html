@@ -1,69 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Phawse</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Portal</title>
   <style>
     body {
-      display: flex;
-      height: 100vh;
       margin: 0;
+      height: 100vh;
+      display: flex;
       justify-content: center;
       align-items: center;
-      background: #7289da;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
-    .button {
-      background-color: #fff;
-      color: #7289da;
-      padding: 20px 40px;
-      font-size: 1.5rem;
+
+    .snake-button {
+      background-color: #1db954;
       border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: bold;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .button:hover {
-      background-color: #5b6eae;
+      padding: 20px 40px;
+      border-radius: 50px;
       color: white;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .snake-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(29, 185, 84, 0.7);
+    }
+
+    .snake-body {
+      position: absolute;
+      height: 15px;
+      width: 15px;
+      background-color: #1db954;
+      border-radius: 50%;
+      animation: move 2s infinite linear;
+    }
+
+    .snake-body:nth-child(1) { top: -30px; left: 20px; animation-delay: 0s; }
+    .snake-body:nth-child(2) { top: -60px; left: 40px; animation-delay: 0.2s; }
+    .snake-body:nth-child(3) { top: -90px; left: 60px; animation-delay: 0.4s; }
+    .snake-body:nth-child(4) { top: -120px; left: 80px; animation-delay: 0.6s; }
+
+    @keyframes move {
+      0%   { transform: translateY(0) }
+      50%  { transform: translateY(10px) }
+      100% { transform: translateY(0) }
     }
   </style>
-  <script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-
-    document.addEventListener('keydown', function (e) {
-      if (
-        e.key === 'F12' || 
-        (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key.toUpperCase())) ||
-        (e.ctrlKey && e.key === 'U')
-      ) {
-        e.preventDefault();
-      }
-    });
-
-    let devtoolsOpen = false;
-    const threshold = 160;
-    setInterval(() => {
-      const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-      const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-      if (widthThreshold || heightThreshold) {
-        if (!devtoolsOpen) {
-          devtoolsOpen = true;
-          alert('Developer tools are disabled on this site.');
-        }
-      } else {
-        devtoolsOpen = false;
-      }
-    }, 1000);
-  </script>
 </head>
 <body>
-  <a href="https://discord.com/users/1161104305080762449" target="_blank" rel="noopener noreferrer" class="button">
-    Join my Discord
+  <a href="https://www.phawse.lol/snake/" class="snake-button">
+    🐍 Play Snake
+    <span class="snake-body"></span>
+    <span class="snake-body"></span>
+    <span class="snake-body"></span>
+    <span class="snake-body"></span>
   </a>
 </body>
 </html>
