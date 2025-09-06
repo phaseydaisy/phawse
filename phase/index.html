@@ -3,18 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Phawse | Social Links</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Connect with Me</h1>
         <div class="buttons">
             <a href="https://discord.com/users/1161104305080762449" class="btn discord" target="_blank">
+                <span class="icon-discord"></span>
                 <span>Discord</span>
             </a>
             <a href="#" class="btn extra" disabled>Coming Soon</a>
         </div>
     </div>
-    <script src="index.js"></script>
+    <script>
+    document.querySelectorAll('.btn:not([disabled])').forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            btn.classList.add('animate-bounce');
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.classList.remove('animate-bounce');
+        });
+    });
+    </script>
 </body>
 </html>
