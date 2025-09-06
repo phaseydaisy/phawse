@@ -3,14 +3,7 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
-    background: #000428;
-    background: radial-gradient(circle at center,
-        #00d4ff 0%,
-        #090979 30%,
-        #020024 60%,
-        #000428 100%);
-    background-size: 200% 200%;
-    animation: pulse 15s ease infinite;
+    background: #0f0f0f;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -38,14 +31,18 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-        radial-gradient(circle at center, transparent 20%, rgba(255, 255, 255, 0.05) 20%, rgba(255, 255, 255, 0.05) 80%, transparent 80%),
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
-    animation: stars 30s linear infinite alternate;
-    background-size: 50px 50px, 200px 200px;
-    background-repeat: repeat-y;
+    background: 
+        radial-gradient(circle at 50% 50%, rgba(76, 161, 175, 0.1), transparent 60%),
+        radial-gradient(circle at 85% 30%, rgba(148, 93, 196, 0.15), transparent 55%),
+        radial-gradient(circle at 15% 70%, rgba(59, 178, 184, 0.15), transparent 50%),
+        linear-gradient(135deg, 
+            rgba(15, 15, 15, 0.8) 0%, 
+            rgba(30, 30, 30, 0.9) 50%,
+            rgba(15, 15, 15, 0.8) 100%);
     z-index: 0;
-    mix-blend-mode: overlay;
+    animation: pulse 20s ease infinite;
+    transform-origin: center;
+    background-size: 200% 200%, 120% 120%, 120% 120%, 200% 200%;
 }
 
 @keyframes stars {
