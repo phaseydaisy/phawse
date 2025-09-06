@@ -13,24 +13,26 @@ body {
 
 @keyframes pulse {
     0% {
-        background-size: 100% 100%;
+        background-position: 0% 0%;
     }
     50% {
-        background-size: 200% 200%;
+        background-position: 100% 50%;
     }
     100% {
-        background-size: 100% 100%;
+        background-position: 0% 0%;
     }
 }
 
 
 .portal-container::before {
     content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
     background: 
         radial-gradient(circle at 50% 50%, rgba(76, 161, 175, 0.1), transparent 60%),
         radial-gradient(circle at 85% 30%, rgba(148, 93, 196, 0.15), transparent 55%),
@@ -42,7 +44,7 @@ body {
     z-index: 0;
     animation: pulse 20s ease infinite;
     transform-origin: center;
-    background-size: 200% 200%, 120% 120%, 120% 120%, 200% 200%;
+    background-size: 300% 300%, 200% 200%, 200% 200%, 300% 300%;
 }
 
 @keyframes stars {
