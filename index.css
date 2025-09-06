@@ -1,1 +1,105 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
 
+.portal-container {
+    background: rgba(34, 34, 34, 0.92);
+    padding: 2.5rem 2.5rem 2rem 2.5rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    text-align: center;
+    min-width: 320px;
+}
+
+.portal-container h1 {
+    color: #fff;
+    margin-bottom: 2.2rem;
+    letter-spacing: 1px;
+    font-size: 2.1rem;
+    font-weight: 700;
+}
+
+.portal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.3rem;
+}
+
+.btn.portal-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(90deg, #1db954 60%, #1a8cff 100%);
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 12px rgba(29, 185, 84, 0.13);
+    cursor: pointer;
+    outline: none;
+}
+
+.btn.portal-btn:hover, .btn.portal-btn:focus {
+    background: linear-gradient(90deg, #1a8cff 60%, #1db954 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 24px rgba(26, 140, 255, 0.18);
+}
+
+.container {
+    background: rgba(34, 34, 34, 0.85);
+    padding: 2.5rem 2rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    text-align: center;
+}
+
+h1 {
+    color: #fff;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.9rem 2.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff;
+    background: #5865F2;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(88, 101, 242, 0.15);
+    cursor: pointer;
+}
+
+.btn.discord {
+    background: linear-gradient(90deg, #5865F2 60%, #404eed 100%);
+}
+
+.btn.extra {
+    background: #444;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn:hover:not([disabled]) {
+    background: #404eed;
+    transform: translateY(-2px) scale(1.03);
+}
