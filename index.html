@@ -32,10 +32,38 @@
       color: white;
     }
   </style>
+  <script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    document.addEventListener('keydown', function (e) {
+      if (
+        e.key === 'F12' || 
+        (e.ctrlKey && e.shiftKey && ['I', 'C', 'J'].includes(e.key.toUpperCase())) ||
+        (e.ctrlKey && e.key === 'U')
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    let devtoolsOpen = false;
+    const threshold = 160;
+    setInterval(() => {
+      const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+      const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+      if (widthThreshold || heightThreshold) {
+        if (!devtoolsOpen) {
+          devtoolsOpen = true;
+          alert('Developer tools are disabled on this site.');
+        }
+      } else {
+        devtoolsOpen = false;
+      }
+    }, 1000);
+  </script>
 </head>
 <body>
   <a href="https://discord.com/users/1161104305080762449" target="_blank" rel="noopener noreferrer" class="button">
-    My discord
+    Join my Discord
   </a>
 </body>
 </html>
