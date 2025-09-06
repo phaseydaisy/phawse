@@ -3,30 +3,27 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
-    background: #0a0a0a;
-    background: radial-gradient(circle at 50% 50%,
-        rgba(45, 15, 70, 0.5) 0%,
-        rgba(15, 15, 35, 0.5) 50%,
-        rgba(10, 10, 20, 0.5) 100%),
-        linear-gradient(45deg,
-        #0a0a0a 0%,
-        #1a1a2a 50%,
-        #0a0a0a 100%);
-    background-size: 200% 200%, 400% 400%;
-    animation: aurora 15s ease infinite;
+    background: #000428;
+    background: linear-gradient(-45deg, 
+        #00d4ff,
+        #090979, 
+        #020024,
+        #000428);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
     position: relative;
     overflow: hidden;
 }
 
-@keyframes aurora {
+@keyframes gradient {
     0% {
-        background-position: 0% 0%, 0% 0%;
+        background-position: 0% 50%;
     }
     50% {
-        background-position: 100% 100%, 100% 100%;
+        background-position: 100% 50%;
     }
     100% {
-        background-position: 0% 0%, 0% 0%;
+        background-position: 0% 50%;
     }
 }
 
