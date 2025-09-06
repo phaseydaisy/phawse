@@ -1,4 +1,3 @@
-
 const GRID = 16
 const SPEED = 7
 const CELL = 28
@@ -13,26 +12,32 @@ const resetBtn = document.getElementById('resetBtn')
 let best = Number(localStorage.getItem('snake.best') || 0)
 bestEl.textContent = best
 
-let snake, dir, nextDir, food, score, tickRate, foodsEaten, alive, running
+let snake, dir, nextDir, food, score, tickRate, foodsEaten, running
+let last = 0, acc = 0
 
 function reset(start=false) {
   snake = [{ x: Math.floor(GRID/2), y: Math.floor(GRID/2) }]
-  dir = { x: 1, y: 0 }; nextDir = { ...dir }
+  dir = { x: 1, y: 0 }
+  nextDir = { x: 1, y: 0 }
   food = spawnFood(snake)
-  score = 0; foodsEaten = 0; tickRate = SPEED
+  score = 0
+  foodsEaten = 0
+  tickRate = SPEED
   updateScore(0, true)
-  alive = true
   running = start
+  last = 0
+  acc = 0
+  drawBoard()
 }
 
-function updateScore(delta, reset=false) {
-  if (reset) score = 0
+function updateScore(delta, doReset=false) {
+  if (doReset) score = 0
   else score += delta
   scoreEl.textContent = score
   if (score > best) {
     best = score
     bestEl.textContent = best
-    localStorage.setItem('snake.best', best)
+    localStorage.setItem('snake.best', String(best))
   }
 }
 
@@ -55,20 +60,15 @@ const keyDir = {
 function setDir(nd) {
   if (snake.length > 1 && nd.x === -dir.x && nd.y === -dir.y) return
   nextDir = nd
-  if (!running) running = true
+  if (!running) { running = true; last = 0 }
 }
 
 addEventListener('keydown', (e) => {
-  const nd = keyDir[e.key]
-  if (nd) setDir(nd)
-  if (e.key.toLowerCase() === 'r'){ reset(true) }
+  const k = e.key
+  const nd = keyDir[k]
+  if (nd) { e.preventDefault(); setDir(nd) }
+  if (k.toLowerCase() === 'r') { e.preventDefault(); reset(true) }
 })
-
-document.querySelectorAll('[data-dir]').forEach(btn => btn.addEventListener('click', () => {
-  const d = btn.getAttribute('data-dir')
-  const map = { up: {x:0,y:-1}, down:{x:0,y:1}, left:{x:-1,y:0}, right:{x:1,y:0} }
-  setDir(map[d])
-}))
 
 ;(function enableSwipe(){
   let sx=0, sy=0, active=false
@@ -76,11 +76,11 @@ document.querySelectorAll('[data-dir]').forEach(btn => btn.addEventListener('cli
   el.addEventListener('touchstart', (e)=>{ active=true; sx=e.touches[0].clientX; sy=e.touches[0].clientY }, {passive:true})
   el.addEventListener('touchend', (e)=>{
     if(!active) return; active=false
-    const dx = (e.changedTouches[0].clientX - sx)
-    const dy = (e.changedTouches[0].clientY - sy)
+    const dx = e.changedTouches[0].clientX - sx
+    const dy = e.changedTouches[0].clientY - sy
     if (Math.abs(dx) < 18 && Math.abs(dy) < 18) return
-    if (Math.abs(dx) > Math.abs(dy)) setDir({ x: Math.sign(dx), y: 0 })
-    else setDir({ x: 0, y: Math.sign(dy) })
+    if (Math.abs(dx) > Math.abs(dy)) setDir({ x: dx>0?1:-1, y: 0 })
+    else setDir({ x: 0, y: dy>0?1:-1 })
   }, {passive:true})
 })()
 
@@ -88,13 +88,16 @@ resetBtn.addEventListener('click', () => reset(true))
 
 function resizeCanvas() {
   const cells = GRID * CELL
-  canvas.width = cells; canvas.height = cells
+  canvas.width = cells
+  canvas.height = cells
+  drawBoard()
 }
 addEventListener('resize', resizeCanvas)
 
 function drawCell(x, y, fill, stroke) {
-  const s = CELL; const px = x * s, py = y * s
-  ctx.fillStyle = fill; ctx.fillRect(px, py, s, s)
+  const s = CELL, px = x * s, py = y * s
+  ctx.fillStyle = fill
+  ctx.fillRect(px, py, s, s)
   if (stroke){ ctx.strokeStyle = stroke; ctx.strokeRect(px + .5, py + .5, s - 1, s - 1) }
 }
 
@@ -108,44 +111,38 @@ function drawBoard() {
     ctx.beginPath(); ctx.moveTo(p + .5, 0); ctx.lineTo(p + .5, canvas.height); ctx.stroke()
     ctx.beginPath(); ctx.moveTo(0, p + .5); ctx.lineTo(canvas.width, p + .5); ctx.stroke()
   }
-  const grd = ctx.createRadialGradient((food.x + .5) * CELL, (food.y + .5) * CELL, 2, (food.x + .5) * CELL, (food.y + .5) * CELL, CELL * 2.2)
+  const cx = (food.x + .5) * CELL, cy = (food.y + .5) * CELL
+  const grd = ctx.createRadialGradient(cx, cy, 2, cx, cy, CELL * 2.2)
   grd.addColorStop(0, 'rgba(83,229,168,.35)')
   grd.addColorStop(1, 'rgba(83,229,168,0)')
-  ctx.fillStyle = grd; ctx.beginPath(); ctx.arc((food.x + .5) * CELL, (food.y + .5) * CELL, CELL * 2.2, 0, Math.PI * 2); ctx.fill()
+  ctx.fillStyle = grd
+  ctx.beginPath(); ctx.arc(cx, cy, CELL * 2.2, 0, Math.PI * 2); ctx.fill()
   drawCell(food.x, food.y, '#53e5a8', '#154a37')
   for (let i = 0; i < snake.length; i++) {
     const seg = snake[i]
-    const isHead = i === 0
-    const fill = isHead ? '#6bc1ff' : '#b1d9ff'
-    const stroke = isHead ? '#204b6b' : '#395e84'
-    drawCell(seg.x, seg.y, fill, stroke)
+    const head = i === 0
+    drawCell(seg.x, seg.y, head ? '#6bc1ff' : '#b1d9ff', head ? '#204b6b' : '#395e84')
   }
 }
 
-let last = 0, acc = 0
 function step(ts) {
   requestAnimationFrame(step)
-  if (!alive || !running) return
   if (!last) last = ts
-  const dt = (ts - last) / 1000; last = ts; acc += dt
-  const interval = 1 / tickRate
-  while (acc >= interval) { tick(); acc -= interval }
+  const dt = (ts - last) / 1000
+  last = ts
+  if (running) {
+    acc += dt
+    const interval = 1 / tickRate
+    while (acc >= interval) { tick(); acc -= interval }
+  }
   drawBoard()
 }
 
 function tick() {
   dir = nextDir
   const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y }
-  if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) {
-    alive = false
-    reset(false)
-    return
-  }
-  if (snake.some((s, i) => i && s.x === head.x && s.y === head.y)) {
-    alive = false
-    reset(false)
-    return
-  }
+  if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) { reset(false); return }
+  if (snake.some((s, i) => i && s.x === head.x && s.y === head.y)) { reset(false); return }
   snake.unshift(head)
   if (head.x === food.x && head.y === food.y) {
     updateScore(1)
@@ -160,7 +157,7 @@ function tick() {
 function boot(){
   resizeCanvas()
   reset(false)
+  requestAnimationFrame(step)
 }
 
 boot()
-requestAnimationFrame(step)
