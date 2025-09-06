@@ -4,26 +4,29 @@ body {
     min-height: 100vh;
     font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
     background: #000428;
-    background: linear-gradient(-45deg, 
-        #00d4ff,
-        #090979, 
-        #020024,
-        #000428);
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
+    background: radial-gradient(circle at center,
+        #00d4ff 0%,
+        #090979 30%,
+        #020024 60%,
+        #000428 100%);
+    background-size: 200% 200%;
+    animation: pulse 15s ease infinite;
     position: relative;
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-@keyframes gradient {
+@keyframes pulse {
     0% {
-        background-position: 0% 50%;
+        background-size: 100% 100%;
     }
     50% {
-        background-position: 100% 50%;
+        background-size: 200% 200%;
     }
     100% {
-        background-position: 0% 50%;
+        background-size: 100% 100%;
     }
 }
 
@@ -96,13 +99,13 @@ h1 {
     padding: 1rem 2rem;
     font-size: 1rem;
     color: white;
-    background: rgba(40, 40, 40, 0.4);
+    background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 4px;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
     text-decoration: none;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     letter-spacing: 0.5px;
     font-weight: 500;
 }
