@@ -8,27 +8,25 @@ const ctx = canvas.getContext('2d')
 const scoreEl = document.getElementById('score')
 const bestEl = document.getElementById('best')
 const resetBtn = document.getElementById('resetBtn')
-const overlay = document.getElementById('overlay')
-const overlayTitle = document.getElementById('overlayTitle')
-const overlayMsg = document.getElementById('overlayMsg')
-const overlayBtn = document.getElementById('overlayBtn')
 
 let best = Number(localStorage.getItem('snake.best') || 0)
 bestEl.textContent = best
 
-let snake, dir, nextDir, food, score, tickRate, foodsEaten, alive
+let snake, dir, nextDir, food, score, tickRate, foodsEaten, alive, running
 
-function reset() {
+function reset(start=false) {
   snake = [{ x: Math.floor(GRID/2), y: Math.floor(GRID/2) }]
   dir = { x: 1, y: 0 }; nextDir = { ...dir }
   food = spawnFood(snake)
-  score = 0; foodsEaten = 0; tickRate = SPEED; alive = true
-  updateScore(0)
-  hideOverlay()
+  score = 0; foodsEaten = 0; tickRate = SPEED
+  updateScore(0, true)
+  alive = true
+  running = start
 }
 
-function updateScore(delta) {
-  score += delta
+function updateScore(delta, reset=false) {
+  if (reset) score = 0
+  else score += delta
   scoreEl.textContent = score
   if (score > best) {
     best = score
@@ -61,7 +59,7 @@ function setDir(nd) {
 addEventListener('keydown', (e) => {
   const nd = keyDir[e.key]
   if (nd) setDir(nd)
-  if (e.key.toLowerCase() === 'r'){ reset() }
+  if (e.key.toLowerCase() === 'r'){ reset(true) }
 })
 
 document.querySelectorAll('[data-dir]').forEach(btn => btn.addEventListener('click', () => {
@@ -84,16 +82,7 @@ document.querySelectorAll('[data-dir]').forEach(btn => btn.addEventListener('cli
   }, {passive:true})
 })()
 
-resetBtn.addEventListener('click', reset)
-overlayBtn.addEventListener('click', () => { reset() })
-
-function showOverlay(title, msg, buttonText='Play') {
-  overlayTitle.textContent = title
-  overlayMsg.textContent = msg
-  overlayBtn.textContent = buttonText
-  overlay.hidden = false
-}
-function hideOverlay(){ overlay.hidden = true }
+resetBtn.addEventListener('click', () => reset(true))
 
 function resizeCanvas() {
   const cells = GRID * CELL
@@ -134,7 +123,7 @@ function drawBoard() {
 let last = 0, acc = 0
 function step(ts) {
   requestAnimationFrame(step)
-  if (!alive) return
+  if (!alive || !running) return
   if (!last) last = ts
   const dt = (ts - last) / 1000; last = ts; acc += dt
   const interval = 1 / tickRate
@@ -147,12 +136,12 @@ function tick() {
   const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y }
   if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) {
     alive = false
-    showOverlay('Game Over', `Score ${score}. Press Play to restart.`, 'Restart')
+    reset(false)
     return
   }
   if (snake.some((s, i) => i && s.x === head.x && s.y === head.y)) {
     alive = false
-    showOverlay('Game Over', `Score ${score}. Press Play to restart.`, 'Restart')
+    reset(false)
     return
   }
   snake.unshift(head)
@@ -168,10 +157,8 @@ function tick() {
 
 function boot(){
   resizeCanvas()
-  showOverlay('Snake', 'Press Play or tap to start.')
-  alive = false
+  reset(false)
 }
 
 boot()
 requestAnimationFrame(step)
-document.querySelector('.board').addEventListener('click', () => { if (!alive) { reset() } })
