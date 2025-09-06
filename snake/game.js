@@ -27,7 +27,6 @@ function handleDirection(newDx, newDy) {
     }
 }
 
-// Keyboard controls
 document.addEventListener('keydown', (e) => {
     switch(e.key.toLowerCase()) {
         case 'arrowup':
@@ -49,7 +48,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Mobile controls
 document.querySelectorAll('.control-btn').forEach(btn => {
     const handleTouch = () => {
         switch(btn.id) {
