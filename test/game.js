@@ -1,6 +1,6 @@
-const GRID = 24
+const GRID = 16
 const SPEED = 7
-const CELL = 20
+const CELL = 28
 const BOOST_EVERY = 5
 
 const canvas = document.getElementById('game')
@@ -54,6 +54,7 @@ const keyDir = {
 function setDir(nd) {
   if (snake.length > 1 && nd.x === -dir.x && nd.y === -dir.y) return
   nextDir = nd
+  if (!running) running = true
 }
 
 addEventListener('keydown', (e) => {
