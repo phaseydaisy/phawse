@@ -3,67 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snake Portal</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
-
-    .snake-button {
-      background-color: #1db954;
-      border: none;
-      padding: 20px 40px;
-      border-radius: 50px;
-      color: white;
-      font-size: 1.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.2s, box-shadow 0.3s;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .snake-button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px rgba(29, 185, 84, 0.7);
-    }
-
-    .snake-body {
-      position: absolute;
-      height: 15px;
-      width: 15px;
-      background-color: #1db954;
-      border-radius: 50%;
-      animation: move 2s infinite linear;
-    }
-
-    .snake-body:nth-child(1) { top: -30px; left: 20px; animation-delay: 0s; }
-    .snake-body:nth-child(2) { top: -60px; left: 40px; animation-delay: 0.2s; }
-    .snake-body:nth-child(3) { top: -90px; left: 60px; animation-delay: 0.4s; }
-    .snake-body:nth-child(4) { top: -120px; left: 80px; animation-delay: 0.6s; }
-
-    @keyframes move {
-      0%   { transform: translateY(0) }
-      50%  { transform: translateY(10px) }
-      100% { transform: translateY(0) }
-    }
-  </style>
+  <title>Phawse Portal</title>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <a href="https://www.phawse.lol/snake/" class="snake-button">
-    🐍 Play Snake
-    <span class="snake-body"></span>
-    <span class="snake-body"></span>
-    <span class="snake-body"></span>
-    <span class="snake-body"></span>
-  </a>
+  <div class="portal-container">
+    <h1>Phawse Portal</h1>
+    <div class="portal-buttons">
+      <a href="https://www.phawse.lol/snake/" class="btn portal-btn" target="_blank">
+        🐍 Play Snake
+      </a>
+      <a href="https://www.phawse.lol/phase" class="btn portal-btn" target="_blank">
+        ✨ Phase
+      </a>
+    </div>
+  </div>
 </body>
 </html>
