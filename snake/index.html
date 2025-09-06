@@ -1,1 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Snake — /next</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1><span class="dot"></span> Snake</h1>
+      <div class="stats">
+        <div class="pill">Score: <span id="score">0</span></div>
+        <div class="pill">Best: <span id="best">0</span></div>
+        <button id="resetBtn" class="btn" aria-label="Reset (R)">Reset</button>
+      </div>
+    </header>
 
+    <section class="panel board">
+      <canvas id="game" width="480" height="480" aria-label="Snake game board" role="img"></canvas>
+    </section>
+
+    <footer class="panel" style="padding: 12px 14px;">
+      <div class="controls">
+        <div class="pill">Move: ⬆️⬇️⬅️➡️ / WASD</div>
+        <div class="pill">Reset: R</div>
+        <div class="pill">Grid: 24×24</div>
+      </div>
+      <div class="dpad grid" aria-label="Touch controls">
+        <div></div>
+        <button data-dir="up">▲</button>
+        <div></div>
+        <button data-dir="left">◄</button>
+        <div></div>
+        <button data-dir="right">►</button>
+        <div></div>
+        <button data-dir="down">▼</button>
+        <div></div>
+      </div>
+      <p class="hint">Tip: On mobile, use the on-screen D-pad or swipe anywhere on the board.</p>
+    </footer>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
