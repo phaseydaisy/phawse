@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    background: rgba(34, 34, 34, 0.85);
+    padding: 2.5rem 2rem;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    text-align: center;
+}
+
+h1 {
+    color: #fff;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.9rem 2.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff;
+    background: #5865F2;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(88, 101, 242, 0.15);
+    cursor: pointer;
+}
+
+.btn.discord {
+    background: linear-gradient(90deg, #5865F2 60%, #404eed 100%);
+}
+
+.btn.extra {
+    background: #444;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn:hover:not([disabled]) {
+    background: #404eed;
+    transform: translateY(-2px) scale(1.03);
+}
