@@ -1,18 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Link Discord & Spotify</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Phawse</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-    button { padding: 15px 30px; font-size: 18px; background-color: #1DB954; color: white; border: none; border-radius: 8px; cursor: pointer; }
-    button:hover { background-color: #17a34a; }
+    body {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      justify-content: center;
+      align-items: center;
+      background: #7289da; /* Discord blurple */
+      font-family: Arial, sans-serif;
+    }
+    .button {
+      background-color: #fff;
+      color: #7289da;
+      padding: 20px 40px;
+      font-size: 1.5rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .button:hover {
+      background-color: #5b6eae;
+      color: white;
+    }
   </style>
 </head>
 <body>
-  <h1>Link Your Discord & Spotify</h1>
-  <p>Click the button below to link your Spotify account with your Discord account.</p>
-  <button id="linkBtn">Link Spotify</button>
-  <script src="index.js"></script>
+  <a href="https://discord.com/users/1161104305080762449" target="_blank" rel="noopener noreferrer" class="button">
+    Join my Discord
+  </a>
 </body>
 </html>
