@@ -36,12 +36,8 @@ class Particle {
         this.wobble += this.wobbleSpeed;
         this.x = this.originalX + Math.sin(this.wobble) * this.maxDistance;
         this.y = this.originalY + Math.cos(this.wobble) * this.maxDistance;
-        
-       
         this.originalX += this.speedX;
         this.originalY += this.speedY;
-
-        
         if (this.originalX < 0 || this.originalX > canvas.width) this.speedX *= -1;
         if (this.originalY < 0 || this.originalY > canvas.height) this.speedY *= -1;
     }
