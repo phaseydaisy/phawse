@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const cat = document.getElementById('cat');
     let isMoving = false;
+    let isRunning = false;
     let targetX = 0;
     let targetY = 0;
     let currentX = window.innerWidth / 2;
     let currentY = window.innerHeight / 2;
+    let lastMouseMove = Date.now();
     
     // Initial position
     cat.style.left = currentX + 'px';
@@ -15,22 +17,33 @@ document.addEventListener('DOMContentLoaded', () => {
         targetX = e.clientX;
         targetY = e.clientY;
         
+        const now = Date.now();
+        const timeSinceLastMove = now - lastMouseMove;
+        lastMouseMove = now;
+        
         const distance = Math.hypot(targetX - currentX, targetY - currentY);
         
-        // Start walking animation if mouse is far enough
-        if (distance > 100 && !isMoving) {
-            isMoving = true;
-            cat.style.animation = 'walk 0.8s infinite';
-        } else if (distance < 100 && isMoving) {
+        // Start animation based on mouse speed and distance
+        if (distance > 50) {
+            if (timeSinceLastMove < 50 && !isRunning && distance > 150) {
+                isRunning = true;
+                isMoving = false;
+                cat.style.animation = 'cat-run 0.3s steps(4) infinite';
+            } else if (!isMoving && !isRunning) {
+                isMoving = true;
+                cat.style.animation = 'cat-walk 0.5s steps(4) infinite';
+            }
+        } else {
             isMoving = false;
-            cat.style.animation = 'idle 3s infinite';
+            isRunning = false;
+            cat.style.animation = 'cat-idle 0.8s steps(4) infinite';
         }
 
         // Flip cat based on movement direction
         if (targetX < currentX) {
-            cat.style.transform = 'scale(-4, 4)';
+            cat.style.transform = 'scaleX(-1) scale(2)';
         } else {
-            cat.style.transform = 'scale(4)';
+            cat.style.transform = 'scaleX(1) scale(2)';
         }
     });
 
@@ -67,9 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Happy animation
         const currentAnimation = cat.style.animation;
-        cat.style.animation = 'happy 0.5s';
+        cat.style.animation = 'cat-happy 0.4s steps(4) infinite';
         setTimeout(() => {
             cat.style.animation = currentAnimation;
-        }, 500);
+        }, 800);
     });
 });

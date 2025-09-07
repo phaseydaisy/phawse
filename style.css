@@ -135,16 +135,17 @@ h1 {
 }
 
 #cat {
-    width: 1px;
-    height: 1px;
+    width: 48px;
+    height: 48px;
     cursor: pointer;
     user-select: none;
     position: fixed;
-    opacity: 0.8;
     z-index: 10;
-    transition: all 0.3s ease;
-    animation: idle 3s ease-in-out infinite;
-    box-shadow:
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAABgCAYAAADVenpJAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RjM4MzNBNjQyMkM0MTFFQjk0QkZCRjM5NjU1RTMyMzYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RjM4MzNBNjUyMkM0MTFFQjk0QkZCRjM5NjU1RTMyMzYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGMzgzM0E2MjIyQzQxMUVCOTRCRkJGMzk2NTVFMzIzNiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpGMzgzM0E2MzIyQzQxMUVCOTRCRkJGMzk2NTVFMzIzNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsMQYv8AAABJSURBVHja7MExDQAwCAAwPqX8OY3BggRkZtjNOQqy0wEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMBfFRBgAMd8AgFzSWHrAAAAAElFTkSuQmCC') no-repeat;
+    background-size: 400% 400%;
+    image-rendering: pixelated;
+    transform-origin: center;
+    animation: cat-idle 0.8s steps(4) infinite;
         /* Ears */
         3px 0 0 #2a2a2a,
         4px 0 0 #2a2a2a,
@@ -272,37 +273,24 @@ h1 {
     }
 }
 
-@keyframes idle {
-    0%, 100% {
-        transform: scale(4) translateY(0px);
-    }
-    50% {
-        transform: scale(4) translateY(-2px);
-    }
+@keyframes cat-idle {
+    0% { background-position: 0 0; }
+    100% { background-position: -192px 0; }
 }
 
-@keyframes walk {
-    0%, 100% {
-        transform: scale(4) translateY(0);
-    }
-    25% {
-        transform: scale(4) translateY(-2px) rotate(-1deg);
-    }
-    75% {
-        transform: scale(4) translateY(-2px) rotate(1deg);
-    }
+@keyframes cat-walk {
+    0% { background-position: 0 -48px; }
+    100% { background-position: -192px -48px; }
 }
 
-@keyframes happy {
-    0%, 100% {
-        transform: scale(4) rotate(0deg);
-    }
-    25% {
-        transform: scale(4.2) rotate(-5deg);
-    }
-    75% {
-        transform: scale(4.2) rotate(5deg);
-    }
+@keyframes cat-run {
+    0% { background-position: 0 -96px; }
+    100% { background-position: -192px -96px; }
+}
+
+@keyframes cat-happy {
+    0% { background-position: 0 -144px; }
+    100% { background-position: -192px -144px; }
 }
 
 .bounce {
