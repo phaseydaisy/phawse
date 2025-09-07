@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        // Add loading state
         form.classList.add('sending');
         submitBtn.disabled = true;
 
@@ -19,12 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            // Create Discord webhook message
             const discordMessage = {
-                content: "<@1161104305080762449>",  // Ping yephawse
+                content: "<@1161104305080762449>",
                 embeds: [{
                     title: "💌 New Message from Website",
-                    color: 0x2F3136, // Dark theme color
+                    color: 0x2F3136,
                     fields: [
                         {
                             name: "👤 From",
@@ -48,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }]
             };
 
-            // Send to Discord webhook
             const response = await fetch(DISCORD_WEBHOOK, {
                 method: 'POST',
                 headers: {
@@ -61,22 +57,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Failed to send message');
             }
             
-            // Clear the form
             form.reset();
             
-            // Show success message
-            alert('Message sent successfully! I\'ll get back to you soon.');
+            alert('Message sent successfully! I\'ll get back to you via discord soon.');
         } catch (error) {
             console.error('Error:', error);
             alert('Oops! Something went wrong. Please try again.');
         } finally {
-            // Remove loading state
             form.classList.remove('sending');
             submitBtn.disabled = false;
         }
     });
 
-    // Add floating label animation
     const inputs = form.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         if (input.value) {
