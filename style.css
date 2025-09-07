@@ -69,14 +69,32 @@ body {
 }
 
 h1 {
-    color: white;
-    font-size: 2.5rem;
+    font-family: 'Montserrat', 'Segoe UI', 'Arial', sans-serif;
+    font-size: 3rem;
     margin-bottom: 2rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    font-weight: 600;
-    letter-spacing: -0.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #76c7c0, #a45de4, #2ecc71, #3498db);
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-move 3s ease-in-out infinite;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
 
+@keyframes gradient-move {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
 @keyframes subtle-glow {
     from {
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
