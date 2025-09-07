@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
     const submitBtn = form.querySelector('.submit-btn');
-    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1414341241545425087/wAoO_t5TCkJgJXiCsST4GsyFU-cjdgd21GxIYDhz_1Ve78AXPHp_svV4ayssDJzRihM_";
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1414368769215697073/xF1GrJ5UTALgQ0DcvOniC699AqDiOuhzpv23vOzO0JDXvZ2umLwUUFvksLTxt9MPuIBv";
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
