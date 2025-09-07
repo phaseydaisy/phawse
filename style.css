@@ -139,17 +139,33 @@ h1 {
     height: 1px;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.3s ease;
-    margin: 2rem 0;
-    position: relative;
-    opacity: 0.6;
-    animation: breathe 3s ease-in-out infinite;
+    position: fixed;
+    opacity: 0.8;
+    z-index: 10;
+    transition: all 0.3s ease;
+    animation: idle 3s ease-in-out infinite;
     box-shadow:
-        /* Body */
+        /* Ears */
+        3px 0 0 #2a2a2a,
         4px 0 0 #2a2a2a,
-        5px 0 0 #2a2a2a,
-        6px 0 0 #2a2a2a,
-        7px 0 0 #2a2a2a,
+        8px 0 0 #2a2a2a,
+        9px 0 0 #2a2a2a,
+        /* Head */
+        2px 1px 0 #2a2a2a,
+        3px 1px 0 #2a2a2a,
+        4px 1px 0 #2a2a2a,
+        5px 1px 0 #2a2a2a,
+        6px 1px 0 #2a2a2a,
+        7px 1px 0 #2a2a2a,
+        8px 1px 0 #2a2a2a,
+        9px 1px 0 #2a2a2a,
+        10px 1px 0 #2a2a2a,
+        /* Body Top */
+        4px 2px 0 #2a2a2a,
+        5px 2px 0 #2a2a2a,
+        6px 2px 0 #2a2a2a,
+        7px 2px 0 #2a2a2a,
+        8px 2px 0 #2a2a2a,
         3px 1px 0 #2a2a2a,
         4px 1px 0 #2a2a2a,
         5px 1px 0 #2a2a2a,
@@ -196,10 +212,34 @@ h1 {
         /* Nose */
         5px 4px 0 #333,
         6px 4px 0 #333,
+        /* Body Main */
+        3px 3px 0 #2a2a2a,
+        4px 3px 0 #2a2a2a,
+        5px 3px 0 #2a2a2a,
+        6px 3px 0 #2a2a2a,
+        7px 3px 0 #2a2a2a,
+        8px 3px 0 #2a2a2a,
+        9px 3px 0 #2a2a2a,
+        3px 4px 0 #2a2a2a,
+        4px 4px 0 #2a2a2a,
+        5px 4px 0 #2a2a2a,
+        6px 4px 0 #2a2a2a,
+        7px 4px 0 #2a2a2a,
+        8px 4px 0 #2a2a2a,
+        9px 4px 0 #2a2a2a,
+        /* Paws */
+        3px 5px 0 #2a2a2a,
+        4px 5px 0 #2a2a2a,
+        8px 5px 0 #2a2a2a,
+        9px 5px 0 #2a2a2a,
+        2px 6px 0 #2a2a2a,
+        3px 6px 0 #2a2a2a,
+        9px 6px 0 #2a2a2a,
+        10px 6px 0 #2a2a2a,
         /* Tail */
-        10px 5px 0 #2a2a2a,
-        11px 4px 0 #2a2a2a,
-        12px 3px 0 #2a2a2a;
+        10px 3px 0 #2a2a2a,
+        11px 2px 0 #2a2a2a,
+        12px 1px 0 #2a2a2a;
     transform: scale(3);
 }
 
@@ -232,12 +272,36 @@ h1 {
     }
 }
 
-@keyframes breathe {
+@keyframes idle {
     0%, 100% {
-        transform: scale(3);
+        transform: scale(4) translateY(0px);
     }
     50% {
-        transform: scale(3.1);
+        transform: scale(4) translateY(-2px);
+    }
+}
+
+@keyframes walk {
+    0%, 100% {
+        transform: scale(4) translateY(0);
+    }
+    25% {
+        transform: scale(4) translateY(-2px) rotate(-1deg);
+    }
+    75% {
+        transform: scale(4) translateY(-2px) rotate(1deg);
+    }
+}
+
+@keyframes happy {
+    0%, 100% {
+        transform: scale(4) rotate(0deg);
+    }
+    25% {
+        transform: scale(4.2) rotate(-5deg);
+    }
+    75% {
+        transform: scale(4.2) rotate(5deg);
     }
 }
 
