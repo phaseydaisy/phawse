@@ -21,9 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // Create Discord webhook message
             const discordMessage = {
+                content: "<@1161104305080762449>",  // Ping yephawse
                 embeds: [{
                     title: "💌 New Message from Website",
-                    color: 0x7289da, // Discord blue color
+                    color: 0x2F3136, // Dark theme color
                     fields: [
                         {
                             name: "👤 From",
