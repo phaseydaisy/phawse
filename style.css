@@ -135,15 +135,72 @@ h1 {
 }
 
 #cat {
-    font-size: 3rem;
+    width: 1px;
+    height: 1px;
     cursor: pointer;
     user-select: none;
     transition: transform 0.3s ease;
     margin: 2rem 0;
+    position: relative;
+    opacity: 0.6;
+    box-shadow:
+        /* Body */
+        4px 0 0 #2a2a2a,
+        5px 0 0 #2a2a2a,
+        6px 0 0 #2a2a2a,
+        7px 0 0 #2a2a2a,
+        3px 1px 0 #2a2a2a,
+        4px 1px 0 #2a2a2a,
+        5px 1px 0 #2a2a2a,
+        6px 1px 0 #2a2a2a,
+        7px 1px 0 #2a2a2a,
+        8px 1px 0 #2a2a2a,
+        2px 2px 0 #2a2a2a,
+        3px 2px 0 #2a2a2a,
+        4px 2px 0 #2a2a2a,
+        5px 2px 0 #2a2a2a,
+        6px 2px 0 #2a2a2a,
+        7px 2px 0 #2a2a2a,
+        8px 2px 0 #2a2a2a,
+        9px 2px 0 #2a2a2a,
+        2px 3px 0 #2a2a2a,
+        3px 3px 0 #2a2a2a,
+        4px 3px 0 #2a2a2a,
+        5px 3px 0 #2a2a2a,
+        6px 3px 0 #2a2a2a,
+        7px 3px 0 #2a2a2a,
+        8px 3px 0 #2a2a2a,
+        9px 3px 0 #2a2a2a,
+        2px 4px 0 #2a2a2a,
+        3px 4px 0 #2a2a2a,
+        4px 4px 0 #2a2a2a,
+        5px 4px 0 #2a2a2a,
+        6px 4px 0 #2a2a2a,
+        7px 4px 0 #2a2a2a,
+        8px 4px 0 #2a2a2a,
+        9px 4px 0 #2a2a2a,
+        3px 5px 0 #2a2a2a,
+        4px 5px 0 #2a2a2a,
+        5px 5px 0 #2a2a2a,
+        6px 5px 0 #2a2a2a,
+        7px 5px 0 #2a2a2a,
+        8px 5px 0 #2a2a2a,
+        4px 6px 0 #2a2a2a,
+        5px 6px 0 #2a2a2a,
+        6px 6px 0 #2a2a2a,
+        7px 6px 0 #2a2a2a,
+        /* Eyes */
+        4px 3px 0 #444,
+        7px 3px 0 #444,
+        /* Nose */
+        5px 4px 0 #333,
+        6px 4px 0 #333;
+    transform: scale(3);
 }
 
 #cat:hover {
-    transform: scale(1.1);
+    transform: scale(3.3);
+    opacity: 0.8;
 }
 
 .bounce {
