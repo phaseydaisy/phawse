@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ],
                     timestamp: formData.timestamp,
                     footer: {
-                        text: "Sent from phases website"
+                        text: "Sent from https://phawse.lol"
                     }
                 }]
             };
