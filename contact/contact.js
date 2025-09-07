@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
     const submitBtn = form.querySelector('.submit-btn');
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1414341241545425087/wAoO_t5TCkJgJXiCsST4GsyFU-cjdgd21GxIYDhz_1Ve78AXPHp_svV4ayssDJzRihM_";
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -9,18 +10,55 @@ document.addEventListener('DOMContentLoaded', () => {
         form.classList.add('sending');
         submitBtn.disabled = true;
 
-        // Get form data
+        const timestamp = new Date();
         const formData = {
-            name: form.name.value,
-            email: form.email.value,
-            message: form.message.value,
-            timestamp: new Date().toISOString()
+            name: form.name.value.trim(),
+            discord: form.discord.value.trim() || 'Not provided',
+            message: form.message.value.trim(),
+            timestamp: timestamp.toISOString()
         };
 
         try {
-            // Here you would typically send the data to your backend
-            // For now, we'll just simulate a delay
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            // Create Discord webhook message
+            const discordMessage = {
+                embeds: [{
+                    title: "💌 New Message from Website",
+                    color: 0x7289da, // Discord blue color
+                    fields: [
+                        {
+                            name: "👤 From",
+                            value: formData.name,
+                            inline: true
+                        },
+                        {
+                            name: "🎮 Discord",
+                            value: formData.discord,
+                            inline: true
+                        },
+                        {
+                            name: "📝 Message",
+                            value: formData.message
+                        }
+                    ],
+                    timestamp: formData.timestamp,
+                    footer: {
+                        text: "Sent from phases website"
+                    }
+                }]
+            };
+
+            // Send to Discord webhook
+            const response = await fetch(DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(discordMessage)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send message');
+            }
             
             // Clear the form
             form.reset();
@@ -28,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show success message
             alert('Message sent successfully! I\'ll get back to you soon.');
         } catch (error) {
+            console.error('Error:', error);
             alert('Oops! Something went wrong. Please try again.');
         } finally {
             // Remove loading state
