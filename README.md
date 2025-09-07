@@ -1,1 +1,0 @@
-js a simple website 🙏
