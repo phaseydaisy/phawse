@@ -143,6 +143,7 @@ h1 {
     margin: 2rem 0;
     position: relative;
     opacity: 0.6;
+    animation: breathe 3s ease-in-out infinite;
     box-shadow:
         /* Body */
         4px 0 0 #2a2a2a,
@@ -194,13 +195,50 @@ h1 {
         7px 3px 0 #444,
         /* Nose */
         5px 4px 0 #333,
-        6px 4px 0 #333;
+        6px 4px 0 #333,
+        /* Tail */
+        10px 5px 0 #2a2a2a,
+        11px 4px 0 #2a2a2a,
+        12px 3px 0 #2a2a2a;
     transform: scale(3);
 }
 
 #cat:hover {
     transform: scale(3.3);
     opacity: 0.8;
+}
+
+#cat::after {
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    animation: tail-wag 1s ease-in-out infinite;
+    box-shadow:
+        10px 5px 0 #2a2a2a,
+        11px 4px 0 #2a2a2a,
+        12px 3px 0 #2a2a2a;
+}
+
+@keyframes tail-wag {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-15deg) translate(-1px, 1px);
+    }
+    75% {
+        transform: rotate(15deg) translate(1px, 1px);
+    }
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(3);
+    }
+    50% {
+        transform: scale(3.1);
+    }
 }
 
 .bounce {
