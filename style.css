@@ -201,7 +201,7 @@ body::-webkit-scrollbar {
 }
 
 .bottom-section {
-    margin-top: 60vh;
+    margin-top: 4rem;
     opacity: 0.8;
     transition: opacity 0.3s ease;
 }

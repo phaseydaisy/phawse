@@ -6,20 +6,17 @@
   <link rel="icon" href="https://cdn.discordapp.com/attachments/1312641194810933258/1414362852944384101/IMG_6468.png?ex=68bf4b8d&is=68bdfa0d&hm=da7e549fbbe9c88f251353ed817029fbf58c059889f620850fca9f62040974fb&" type="image/png">
   <link rel="shortcut icon" href="https://cdn.discordapp.com/attachments/1312641194810933258/1414362852944384101/IMG_6468.png?ex=68bf4b8d&is=68bdfa0d&hm=da7e549fbbe9c88f251353ed817029fbf58c059889f620850fca9f62040974fb&" type="image/png">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="404.css">
   <meta http-equiv="refresh" content="3;url=/">
 </head>
 <body>
   <div class="portal-container">
     <h1>oopsie! wrong path bestie</h1>
-    <p style="color: white; margin-bottom: 2rem; font-size: 1.2rem;">redirecting you back home in 3 seconds...</p>
+    <p class="redirect-text">redirecting you back home in 3 seconds...</p>
     <a href="/" class="btn portal-btn">
       <span>🏠 Go Home Now</span>
     </a>
   </div>
-  <script>
-    if (window.top !== window.self) {
-      window.top.location.href = window.self.location.href;
-    }
-  </script>
+  <script src="404.js"></script>
 </body>
 </html>
