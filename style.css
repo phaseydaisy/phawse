@@ -7,9 +7,6 @@ body {
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 @keyframes pulse {
@@ -62,11 +59,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: 100vh;
     padding: 2rem;
+    padding-top: 4rem;
     text-align: center;
     z-index: 1;
+    width: 100%;
 }
 
 h1 {
