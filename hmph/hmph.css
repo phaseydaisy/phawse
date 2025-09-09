@@ -1,0 +1,42 @@
+.definition-card {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.word-type {
+    color: #9f86c0;
+    font-style: italic;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.definition {
+    color: white;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.example {
+    color: #a89ec9;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    padding-left: 1rem;
+    border-left: 2px solid #9f86c0;
+}
+
+.back-btn {
+    margin-top: 2rem;
+}
+
+h1 {
+    font-size: 4rem !important;
+    text-shadow: 0 0 20px rgba(159, 134, 192, 0.5) !important;
+}

@@ -37,8 +37,35 @@
       </a>
     </div>
     <div class="additional-content">
+      <div class="bottom-section">
+        <a href="/hmph/" class="btn portal-btn">
+          <span>😤 Hmph.</span>
+        </a>
+      </div>
     </div>
   </div>
+    <p>An expression of dissatisfaction, disdain, or contemptuous disagreement, often accompanied by crossed arms and a slight turning away of the head. Commonly used to show mild annoyance or playful stubbornness.</p>
+    <p style="font-style: italic; color: #9f86c0;">Example: "Hmph! I didn't want to go to your party anyway!" *turns away dramatically*</p>
+  </div>
+
   <script src="index.js"></script>
+  <script>
+    function showDefinition(event) {
+      event.preventDefault();
+      document.getElementById('definitionPopup').style.display = 'block';
+    }
+
+    function hideDefinition() {
+      document.getElementById('definitionPopup').style.display = 'none';
+    }
+
+    // Close popup when clicking outside
+    window.onclick = function(event) {
+      const popup = document.getElementById('definitionPopup');
+      if (event.target === popup) {
+        hideDefinition();
+      }
+    }
+  </script>
 </body>
 </html>
