@@ -5,7 +5,8 @@ body {
     font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
     background: #0f0f0f;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,10 +99,15 @@ h1 {
     50% {
         background-position: 100% 50%;
     }
-    100% {
-        background-position: 0% 50%;
-    }
 }
+
+.additional-content {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 2rem;
+    min-height: 50vh;
+}
+
 @keyframes subtle-glow {
     from {
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
