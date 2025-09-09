@@ -64,10 +64,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 200vh;
+    justify-content: flex-start;
+    min-height: 150vh;
     padding: 2rem;
-    padding-top: 40vh;
+    padding-top: 25vh;
     text-align: center;
     z-index: 1;
 }
