@@ -1,9 +1,15 @@
+.portal-container {
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+}
+
 .definition-card {
     background: rgba(20, 20, 20, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     padding: 2rem;
-    margin: 2rem auto;
+    margin: 0 auto;
     max-width: 600px;
     backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
