@@ -1,6 +1,6 @@
 const getBasePath = () => {
-    const path = window.location.pathname;
-    if (path.includes('/phawse/')) {
+    const isGitHubPages = location.hostname.endsWith('github.io');
+    if (isGitHubPages) {
         return '/phawse';
     }
     return '';
