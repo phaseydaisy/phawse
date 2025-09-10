@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
     const submitBtn = form.querySelector('.submit-btn');
-    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1414368769215697073/xF1GrJ5UTALgQ0DcvOniC699AqDiOuhzpv23vOzO0JDXvZ2umLwUUFvksLTxt9MPuIBv";
+    const WORKER_URL = "https://phawse.kaidenlorse1.workers.dev/";
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -17,40 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const discordMessage = {
-                content: "<@1161104305080762449>",
-                embeds: [{
-                    title: "💌 New Message from Website",
-                    color: 0x2F3136,
-                    fields: [
-                        {
-                            name: "👤 From",
-                            value: formData.name,
-                            inline: true
-                        },
-                        {
-                            name: "🎮 Discord",
-                            value: formData.discord,
-                            inline: true
-                        },
-                        {
-                            name: "📝 Message",
-                            value: formData.message
-                        }
-                    ],
-                    timestamp: formData.timestamp,
-                    footer: {
-                        text: "Sent from https://phawse.lol"
-                    }
-                }]
-            };
-
-            const response = await fetch(DISCORD_WEBHOOK, {
+            const response = await fetch(WORKER_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(discordMessage)
+                body: JSON.stringify(formData)
             });
 
             if (!response.ok) {
