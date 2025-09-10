@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            // Directly POST to Discord webhook (hardcoded)
             const WEBHOOK_URL = 'https://discord.com/api/webhooks/1415402565197107333/okWqkhR_yaJm_PZRbT3zyoGXTXflMjmfLUAZnOIs6wd9kade8hW5LO7D_2hkLIzcxTgI';
             const response = await fetch(WEBHOOK_URL, {
                 method: 'POST',
