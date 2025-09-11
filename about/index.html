@@ -4,34 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>about me - phawse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="about.css">
     <script src="/preventDevTools.js"></script>
 </head>
 <body>
     <a href="/" class="back-button">← Back</a>
     <div class="container">
-        <div class="time-container">
-            <div class="time">
-                <span id="current-time"></span>
-                <span class="timezone">EST</span>
-            </div>
-        </div>
-        
-        <div class="discord-profile">
-            <div class="profile-header">
-                <img id="avatar" src="" alt="Discord Avatar" class="avatar">
-                <div class="user-info">
-                    <h1 id="username"></h1>
-                    <span id="discriminator"></span>
+        <div class="card">
+            <div class="time-container">
+                <div class="time">
+                    <span id="current-time"></span>
+                    <span class="timezone">EST</span>
                 </div>
             </div>
-            <div class="about-me">
-                <h2>About Me</h2>
-                <p id="bio"></p>
-            </div>
-            <div class="status">
-                <span id="status-dot"></span>
-                <span id="status-text"></span>
+            <div class="discord-profile">
+                <div class="profile-header">
+                    <img id="avatar" src="" alt="Discord Avatar" class="avatar">
+                    <div class="user-info">
+                        <h1 id="username"></h1>
+                        <div class="status">
+                            <span id="status-dot"></span>
+                            <span id="status-text"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-me">
+                    <p id="bio"></p>
+                </div>
             </div>
         </div>
     </div>

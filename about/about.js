@@ -17,35 +17,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const DISCORD_USER_ID = '1161104305080762449';
     async function fetchDiscordProfile() {
         try {
-            // Using Toolscord API
-            const response = await fetch(`https://api.toolscord.com/profile/${DISCORD_USER_ID}`);
+            const response = await fetch(`https://japi.rest/discord/v1/user/${DISCORD_USER_ID}`, {
+                headers: {
+                    'Authorization': 'BfbEMm4Z5Z2myB3YbseTR7th'
+                }
+            });
             if (!response.ok) throw new Error('Failed to fetch Discord profile');
             
             const data = await response.json();
             
-            // Update avatar
-            document.getElementById('avatar').src = data.avatar;
+            document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/${data.data.avatar}.png?size=512`;
+            document.getElementById('username').textContent = data.data.global_name || data.data.username;
             
-            // Update username
-            document.getElementById('username').textContent = data.username;
-            
-            // Update status
             const statusDot = document.getElementById('status-dot');
             const statusText = document.getElementById('status-text');
-            const status = data.status || 'online';
-            statusDot.className = status.toLowerCase();
-            statusText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            const presence = data.data.presence || {};
+            statusDot.className = presence.status || 'online';
+            statusText.textContent = (presence.status || 'Online').charAt(0).toUpperCase() + (presence.status || 'online').slice(1);
 
-            // Update bio/activity
             const bioElement = document.getElementById('bio');
-            if (data.activities && data.activities.length > 0) {
-                const activity = data.activities[0];
-                bioElement.textContent = activity.name + (activity.details ? `: ${activity.details}` : '');
+            if (presence.activities && presence.activities.length > 0) {
+                const activity = presence.activities[0];
+                bioElement.textContent = activity.name;
             } else {
-                bioElement.textContent = data.bio || "hi im phase!";
+                bioElement.textContent = "hi im phase!";
             }
         } catch (error) {
             console.error('Error fetching Discord profile:', error);
+            document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/a_ab3e4550c9644f12485117ba7d46c17e.gif?size=512`;
+            document.getElementById('username').textContent = 'phase';
+            document.getElementById('bio').textContent = "hi im phase!";
         }
     }
     fetchDiscordProfile();
