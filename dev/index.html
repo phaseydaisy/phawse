@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>in development - phawse</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap">
+    <title>Development - Work in Progress</title>
     <link rel="stylesheet" href="dev.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="/preventDevTools.js"></script>
 </head>
 <body>
-    <a href="/" class="back-button">← Back</a>
+    <a href="../index.html" class="back-button">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+
     <div class="container">
-        <div class="dev-content">
-            <div class="status-icon">🚧</div>
-            <h1>in development</h1>
-            <div class="loading-bar">
-                <div class="progress"></div>
+        <div class="wip-content">
+            <div class="status-icon">
+                <span class="gear">⚙️</span>
+                <span class="hammer">�</span>
             </div>
-            <p class="status-text">something cool is brewing...</p>
+            
+            <h1>Work in Progress</h1>
+            
+            <div class="tools-animation">
+                <div class="tool"></div>
+                <div class="tool"></div>
+                <div class="tool"></div>
+            </div>
+            
+            <p class="status-text">Initializing development environment...</p>
+            
+            <div class="nav-buttons">
+                <a href="shutdown/index.html" class="btn">
+                    <i class="fas fa-power-off"></i> Shutdown
+                </a>
+            </div>
         </div>
     </div>
+
     <script src="dev.js"></script>
 </body>
 </html>
