@@ -21,20 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Failed to fetch Discord profile');
             
             const { data } = await response.json();
-            const discordUser = data;
-            document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${discordUser.discord_user.id}/${discordUser.discord_user.avatar}.png?size=256`;
-            document.getElementById('username').textContent = discordUser.discord_user.username;
-            document.getElementById('discriminator').textContent = discordUser.discord_user.discriminator ? `#${discordUser.discord_user.discriminator}` : '';
             
-            if (discordUser.discord_user.bio) {
-                document.getElementById('bio').textContent = discordUser.discord_user.bio;
-            }
-
+            document.getElementById('avatar').src = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=256`;
+            document.getElementById('username').textContent = data.discord_user.global_name || data.discord_user.username;
+            
             const statusDot = document.getElementById('status-dot');
             const statusText = document.getElementById('status-text');
-            
-            statusDot.className = discordUser.discord_status;
-            statusText.textContent = discordUser.discord_status.charAt(0).toUpperCase() + discordUser.discord_status.slice(1);
+            statusDot.className = data.discord_status;
+            statusText.textContent = data.discord_status.charAt(0).toUpperCase() + data.discord_status.slice(1);
+            const bioElement = document.getElementById('bio');
+            if (data.activities && data.activities.length > 0) {
+                const customStatus = data.activities.find(activity => activity.type === 4);
+                if (customStatus && customStatus.state) {
+                    bioElement.textContent = customStatus.state;
+                } else {
+                    const currentActivity = data.activities[0];
+                    bioElement.textContent = `${currentActivity.name}: ${currentActivity.state || currentActivity.details || ''}`;
+                }
+            } else {
+                bioElement.textContent = "No current status";
+            }
         } catch (error) {
             console.error('Error fetching Discord profile:', error);
         }
