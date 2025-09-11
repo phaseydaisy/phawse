@@ -35,9 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }]
         };
-
         try {
-            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1415402565197107333/okWqkhR_yaJm_PZRbT3zyoGXTXflMjmfLUAZnOIs6wd9kade8hW5LO7D_2hkLIzcxTgI';
+            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1415402565197107333/okWqkhR_yaJm_PZRbT3zyoGXTXflMjmfLUAZnOIs6wd9kade8hW5LO7D_2hkLIzcxTgI'; //ohhsemen can suck my dick 
             const response = await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
