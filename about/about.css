@@ -5,13 +5,34 @@
 }
 
 body {
-    background-color: #000;
+    background: linear-gradient(135deg, #000000, #1a1a1a);
     color: #fff;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(114, 137, 218, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(114, 137, 218, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
 }
 
 .container {
