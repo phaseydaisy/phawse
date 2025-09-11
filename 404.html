@@ -10,7 +10,6 @@
             var basePath = isGitHubPages ? repoPath : '';
             var errorPath = basePath + '/404/';
             
-            // Don't redirect if we're already on the error page
             if (!window.location.pathname.includes('/404/')) {
                 window.location.replace(errorPath);
             }
