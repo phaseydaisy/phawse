@@ -17,33 +17,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const DISCORD_USER_ID = '1161104305080762449';
     async function fetchDiscordProfile() {
         try {
-            const response = await fetch('https://discordapp.com/api/webhooks/1415402565197107333/okWqkhR_yaJm_PZRbT3zyoGXTXflMjmfLUAZnOIs6wd9kade8hW5LO7D_2hkLIzcxTgI', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    type: 2,
-                    data: {
-                        user_id: DISCORD_USER_ID
-                    }
-                })
-            });
-
+            // Using Toolscord API
+            const response = await fetch(`https://api.toolscord.com/profile/${DISCORD_USER_ID}`);
             if (!response.ok) throw new Error('Failed to fetch Discord profile');
             
             const data = await response.json();
             
             // Update avatar
-            document.getElementById('avatar').src = data.avatar_url || `https://cdn.discordapp.com/avatars/${DISCORD_USER_ID}/a_${data.avatar}.gif?size=256` || 'https://cdn.discordapp.com/embed/avatars/0.png';
-            document.getElementById('username').textContent = data.username || 'phase';
+            document.getElementById('avatar').src = data.avatar;
+            
+            // Update username
+            document.getElementById('username').textContent = data.username;
+            
+            // Update status
             const statusDot = document.getElementById('status-dot');
             const statusText = document.getElementById('status-text');
-            statusDot.className = 'online';
-            statusText.textContent = 'Online';
+            const status = data.status || 'online';
+            statusDot.className = status.toLowerCase();
+            statusText.textContent = status.charAt(0).toUpperCase() + status.slice(1);
 
+            // Update bio/activity
             const bioElement = document.getElementById('bio');
-            bioElement.textContent = data.bio || "hey..";
+            if (data.activities && data.activities.length > 0) {
+                const activity = data.activities[0];
+                bioElement.textContent = activity.name + (activity.details ? `: ${activity.details}` : '');
+            } else {
+                bioElement.textContent = data.bio || "hi im phase!";
+            }
         } catch (error) {
             console.error('Error fetching Discord profile:', error);
         }
