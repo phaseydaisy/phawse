@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Fade utility
     function fadeVolume(from, to, duration) {
         const start = performance.now();
         function step(now) {
@@ -39,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const isVisible = volSliderWrap.classList.toggle('show');
         volSliderWrap.setAttribute('aria-hidden', !isVisible);
         if (!audio.paused && audio.volume > 0) {
-            // clicking button mutes/unmutes
             if (audio.volume > 0.001) {
                 fadeVolume(audio.volume, 0, 300);
                 volRange.value = 0;

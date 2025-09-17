@@ -79,43 +79,70 @@ function isInternalLink(a) {
         return url.origin === location.origin;
     } catch (e) { return false; }
 }
-
-// single handleLinkClick implementation is attached below after helper functions
 const CONTENT_SELECTOR = '.portal-container';
+
+const PHAWSE_PERSISTENT_HEAD_LINKS = new Set(Array.from(document.head.querySelectorAll('link[rel="stylesheet"]')).map(l => l.href));
+const PHAWSE_PERSISTENT_HEAD_STYLES = new Set(Array.from(document.head.querySelectorAll('style')).map(s => s.textContent));
 
 function extractAndReplaceContent(doc) {
     const newContent = doc.querySelector(CONTENT_SELECTOR);
     const curContent = document.querySelector(CONTENT_SELECTOR);
     if (!newContent) return false;
-    // Ensure page-specific styles from the new document head are present in the current page.
     let styleLoadPromises = [];
     try {
         const headLinks = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+        
+        const desiredHrefs = headLinks.map(l => {
+            try { return new URL(l.getAttribute('href') || l.href, doc.baseURI).href; } catch (e) { return null; }
+        }).filter(Boolean);
+        
         headLinks.forEach(link => {
-            const href = link.href;
-            if (!href) return;
-            // If a stylesheet with the same href isn't already in the current head, append it and track its load.
-            if (!document.head.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
+            const hrefAbs = new URL(link.getAttribute('href') || link.href, doc.baseURI).href;
+            if (!hrefAbs) return;
+            if (!document.head.querySelector(`link[rel="stylesheet"][href="${hrefAbs}"]`)) {
                 const nl = document.createElement('link');
                 nl.rel = 'stylesheet';
-                nl.href = href;
+                nl.href = hrefAbs;
+                nl.dataset.phawseDynamic = '1';
                 if (link.crossOrigin) nl.crossOrigin = link.crossOrigin;
                 const p = new Promise((resolve) => {
                     nl.addEventListener('load', () => resolve());
                     nl.addEventListener('error', () => resolve());
-                    // In case load events never fire, resolve after a timeout
                     setTimeout(() => resolve(), 2500);
                 });
                 styleLoadPromises.push(p);
                 document.head.appendChild(nl);
             }
         });
-        // Also copy any inline <style> blocks that may be required by the page
+
+        
         const headStyles = Array.from(doc.querySelectorAll('style'));
         headStyles.forEach(style => {
             const exists = Array.from(document.head.querySelectorAll('style')).some(s => s.textContent === style.textContent);
-            if (!exists) document.head.appendChild(style.cloneNode(true));
+            if (!exists) {
+                const cloned = style.cloneNode(true);
+                cloned.dataset.phawseDynamic = '1';
+                document.head.appendChild(cloned);
+            }
         });
+
+        
+        try {
+            const injectedLinks = Array.from(document.head.querySelectorAll('link[rel="stylesheet"][data-phawse-dynamic="1"]'));
+            injectedLinks.forEach(l => {
+                if (!desiredHrefs.includes(l.href) && !PHAWSE_PERSISTENT_HEAD_LINKS.has(l.href)) {
+                    l.remove();
+                }
+            });
+            const injectedStyles = Array.from(document.head.querySelectorAll('style[data-phawse-dynamic="1"]'));
+            const desiredStyleContents = headStyles.map(s => s.textContent);
+            injectedStyles.forEach(s => {
+                if (!desiredStyleContents.includes(s.textContent) && !PHAWSE_PERSISTENT_HEAD_STYLES.has(s.textContent)) {
+                    s.remove();
+                }
+            });
+        } catch (e) {
+        }
     } catch (e) {
         console.warn('Failed to import page head styles:', e);
     }
@@ -130,43 +157,43 @@ function extractAndReplaceContent(doc) {
         document.body.appendChild(audioRoot);
     }
 
-    // Re-run any scripts inside the replaced content so they execute in the current document.
-    // For external scripts, avoid re-adding ones that already exist in the document to prevent double-loading.
+    
     const scripts = Array.from(newContent.querySelectorAll('script'));
     const loadPromises = [];
     scripts.forEach(s => {
         const run = document.createElement('script');
         if (s.src) {
-            // Always append external scripts found in the fetched content so page-specific logic executes.
-            // Rely on per-script guards (like window.__phawseAudioControlInstalled) to avoid duplicates for globals.
-            const srcHref = new URL(s.src, doc.baseURI).href;
-            // Don't re-insert the main index.js to avoid double-initialization
+            
+            const srcHref = new URL(s.getAttribute('src') || s.src, doc.baseURI).href;
+            
             if (srcHref.endsWith('/assets/js/index.js') || srcHref.endsWith('/assets/js/index.js/')) {
                 s.remove();
                 return;
             }
             run.src = srcHref;
+            run.dataset.phawseDynamic = '1';
             run.async = false;
-            // track load so we dispatch page-loaded only after external scripts executed
+            
             loadPromises.push(new Promise((resolve) => {
                 run.addEventListener('load', () => resolve());
                 run.addEventListener('error', () => resolve());
             }));
         } else {
-            // inline script: copy its text so it executes in the current document
+            
             run.textContent = s.textContent;
+            run.dataset.phawseDynamic = '1';
         }
         s.remove();
         newContent.appendChild(run);
     });
 
-    // Wait for both styles and scripts to settle before dispatching page-loaded
+    
     Promise.all([].concat(styleLoadPromises, loadPromises)).then(() => {
         try {
             window.dispatchEvent(new CustomEvent('phawse:page-loaded', { detail: { url: location.href } }));
         } catch (e) {}
 
-        // Defensive: call well-known initializers if present
+        
         setTimeout(() => {
             try { if (typeof window.initContact === 'function') window.initContact(); } catch (e) {}
             try { if (typeof window.initHmph === 'function') window.initHmph(); } catch (e) {}
@@ -203,19 +230,17 @@ function handleLinkClick(e) {
     });
 }
 
-// Attach the click handler for internal navigation
 document.addEventListener('click', handleLinkClick);
 
-// Handle back/forward navigation via PJAX: fetch and swap content instead of full reload
 window.addEventListener('popstate', (e) => {
-    // Attempt to replace content for the current location.href
+    
     const url = new URL(location.href);
     fetch(url.href, { credentials: 'same-origin' }).then(r => r.text()).then(html => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const replaced = extractAndReplaceContent(doc);
         if (!replaced) {
-            // fallback to full reload
+            
             location.reload();
             return;
         }

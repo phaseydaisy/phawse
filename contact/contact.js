@@ -4,7 +4,6 @@ function initContact() {
     const submitBtn = form.querySelector('.submit-btn');
     let isSubmitting = false;
 
-    // avoid double-binding
     if (form.__phawse_contact_initialized) return;
     form.__phawse_contact_initialized = true;
 

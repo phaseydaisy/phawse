@@ -7,7 +7,6 @@
   ];
   const randomSong = songs[Math.floor(Math.random() * songs.length)];
   
-  // If a container already exists (maybe from a previous load), reuse it instead of creating a new one
   let container = document.getElementById('phawse-audio-root');
   if (!container) {
     container = document.createElement('div');
@@ -41,27 +40,24 @@
     </div>
   `;
 
-    // append temporarily; we'll ensure it's in the host below
     document.body.appendChild(container);
   } else {
-    // update source if needed
+    
     const srcEl = container.querySelector('#bg-audio-source');
     if (srcEl && srcEl.src && !srcEl.src.includes(randomSong.path)) {
       try { srcEl.src = randomSong.path; } catch (e) {}
     }
   }
-  // Ensure a fixed host wrapper exists so CSS can position the audio UI without blocking the page.
   let host = document.querySelector('.phawse-audio-host');
   if (!host) {
     host = document.createElement('div');
     host.className = 'phawse-audio-host';
     document.body.appendChild(host);
   }
-  // If container isn't already inside the host, move it there.
   if (container.parentElement !== host) {
     host.appendChild(container);
   }
-  // Start in a compact (thin) state
+  
   container.querySelector('.audio-card')?.classList.add('thin');
   const audio = document.getElementById('bg-audio');
   const volRange = document.getElementById('vol-range');
@@ -204,7 +200,6 @@
     localStorage.setItem(VOL_KEY, v);
     startVol = v;
     playPauseBtn.textContent = v <= 0 ? '🔇' : (v < 40 ? '🔈' : (v < 80 ? '🔉' : '🔊'));
-    // Update the circular dial display
     volRange.style.setProperty('--percent', `${v}%`);
     clearTimeout(sliderTimeout);
     sliderTimeout = setTimeout(() => { document.getElementById('vol-slider').classList.remove('show'); document.getElementById('vol-slider').setAttribute('aria-hidden','true'); }, 2500);
@@ -230,4 +225,3 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveState(); });
   window.addEventListener('unload', () => { clearInterval(saveTimer); saveState(); });
 })();
-//test again
