@@ -39,6 +39,17 @@
   `;
 
   document.body.appendChild(container);
+  // Ensure a fixed host wrapper exists so CSS can position the audio UI without blocking the page.
+  let host = document.querySelector('.phawse-audio-host');
+  if (!host) {
+    host = document.createElement('div');
+    host.className = 'phawse-audio-host';
+    document.body.appendChild(host);
+  }
+  // If container isn't already inside the host, move it there.
+  if (container.parentElement !== host) {
+    host.appendChild(container);
+  }
   const audio = document.getElementById('bg-audio');
   const volRange = document.getElementById('vol-range');
   const playPauseBtn = document.getElementById('play-pause');

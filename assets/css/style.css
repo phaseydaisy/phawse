@@ -211,7 +211,8 @@ body::-webkit-scrollbar {
 }
 
 /* audio control root: lower z-index so it doesn't cover full-screen modals; allow clicks only on children */
-#phawse-audio-root { position: fixed; right: 20px; bottom: 20px; z-index: 9999; pointer-events: none; }
+.phawse-audio-host { position: fixed; right: 20px; bottom: 20px; z-index: 9999; pointer-events: none; }
+#phawse-audio-root { position: relative; pointer-events: auto; }
 #volume-control { pointer-events: auto; position: relative; display: flex; align-items: center; gap: 12px; }
 .audio-card {
     width: 300px;
@@ -245,7 +246,7 @@ body::-webkit-scrollbar {
 }
 #phawse-audio-root .vol-slider { max-width: 180px; }
 
-.vol-meta { display:flex; flex-direction: column; gap:4px; color: #fff; }
+.vol-meta { display:flex; flex-direction: column; gap:4px; color: #fff; min-width:0 }
 .vol-title { font-size: 0.92rem; font-weight:600; color:#fff; }
 .vol-sub { font-size:0.78rem; opacity:0.75 }
 
@@ -320,7 +321,7 @@ body::-webkit-scrollbar {
     box-shadow: 0 0 0 6px rgba(255,135,135,0.06);
 }
 
-#open-spotify { color: #fff; font-size: 0.85rem; text-decoration: underline; opacity: 0.95; }
+#open-spotify { color: #fff; font-size: 0.85rem; text-decoration: underline; opacity: 0.95; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .audio-card.enter { animation: popIn 260ms cubic-bezier(.2,.9,.3,1) forwards }
 @keyframes popIn { from { opacity:0; transform: translateY(6px) scale(.98) } to { opacity:1; transform: translateY(0) scale(1) } }

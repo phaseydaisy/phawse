@@ -125,14 +125,24 @@ function extractAndReplaceContent(doc) {
         document.body.appendChild(audioRoot);
     }
 
-    // Re-run any scripts inside the replaced content so they execute in the current document
+    // Re-run any scripts inside the replaced content so they execute in the current document.
+    // For external scripts, avoid re-adding ones that already exist in the document to prevent double-loading.
     const scripts = Array.from(newContent.querySelectorAll('script'));
     scripts.forEach(s => {
         const run = document.createElement('script');
         if (s.src) {
-            run.src = s.src;
+            // If a script with this src already exists in document, skip re-adding it.
+            const src = s.src;
+            const exists = Array.from(document.scripts).some(sc => sc.src === src);
+            if (exists) {
+                // remove the placeholder script tag from the new content to keep DOM clean
+                s.remove();
+                return;
+            }
+            run.src = src;
             run.async = false;
         } else {
+            // inline script: copy its text so it executes in the current document
             run.textContent = s.textContent;
         }
         s.remove();
@@ -174,4 +184,26 @@ function handleLinkClick(e) {
     });
 }
 
-window.addEventListener('popstate', () => { location.reload(); });
+// Attach the click handler for internal navigation
+document.addEventListener('click', handleLinkClick);
+
+// Handle back/forward navigation via PJAX: fetch and swap content instead of full reload
+window.addEventListener('popstate', (e) => {
+    // Attempt to replace content for the current location.href
+    const url = new URL(location.href);
+    fetch(url.href, { credentials: 'same-origin' }).then(r => r.text()).then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const replaced = extractAndReplaceContent(doc);
+        if (!replaced) {
+            // fallback to full reload
+            location.reload();
+            return;
+        }
+        const newTitle = doc.querySelector('title');
+        if (newTitle) document.title = newTitle.textContent;
+        window.scrollTo(0,0);
+    }).catch(() => {
+        location.reload();
+    });
+});
