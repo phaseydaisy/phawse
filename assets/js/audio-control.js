@@ -25,7 +25,7 @@
           <button id="expand-btn" class="expand-btn" aria-label="Open volume control">⚙️</button>
         </div>
         <div class="vol-slider" id="vol-slider" aria-hidden="true">
-          <input id="vol-range" type="range" min="0" max="1" step="0.01" value="0.18">
+          <input id="vol-range" type="range" min="0" max="100" step="1" value="55">
           <a id="open-spotify" href="https://open.spotify.com/track/40TZnaw4eDPChJNHw2Swf3" target="_blank" rel="noopener">Spotify</a>
         </div>
       </div>
@@ -46,14 +46,14 @@
   const PLAY_KEY = 'phawse_audio_playing';
 
   let saved = localStorage.getItem(VOL_KEY);
-  let startVol = saved !== null ? parseFloat(saved) : 0.55;
+  let startVol = saved !== null ? (parseFloat(saved) > 1 ? parseFloat(saved) : Math.round(parseFloat(saved) * 100)) : 55;
   audio.volume = 0;
 
   function fadeVolume(from, to, duration) {
     const start = performance.now();
     function step(now) {
       const t = Math.min(1, (now - start) / duration);
-      audio.volume = from + (to - from) * t;
+      audio.volume = (from + (to - from) * t) / 100;
       if (t < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -62,7 +62,7 @@
   volRange.value = startVol;
   const bars = container.querySelectorAll('.visual-bars div');
   function updateBars(vol){
-    const base = Math.max(6, Math.round(vol * 100));
+    const base = Math.max(6, vol);
     bars.forEach((b,i)=>{
       const variance = [0.4,1.0,1.4,0.8][i] || 1;
       b.style.height = Math.max(8, Math.round(base * variance)) + '%';
@@ -141,17 +141,12 @@
   });
   const savedExpanded = localStorage.getItem('phawse_audio_expanded');
   if (savedExpanded === '1') setExpanded(true);
-
-  // Make the slider appear on hover/focus reliably even across pages where CSS
-  // :hover may not take effect due to stacking/context. We toggle the `show`
-  // class on mouseenter/mouseleave and focusin/focusout for keyboard access.
   const audioCard = container.querySelector('.audio-card');
   audioCard.addEventListener('mouseenter', () => {
     volSliderWrap.classList.add('show');
     volSliderWrap.setAttribute('aria-hidden', 'false');
   });
   audioCard.addEventListener('mouseleave', () => {
-    // don't hide if it's explicitly expanded
     if (!volSliderWrap.classList.contains('show') || localStorage.getItem('phawse_audio_expanded') !== '1') {
       volSliderWrap.classList.remove('show');
       volSliderWrap.setAttribute('aria-hidden', 'true');
@@ -171,11 +166,11 @@
   let sliderTimeout;
   volRange.addEventListener('input', (e) => {
     const v = parseFloat(e.target.value);
-  audio.volume = v;
+  audio.volume = v / 100;
   updateBars(v);
   localStorage.setItem(VOL_KEY, v);
   startVol = v;
-  playPauseBtn.textContent = v <= 0 ? '🔇' : (v < 0.4 ? '🔈' : (v < 0.8 ? '🔉' : '🔊'));
+  playPauseBtn.textContent = v <= 0 ? '🔇' : (v < 40 ? '🔈' : (v < 80 ? '🔉' : '🔊'));
     clearTimeout(sliderTimeout);
     sliderTimeout = setTimeout(() => { document.getElementById('vol-slider').classList.remove('show'); document.getElementById('vol-slider').setAttribute('aria-hidden','true'); }, 2500);
   });
