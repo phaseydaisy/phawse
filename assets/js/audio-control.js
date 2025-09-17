@@ -142,6 +142,32 @@
   const savedExpanded = localStorage.getItem('phawse_audio_expanded');
   if (savedExpanded === '1') setExpanded(true);
 
+  // Make the slider appear on hover/focus reliably even across pages where CSS
+  // :hover may not take effect due to stacking/context. We toggle the `show`
+  // class on mouseenter/mouseleave and focusin/focusout for keyboard access.
+  const audioCard = container.querySelector('.audio-card');
+  audioCard.addEventListener('mouseenter', () => {
+    volSliderWrap.classList.add('show');
+    volSliderWrap.setAttribute('aria-hidden', 'false');
+  });
+  audioCard.addEventListener('mouseleave', () => {
+    // don't hide if it's explicitly expanded
+    if (!volSliderWrap.classList.contains('show') || localStorage.getItem('phawse_audio_expanded') !== '1') {
+      volSliderWrap.classList.remove('show');
+      volSliderWrap.setAttribute('aria-hidden', 'true');
+    }
+  });
+  audioCard.addEventListener('focusin', () => {
+    volSliderWrap.classList.add('show');
+    volSliderWrap.setAttribute('aria-hidden', 'false');
+  });
+  audioCard.addEventListener('focusout', () => {
+    if (localStorage.getItem('phawse_audio_expanded') !== '1') {
+      volSliderWrap.classList.remove('show');
+      volSliderWrap.setAttribute('aria-hidden', 'true');
+    }
+  });
+
   let sliderTimeout;
   volRange.addEventListener('input', (e) => {
     const v = parseFloat(e.target.value);
