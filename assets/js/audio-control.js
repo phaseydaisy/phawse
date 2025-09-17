@@ -7,9 +7,12 @@
   ];
   const randomSong = songs[Math.floor(Math.random() * songs.length)];
   
-  const container = document.createElement('div');
-  container.id = 'phawse-audio-root';
-  container.innerHTML = `
+  // If a container already exists (maybe from a previous load), reuse it instead of creating a new one
+  let container = document.getElementById('phawse-audio-root');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'phawse-audio-root';
+    container.innerHTML = `
     <audio id="bg-audio" loop preload="auto">
       <source id="bg-audio-source" src="${randomSong.path}" type="audio/mpeg">
       Your browser does not support the audio element.
@@ -38,7 +41,15 @@
     </div>
   `;
 
-  document.body.appendChild(container);
+    // append temporarily; we'll ensure it's in the host below
+    document.body.appendChild(container);
+  } else {
+    // update source if needed
+    const srcEl = container.querySelector('#bg-audio-source');
+    if (srcEl && srcEl.src && !srcEl.src.includes(randomSong.path)) {
+      try { srcEl.src = randomSong.path; } catch (e) {}
+    }
+  }
   // Ensure a fixed host wrapper exists so CSS can position the audio UI without blocking the page.
   let host = document.querySelector('.phawse-audio-host');
   if (!host) {
@@ -50,6 +61,8 @@
   if (container.parentElement !== host) {
     host.appendChild(container);
   }
+  // Start in a compact (thin) state
+  container.querySelector('.audio-card')?.classList.add('thin');
   const audio = document.getElementById('bg-audio');
   const volRange = document.getElementById('vol-range');
   const playPauseBtn = document.getElementById('play-pause');
@@ -142,10 +155,12 @@
       volSliderWrap.classList.add('show');
       expandBtn.setAttribute('aria-pressed', 'true');
       volSliderWrap.setAttribute('aria-hidden', 'false');
+      container.querySelector('.audio-card')?.classList.remove('thin');
     } else {
       volSliderWrap.classList.remove('show');
       expandBtn.setAttribute('aria-pressed', 'false');
       volSliderWrap.setAttribute('aria-hidden', 'true');
+      container.querySelector('.audio-card')?.classList.add('thin');
     }
     localStorage.setItem('phawse_audio_expanded', exp ? '1' : '0');
   }

@@ -128,19 +128,20 @@ function extractAndReplaceContent(doc) {
     // Re-run any scripts inside the replaced content so they execute in the current document.
     // For external scripts, avoid re-adding ones that already exist in the document to prevent double-loading.
     const scripts = Array.from(newContent.querySelectorAll('script'));
+    const loadPromises = [];
     scripts.forEach(s => {
         const run = document.createElement('script');
         if (s.src) {
-            // If a script with this src already exists in document, skip re-adding it.
-            const src = s.src;
-            const exists = Array.from(document.scripts).some(sc => sc.src === src);
-            if (exists) {
-                // remove the placeholder script tag from the new content to keep DOM clean
-                s.remove();
-                return;
-            }
-            run.src = src;
+            // Always append external scripts found in the fetched content so page-specific logic executes.
+            // Rely on per-script guards (like window.__phawseAudioControlInstalled) to avoid duplicates for globals.
+            const srcHref = new URL(s.src, doc.baseURI).href;
+            run.src = srcHref;
             run.async = false;
+            // track load so we dispatch page-loaded only after external scripts executed
+            loadPromises.push(new Promise((resolve) => {
+                run.addEventListener('load', () => resolve());
+                run.addEventListener('error', () => resolve());
+            }));
         } else {
             // inline script: copy its text so it executes in the current document
             run.textContent = s.textContent;
@@ -150,9 +151,19 @@ function extractAndReplaceContent(doc) {
     });
 
     // Dispatch a custom event so page scripts can hook into PJAX navigation and initialize
-    try {
-        window.dispatchEvent(new CustomEvent('phawse:page-loaded', { detail: { url: location.href } }));
-    } catch (e) {}
+    // Wait for any external scripts to finish loading so initializers are available.
+    Promise.all(loadPromises).then(() => {
+        try {
+            window.dispatchEvent(new CustomEvent('phawse:page-loaded', { detail: { url: location.href } }));
+        } catch (e) {}
+
+        // Defensive: if pages expose a well-known initializer, call it too (helps pages that don't listen for the event)
+        // Small timeout to ensure script's top-level execution completed
+        setTimeout(() => {
+            try { if (typeof window.initContact === 'function') window.initContact(); } catch (e) {}
+            try { if (typeof window.initHmph === 'function') window.initHmph(); } catch (e) {}
+        }, 20);
+    });
 
     return true;
 }

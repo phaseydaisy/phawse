@@ -273,7 +273,7 @@ body::-webkit-scrollbar {
     max-width: 240px; 
     opacity: 0;
     transform: translateY(-6px) scale(0.95);
-    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 220ms cubic-bezier(0.22, 1, 0.36, 1);
     transform-origin: left center;
     /* ensure volume slider doesn't overflow the audio card */
     overflow: hidden;
@@ -297,6 +297,15 @@ body::-webkit-scrollbar {
     transform: scale(0.8);
     margin: -10px;
 }
+
+/* Compact (thin) audio widget variant */
+.audio-card.thin { width: 220px; padding: 8px; gap:8px }
+.audio-card.thin .vol-title { font-size: 0.86rem }
+.audio-card.thin .visual-bars { width: 72px; height: 22px }
+.audio-card.thin .vol-btn { width: 40px; height: 40px }
+.audio-card.thin .vol-slider { max-width: 160px }
+
+.audio-card .vol-slider, .audio-card .visual-bars { transition: all 180ms cubic-bezier(.2,.9,.3,1) }
 
 .vol-slider input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
