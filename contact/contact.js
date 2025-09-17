@@ -1,7 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initContact() {
     const form = document.getElementById('contactForm');
+    if (!form) return;
     const submitBtn = form.querySelector('.submit-btn');
     let isSubmitting = false;
+
+    // avoid double-binding
+    if (form.__phawse_contact_initialized) return;
+    form.__phawse_contact_initialized = true;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -51,50 +56,34 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) throw new Error('Failed to send message');
-
-            // Success state
             submitBtn.classList.add('submit-success');
             submitBtn.innerHTML = '<span>Message Sent! ✓</span>';
             form.reset();
-            
-            // Reset input states
             const inputs = form.querySelectorAll('input, textarea');
             inputs.forEach(input => {
                 input.parentElement.classList.remove('active');
             });
-
-            // Show success message
             const successMessage = document.createElement('div');
             successMessage.className = 'success-message';
             successMessage.textContent = "I'll get back to you via discord soon!";
             form.appendChild(successMessage);
-
-            // Remove success message after delay
             setTimeout(() => {
                 successMessage.remove();
             }, 5000);
 
         } catch (error) {
             console.error('Error:', error);
-            
-            // Error state
             submitBtn.classList.add('submit-error');
             submitBtn.innerHTML = 'Error! Try Again';
-            
-            // Show error message with retry button
             const errorMessage = document.createElement('div');
             errorMessage.className = 'error-message';
             errorMessage.innerHTML = 'Failed to send message. <button class="retry-btn">Retry</button>';
             form.appendChild(errorMessage);
-
-            // Handle retry button
             const retryBtn = errorMessage.querySelector('.retry-btn');
             retryBtn.onclick = () => {
                 errorMessage.remove();
                 submitBtn.click();
             };
-
-            // Remove error message after delay
             setTimeout(() => {
                 errorMessage.remove();
             }, 5000);
@@ -121,4 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!input.value) input.parentElement.classList.remove('active');
         });
     });
+}
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initContact();
+} else {
+    document.addEventListener('DOMContentLoaded', initContact);
+}
+
+window.addEventListener('phawse:page-loaded', () => {
+    setTimeout(initContact, 40);
 });

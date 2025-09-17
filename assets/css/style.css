@@ -210,20 +210,22 @@ body::-webkit-scrollbar {
     opacity: 1;
 }
 
-#phawse-audio-root { position: fixed; right: 20px; bottom: 20px; z-index: 99999; pointer-events: none; }
+/* audio control root: lower z-index so it doesn't cover full-screen modals; allow clicks only on children */
+#phawse-audio-root { position: fixed; right: 20px; bottom: 20px; z-index: 9999; pointer-events: none; }
 #volume-control { pointer-events: auto; position: relative; display: flex; align-items: center; gap: 12px; }
 .audio-card {
     width: 300px;
     max-width: calc(100vw - 40px);
-    background: linear-gradient(180deg, rgba(22,22,22,0.75), rgba(10,10,10,0.7));
+    /* make background more translucent so it's see-through */
+    background: linear-gradient(180deg, rgba(22,22,22,0.45), rgba(10,10,10,0.25));
     border-radius: 14px;
     padding: 12px;
     display: flex;
     align-items: center;
     gap: 12px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-    backdrop-filter: blur(12px) saturate(140%);
-    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.04);
     transform: translateY(0);
     transition: transform 300ms cubic-bezier(.2,.9,.3,1), opacity 250ms, box-shadow 300ms;
     pointer-events: auto;
@@ -272,6 +274,8 @@ body::-webkit-scrollbar {
     transform: translateY(-6px) scale(0.95);
     transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
     transform-origin: left center;
+    /* ensure volume slider doesn't overflow the audio card */
+    overflow: hidden;
 }
 .vol-slider.show { 
     opacity: 1;

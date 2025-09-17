@@ -80,52 +80,41 @@ function isInternalLink(a) {
     } catch (e) { return false; }
 }
 
-function handleLinkClick(e) {
-    const a = e.target.closest && e.target.closest('a');
-    if (!a) return;
-    if (!isInternalLink(a)) return;
-    const href = a.getAttribute('href');
-    if (!href || href.startsWith('#')) return;
-    if (a.target && a.target !== '' && a.target !== '_self') return;
-
-    e.preventDefault();
-    const url = new URL(a.href, location.href);
-    fetch(url.href, { credentials: 'same-origin' }).then(r => r.text()).then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const audioRoot = document.getElementById('phawse-audio-root');
-        const newBody = doc.body;
-        const preserve = audioRoot ? audioRoot : null;
-        document.body.innerHTML = newBody.innerHTML;
-        if (preserve) {
-            if (!document.getElementById('phawse-audio-root')) document.body.appendChild(preserve);
-        }
-        history.pushState({}, '', url.href);
-        const scripts = Array.from(document.body.querySelectorAll('script'));
-        scripts.forEach(s => {
-            const newScript = document.createElement('script');
-            if (s.src) {
-                newScript.src = s.src;
-                newScript.async = false;
-            } else {
-                newScript.textContent = s.textContent;
-            }
-            document.body.appendChild(newScript);
-            s.remove();
-        });
-        window.scrollTo(0,0);
-    }).catch(err => {
-        location.href = url.href;
-    });
-}
-
-document.addEventListener('click', handleLinkClick);
+// single handleLinkClick implementation is attached below after helper functions
 const CONTENT_SELECTOR = '.portal-container';
 
 function extractAndReplaceContent(doc) {
     const newContent = doc.querySelector(CONTENT_SELECTOR);
     const curContent = document.querySelector(CONTENT_SELECTOR);
     if (!newContent) return false;
+    // Ensure page-specific styles from the new document head are present in the current page.
+    try {
+        const headLinks = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+        headLinks.forEach(link => {
+            const href = link.href;
+            if (!href) return;
+            // If a stylesheet with the same href isn't already in the current head, append it.
+            if (!document.head.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
+                const nl = document.createElement('link');
+                nl.rel = 'stylesheet';
+                nl.href = href;
+                // preserve crossorigin attribute if present
+                if (link.crossOrigin) nl.crossOrigin = link.crossOrigin;
+                document.head.appendChild(nl);
+            }
+        });
+        // Also copy any inline <style> blocks that may be required by the page
+        const headStyles = Array.from(doc.querySelectorAll('style'));
+        headStyles.forEach(style => {
+            // Avoid duplicates by checking text content
+            const exists = Array.from(document.head.querySelectorAll('style')).some(s => s.textContent === style.textContent);
+            if (!exists) document.head.appendChild(style.cloneNode(true));
+        });
+    } catch (e) {
+        // If anything goes wrong here, continue — CSS loading is best-effort
+        console.warn('Failed to import page head styles:', e);
+    }
+
     const audioRoot = document.getElementById('phawse-audio-root');
     if (curContent) {
         curContent.replaceWith(newContent);
@@ -135,6 +124,8 @@ function extractAndReplaceContent(doc) {
     if (audioRoot && !document.getElementById('phawse-audio-root')) {
         document.body.appendChild(audioRoot);
     }
+
+    // Re-run any scripts inside the replaced content so they execute in the current document
     const scripts = Array.from(newContent.querySelectorAll('script'));
     scripts.forEach(s => {
         const run = document.createElement('script');
@@ -147,6 +138,11 @@ function extractAndReplaceContent(doc) {
         s.remove();
         newContent.appendChild(run);
     });
+
+    // Dispatch a custom event so page scripts can hook into PJAX navigation and initialize
+    try {
+        window.dispatchEvent(new CustomEvent('phawse:page-loaded', { detail: { url: location.href } }));
+    } catch (e) {}
 
     return true;
 }
