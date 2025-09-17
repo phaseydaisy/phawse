@@ -1,11 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
     const submitBtn = form.querySelector('.submit-btn');
+    let isSubmitting = false;
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        form.classList.add('sending');
+        
+        if (isSubmitting) return;
+        isSubmitting = true;
+        
+        submitBtn.innerHTML = '<div class="loader"></div>';
         submitBtn.disabled = true;
+        form.classList.add('sending');
 
         const timestamp = new Date();
         const message = {
@@ -35,8 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }]
         };
+
         try {
-            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1415402565197107333/okWqkhR_yaJm_PZRbT3zyoGXTXflMjmfLUAZnOIs6wd9kade8hW5LO7D_2hkLIzcxTgI'; //ohhsemen can suck my dick 
+            const WEBHOOK_URL = 'https://discord.com/api/webhooks/1415402565197107333/okWqkhR_yaJm_PZRbT3zyoGXTXflMjmfLUAZnOIs6wd9kade8hW5LO7D_2hkLIzcxTgI';
             const response = await fetch(WEBHOOK_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -45,15 +52,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) throw new Error('Failed to send message');
 
+            // Success state
+            submitBtn.classList.add('submit-success');
+            submitBtn.innerHTML = '<span>Message Sent! ✓</span>';
             form.reset();
-            alert('Message sent successfully! I\'ll get back to you via discord soon.');
+            
+            // Reset input states
+            const inputs = form.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.parentElement.classList.remove('active');
+            });
+
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = "I'll get back to you via discord soon!";
+            form.appendChild(successMessage);
+
+            // Remove success message after delay
+            setTimeout(() => {
+                successMessage.remove();
+            }, 5000);
 
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed to send message. Please try again later.');
+            
+            // Error state
+            submitBtn.classList.add('submit-error');
+            submitBtn.innerHTML = 'Error! Try Again';
+            
+            // Show error message with retry button
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.innerHTML = 'Failed to send message. <button class="retry-btn">Retry</button>';
+            form.appendChild(errorMessage);
+
+            // Handle retry button
+            const retryBtn = errorMessage.querySelector('.retry-btn');
+            retryBtn.onclick = () => {
+                errorMessage.remove();
+                submitBtn.click();
+            };
+
+            // Remove error message after delay
+            setTimeout(() => {
+                errorMessage.remove();
+            }, 5000);
         } finally {
-            form.classList.remove('sending');
-            submitBtn.disabled = false;
+            setTimeout(() => {
+                submitBtn.classList.remove('submit-success', 'submit-error');
+                submitBtn.innerHTML = 'Send Message';
+                submitBtn.disabled = false;
+                form.classList.remove('sending');
+                isSubmitting = false;
+            }, 3000);
         }
     });
 
