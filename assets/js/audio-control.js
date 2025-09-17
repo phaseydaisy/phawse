@@ -1,18 +1,25 @@
 (function () {
   if (window.__phawseAudioControlInstalled) return;
   window.__phawseAudioControlInstalled = true;
+  
+  // List of available songs
+  const songs = [
+    { path: '/assets/music/letugo.mp3', title: 'Let U Go' }
+  ];
+  const randomSong = songs[Math.floor(Math.random() * songs.length)];
+  
   const container = document.createElement('div');
   container.id = 'phawse-audio-root';
   container.innerHTML = `
     <audio id="bg-audio" loop preload="auto">
-      <source id="bg-audio-source" src="/assets/letugo.mp3" type="audio/mpeg">
+      <source id="bg-audio-source" src="${randomSong.path}" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
     <div id="volume-control" aria-label="Background music volume">
       <div class="audio-card enter" role="region" aria-label="background audio control">
         <button id="play-pause" class="vol-btn" aria-label="Play/Pause">⏵</button>
         <div class="vol-meta">
-          <div class="vol-title">Let U Go</div>
+          <div class="vol-title">${randomSong.title}</div>
           <div class="vol-sub">background music</div>
         </div>
         <div class="visual-bars" aria-hidden="true">
@@ -60,6 +67,7 @@
   }
 
   volRange.value = startVol;
+  volRange.style.setProperty('--percent', `${startVol}%`);
   const bars = container.querySelectorAll('.visual-bars div');
   function updateBars(vol){
     const base = Math.max(6, vol);
@@ -166,11 +174,13 @@
   let sliderTimeout;
   volRange.addEventListener('input', (e) => {
     const v = parseFloat(e.target.value);
-  audio.volume = v / 100;
-  updateBars(v);
-  localStorage.setItem(VOL_KEY, v);
-  startVol = v;
-  playPauseBtn.textContent = v <= 0 ? '🔇' : (v < 40 ? '🔈' : (v < 80 ? '🔉' : '🔊'));
+    audio.volume = v / 100;
+    updateBars(v);
+    localStorage.setItem(VOL_KEY, v);
+    startVol = v;
+    playPauseBtn.textContent = v <= 0 ? '🔇' : (v < 40 ? '🔈' : (v < 80 ? '🔉' : '🔊'));
+    // Update the circular dial display
+    volRange.style.setProperty('--percent', `${v}%`);
     clearTimeout(sliderTimeout);
     sliderTimeout = setTimeout(() => { document.getElementById('vol-slider').classList.remove('show'); document.getElementById('vol-slider').setAttribute('aria-hidden','true'); }, 2500);
   });

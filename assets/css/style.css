@@ -215,15 +215,15 @@ body::-webkit-scrollbar {
 .audio-card {
     width: 300px;
     max-width: calc(100vw - 40px);
-    background: linear-gradient(180deg, rgba(22,22,22,0.9), rgba(10,10,10,0.85));
+    background: linear-gradient(180deg, rgba(22,22,22,0.75), rgba(10,10,10,0.7));
     border-radius: 14px;
     padding: 12px;
     display: flex;
     align-items: center;
     gap: 12px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    backdrop-filter: blur(8px) saturate(120%);
-    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.08);
     transform: translateY(0);
     transition: transform 300ms cubic-bezier(.2,.9,.3,1), opacity 250ms, box-shadow 300ms;
     pointer-events: auto;
@@ -280,33 +280,36 @@ body::-webkit-scrollbar {
 .vol-slider input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
-    width: 100%;
-    height: 6px;
-    background: linear-gradient(90deg, #ff6b6b, #ff8787);
-    border-radius: 6px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: conic-gradient(from -90deg, #ff6b6b 0%, #ff8787 var(--percent, 55%), rgba(255,255,255,0.1) var(--percent, 55%));
     outline: none;
     transition: all 200ms ease;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transform: scale(0.8);
+    margin: -10px;
 }
 
 .vol-slider input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 16px;
-    height: 16px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     cursor: pointer;
     transition: all 200ms ease;
-}
-
-.vol-slider input[type="range"]::-webkit-slider-thumb:hover {
-    transform: scale(1.2);
-    box-shadow: 0 4px 12px rgba(255,135,135,0.3);
+    margin: -20px;
+    transform: translate(30px, 30px);
 }
 
 .vol-slider input[type="range"]:hover {
-    height: 8px;
+    transform: scale(0.85);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
 }
 
 #vol-range:focus {
