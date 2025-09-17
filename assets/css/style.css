@@ -210,13 +210,8 @@ body::-webkit-scrollbar {
     opacity: 1;
 }
 
-/* Shared volume control styles (used by audio-control.js) */
-/* Floating audio card */
-/* audio root stays fixed and visible while scrolling */
 #phawse-audio-root { position: fixed; right: 20px; bottom: 20px; z-index: 99999; pointer-events: none; }
 #volume-control { pointer-events: auto; position: relative; display: flex; align-items: center; gap: 12px; }
-
-/* Card */
 .audio-card {
     width: 300px;
     max-width: calc(100vw - 40px);
@@ -238,6 +233,15 @@ body::-webkit-scrollbar {
 
 .vol-btn { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.06); color: #fff; font-size: 1.1rem; display: grid; place-items: center; box-shadow: 0 6px 18px rgba(0,0,0,0.5); transition: transform 200ms, background 200ms; cursor: pointer; }
 .vol-btn:hover { transform: translateY(-3px); }
+#phawse-audio-root .audio-card:hover .vol-slider,
+#phawse-audio-root .audio-card:focus-within .vol-slider,
+#phawse-audio-root .vol-btn:hover + .vol-slider,
+#phawse-audio-root .vol-slider.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+#phawse-audio-root .vol-slider { max-width: 180px; }
 
 .vol-meta { display:flex; flex-direction: column; gap:4px; color: #fff; }
 .vol-title { font-size: 0.92rem; font-weight:600; color:#fff; }

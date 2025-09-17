@@ -1,4 +1,3 @@
-// Copied from root index.js: decorative particle canvas.
 const canvas = document.createElement('canvas');
 canvas.style.position = 'fixed';
 canvas.style.top = '0';
@@ -73,3 +72,110 @@ function animate() {
 window.addEventListener('resize', resizeCanvas);
 init();
 animate();
+function isInternalLink(a) {
+    if (!a || !a.href) return false;
+    try {
+        const url = new URL(a.href, location.href);
+        return url.origin === location.origin;
+    } catch (e) { return false; }
+}
+
+function handleLinkClick(e) {
+    const a = e.target.closest && e.target.closest('a');
+    if (!a) return;
+    if (!isInternalLink(a)) return;
+    const href = a.getAttribute('href');
+    if (!href || href.startsWith('#')) return;
+    if (a.target && a.target !== '' && a.target !== '_self') return;
+
+    e.preventDefault();
+    const url = new URL(a.href, location.href);
+    fetch(url.href, { credentials: 'same-origin' }).then(r => r.text()).then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const audioRoot = document.getElementById('phawse-audio-root');
+        const newBody = doc.body;
+        const preserve = audioRoot ? audioRoot : null;
+        document.body.innerHTML = newBody.innerHTML;
+        if (preserve) {
+            if (!document.getElementById('phawse-audio-root')) document.body.appendChild(preserve);
+        }
+        history.pushState({}, '', url.href);
+        const scripts = Array.from(document.body.querySelectorAll('script'));
+        scripts.forEach(s => {
+            const newScript = document.createElement('script');
+            if (s.src) {
+                newScript.src = s.src;
+                newScript.async = false;
+            } else {
+                newScript.textContent = s.textContent;
+            }
+            document.body.appendChild(newScript);
+            s.remove();
+        });
+        window.scrollTo(0,0);
+    }).catch(err => {
+        location.href = url.href;
+    });
+}
+
+document.addEventListener('click', handleLinkClick);
+const CONTENT_SELECTOR = '.portal-container';
+
+function extractAndReplaceContent(doc) {
+    const newContent = doc.querySelector(CONTENT_SELECTOR);
+    const curContent = document.querySelector(CONTENT_SELECTOR);
+    if (!newContent) return false;
+    const audioRoot = document.getElementById('phawse-audio-root');
+    if (curContent) {
+        curContent.replaceWith(newContent);
+    } else {
+        document.body.appendChild(newContent);
+    }
+    if (audioRoot && !document.getElementById('phawse-audio-root')) {
+        document.body.appendChild(audioRoot);
+    }
+    const scripts = Array.from(newContent.querySelectorAll('script'));
+    scripts.forEach(s => {
+        const run = document.createElement('script');
+        if (s.src) {
+            run.src = s.src;
+            run.async = false;
+        } else {
+            run.textContent = s.textContent;
+        }
+        s.remove();
+        newContent.appendChild(run);
+    });
+
+    return true;
+}
+
+function handleLinkClick(e) {
+    const a = e.target.closest && e.target.closest('a');
+    if (!a) return;
+    if (!isInternalLink(a)) return; // let external links behave normally
+    const href = a.getAttribute('href');
+    if (!href || href.startsWith('#')) return;
+    if (a.target && a.target !== '' && a.target !== '_self') return;
+
+    e.preventDefault();
+    const url = new URL(a.href, location.href);
+    fetch(url.href, { credentials: 'same-origin' }).then(r => r.text()).then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const replaced = extractAndReplaceContent(doc);
+        if (!replaced) {
+            location.href = url.href;
+            return;
+        }
+        const newTitle = doc.querySelector('title');
+        if (newTitle) document.title = newTitle.textContent;
+        history.pushState({}, '', url.href);
+        window.scrollTo(0,0);
+    }).catch(err => {
+        location.href = url.href;
+    });
+}
+
+window.addEventListener('popstate', () => { location.reload(); });
