@@ -1,8 +1,7 @@
 (function () {
   if (window.__phawseAudioControlInstalled) return;
   window.__phawseAudioControlInstalled = true;
-  
-  // List of available songs
+
   const songs = [
     { path: '/assets/music/letugo.mp3', title: 'Let U Go' }
   ];
@@ -205,4 +204,4 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveState(); });
   window.addEventListener('unload', () => { clearInterval(saveTimer); saveState(); });
 })();
-//test
+//test again
