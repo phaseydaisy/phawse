@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const statusText = document.querySelector('.status-text');
     let currentIndex = 0;
-
-    // Function to update the status message
     function updateStatus() {
         statusText.style.opacity = '0';
         
@@ -24,12 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
             currentIndex = (currentIndex + 1) % statusMessages.length;
         }, 500);
     }
-
-    // Update status message every 3 seconds
     updateStatus();
     setInterval(updateStatus, 3000);
-
-    // Add hover effect to tools
     const tools = document.querySelectorAll('.tool');
     tools.forEach(tool => {
         tool.addEventListener('mouseenter', () => {

@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="shutdown.css">
-    <script src="/preventDevTools.js"></script>
+    <script src="/assets/js/preventDevTools.js"></script>
 </head>
 <body>
     <a href="/dev" class="back-button">← Back</a>
@@ -22,6 +22,18 @@
             <p class="status-text">time to rest...</p>
         </div>
     </div>
+    <audio id="bg-audio" loop preload="auto">
+        <source id="bg-audio-source" src="/assets/letugo.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <div id="volume-control" aria-label="Background music volume">
+        <button id="vol-button" class="vol-btn" aria-label="Toggle volume control">🔈</button>
+        <div id="vol-slider" class="vol-slider" aria-hidden="true">
+            <input id="vol-range" type="range" min="0" max="1" step="0.01" value="0.08">
+            <a id="open-spotify" href="https://open.spotify.com/track/40TZnaw4eDPChJNHw2Swf3" target="_blank" rel="noopener" title="Open on Spotify">Listen on Spotify</a>
+        </div>
+    </div>
+
     <script src="shutdown.js"></script>
 </body>
 </html>
