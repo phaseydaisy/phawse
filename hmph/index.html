@@ -28,6 +28,11 @@
     </a>
   </div>
 </div>
+  <script src="/assets/js/index.js"></script>
   <script src="/assets/js/audio-control.js"></script>
+  <script>
+    // Boot helper for direct hmph page loads
+    try { window.dispatchEvent(new Event('phawse:page-loaded')); } catch (e) {}
+  </script>
 </body>
 </html>

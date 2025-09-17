@@ -40,7 +40,15 @@
             </form>
         </div>
     </div>
-    <script src="contact.js?v=1"></script>
-    <script src="/assets/js/audio-control.js"></script>
+        <script src="/assets/js/index.js"></script>
+        <script src="contact.js?v=1"></script>
+        <script src="/assets/js/audio-control.js"></script>
+        <script>
+            // Boot helper: ensure page initializers run on direct load
+            try {
+                if (typeof initContact === 'function') initContact();
+            } catch (e) { console.warn('initContact failed', e); }
+            try { window.dispatchEvent(new Event('phawse:page-loaded')); } catch (e) {}
+        </script>
 </body>
 </html>
