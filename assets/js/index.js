@@ -88,30 +88,35 @@ function extractAndReplaceContent(doc) {
     const curContent = document.querySelector(CONTENT_SELECTOR);
     if (!newContent) return false;
     // Ensure page-specific styles from the new document head are present in the current page.
+    let styleLoadPromises = [];
     try {
         const headLinks = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
         headLinks.forEach(link => {
             const href = link.href;
             if (!href) return;
-            // If a stylesheet with the same href isn't already in the current head, append it.
+            // If a stylesheet with the same href isn't already in the current head, append it and track its load.
             if (!document.head.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
                 const nl = document.createElement('link');
                 nl.rel = 'stylesheet';
                 nl.href = href;
-                // preserve crossorigin attribute if present
                 if (link.crossOrigin) nl.crossOrigin = link.crossOrigin;
+                const p = new Promise((resolve) => {
+                    nl.addEventListener('load', () => resolve());
+                    nl.addEventListener('error', () => resolve());
+                    // In case load events never fire, resolve after a timeout
+                    setTimeout(() => resolve(), 2500);
+                });
+                styleLoadPromises.push(p);
                 document.head.appendChild(nl);
             }
         });
         // Also copy any inline <style> blocks that may be required by the page
         const headStyles = Array.from(doc.querySelectorAll('style'));
         headStyles.forEach(style => {
-            // Avoid duplicates by checking text content
             const exists = Array.from(document.head.querySelectorAll('style')).some(s => s.textContent === style.textContent);
             if (!exists) document.head.appendChild(style.cloneNode(true));
         });
     } catch (e) {
-        // If anything goes wrong here, continue — CSS loading is best-effort
         console.warn('Failed to import page head styles:', e);
     }
 
@@ -135,6 +140,11 @@ function extractAndReplaceContent(doc) {
             // Always append external scripts found in the fetched content so page-specific logic executes.
             // Rely on per-script guards (like window.__phawseAudioControlInstalled) to avoid duplicates for globals.
             const srcHref = new URL(s.src, doc.baseURI).href;
+            // Don't re-insert the main index.js to avoid double-initialization
+            if (srcHref.endsWith('/assets/js/index.js') || srcHref.endsWith('/assets/js/index.js/')) {
+                s.remove();
+                return;
+            }
             run.src = srcHref;
             run.async = false;
             // track load so we dispatch page-loaded only after external scripts executed
@@ -150,15 +160,13 @@ function extractAndReplaceContent(doc) {
         newContent.appendChild(run);
     });
 
-    // Dispatch a custom event so page scripts can hook into PJAX navigation and initialize
-    // Wait for any external scripts to finish loading so initializers are available.
-    Promise.all(loadPromises).then(() => {
+    // Wait for both styles and scripts to settle before dispatching page-loaded
+    Promise.all([].concat(styleLoadPromises, loadPromises)).then(() => {
         try {
             window.dispatchEvent(new CustomEvent('phawse:page-loaded', { detail: { url: location.href } }));
         } catch (e) {}
 
-        // Defensive: if pages expose a well-known initializer, call it too (helps pages that don't listen for the event)
-        // Small timeout to ensure script's top-level execution completed
+        // Defensive: call well-known initializers if present
         setTimeout(() => {
             try { if (typeof window.initContact === 'function') window.initContact(); } catch (e) {}
             try { if (typeof window.initHmph === 'function') window.initHmph(); } catch (e) {}

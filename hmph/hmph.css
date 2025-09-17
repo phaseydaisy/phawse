@@ -4,9 +4,10 @@
     overflow: hidden !important;
 }
 
-.definition-card {
+.portal-container .definition-card, .definition-card {
     background: rgba(20, 20, 20, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* stronger specificity and important fallback in case other styles briefly override it */
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 8px;
     padding: 2rem;
     margin: 0 auto;
