@@ -95,16 +95,17 @@
     </audio>
     <div id="volume-control" aria-label="Background music volume">
       <div class="audio-card enter" role="region" aria-label="background audio control">
-        <div class="audio-main">
-          <div class="player-controls">
-            <button id="prev-track" class="control-btn" aria-label="Previous track">⏮</button>
-            <button id="play-pause" class="vol-btn" aria-label="Play/Pause">⏵</button>
-            <button id="next-track" class="control-btn" aria-label="Next track">⏭</button>
+        <div class="audio-content">
+          <div class="audio-info">
+            <div class="song-cover">
+              <img id="cover-art" src="${currentSong.cover}" alt="Album art" onerror="this.src='/assets/images/default-cover.png'">
+            </div>
+            <div class="song-details">
+              <div class="vol-title">${currentSong.title}</div>
+              <div class="vol-sub">${currentSong.artist}</div>
+            </div>
           </div>
-          <div class="vol-meta">
-            <div class="vol-title">${currentSong.title}</div>
-            <div class="vol-sub">${currentSong.artist}</div>
-          </div>
+          
           <div class="progress-container">
             <div id="progress-bar" class="progress-bar">
               <div id="progress-current" class="progress-current"></div>
@@ -114,25 +115,49 @@
               <span id="total-time">${Math.floor(currentSong.duration / 60)}:${String(currentSong.duration % 60).padStart(2, '0')}</span>
             </div>
           </div>
+
+          <div class="controls-row">
+            <div class="main-controls">
+              <button id="prev-track" class="control-btn flat-btn" aria-label="Previous track">⏮</button>
+              <button id="play-pause" class="play-btn flat-btn" aria-label="Play/Pause">⏵</button>
+              <button id="next-track" class="control-btn flat-btn" aria-label="Next track">⏭</button>
+            </div>
+            
+            <div class="volume-section">
+              <button id="volume-toggle" class="volume-btn flat-btn" aria-label="Toggle volume">�</button>
+              <div class="volume-slider-container">
+                <input id="vol-range" 
+                       type="range" 
+                       class="volume-slider" 
+                       min="0" 
+                       max="100" 
+                       step="1" 
+                       value="55" 
+                       aria-label="Volume">
+              </div>
+            </div>
+            
+            <div class="extra-controls">
+              <button id="shuffle-btn" class="control-btn flat-btn ${playlist.shuffleMode ? 'active' : ''}" aria-label="Toggle shuffle">🔀</button>
+              <a id="open-spotify" 
+                 href="https://open.spotify.com/track/${currentSong.spotifyId}" 
+                 target="_blank" 
+                 rel="noopener" 
+                 class="spotify-btn flat-btn" 
+                 aria-label="Open in Spotify">
+                <svg class="spotify-icon" viewBox="0 0 24 24">
+                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
           <div class="visual-bars" aria-hidden="true">
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
             <div class="bar"></div>
           </div>
-        </div>
-        <div class="vol-actions">
-          <button id="shuffle-btn" class="control-btn ${playlist.shuffleMode ? 'active' : ''}" aria-label="Toggle shuffle">🔀</button>
-          <button id="expand-btn" class="expand-btn" aria-label="Open volume control">⚙️</button>
-        </div>
-        <div class="vol-slider" id="vol-slider" aria-hidden="true">
-          <div class="volume-control">
-            <span class="volume-icon">🔊</span>
-            <input id="vol-range" type="range" min="0" max="100" step="1" value="55">
-          </div>
-          <a id="open-spotify" href="https://open.spotify.com/track/${currentSong.spotifyId}" target="_blank" rel="noopener" aria-label="Open in Spotify">
-            <img src="/assets/images/spotify.png" alt="Spotify" class="spotify-icon"> Open in Spotify
-          </a>
         </div>
       </div>
     </div>
@@ -160,22 +185,21 @@
   const audio = document.getElementById('bg-audio');
   const volRange = document.getElementById('vol-range');
   const playPauseBtn = document.getElementById('play-pause');
-  const expandBtn = document.getElementById('expand-btn');
-  const volSliderWrap = document.getElementById('vol-slider');
+  const volumeBtn = document.getElementById('volume-toggle');
+  const volSliderContainer = document.querySelector('.volume-slider-container');
   const prevBtn = document.getElementById('prev-track');
   const nextBtn = document.getElementById('next-track');
   const shuffleBtn = document.getElementById('shuffle-btn');
   const progressBar = document.getElementById('progress-current');
   const currentTimeDisplay = document.getElementById('current-time');
   const totalTimeDisplay = document.getElementById('total-time');
+  const coverArt = document.getElementById('cover-art');
 
   if (!audio) return;
 
   const VOL_KEY = 'phawse_audio_vol';
   const TIME_KEY = 'phawse_audio_time';
   const PLAY_KEY = 'phawse_audio_playing';
-  
-  // Create AudioContext for visualization
   let audioContext, analyser, dataArray;
   function initAudioContext() {
     if (audioContext) return;
@@ -203,7 +227,6 @@
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 
-  // Update visualization
   function updateVisualization() {
     if (!audioContext || !analyser) return;
     analyser.getByteFrequencyData(dataArray);
@@ -289,6 +312,12 @@
     document.querySelector('.vol-title').textContent = song.title;
     document.querySelector('.vol-sub').textContent = song.artist;
     document.getElementById('open-spotify').href = `https://open.spotify.com/track/${song.spotifyId}`;
+    
+    const coverImg = document.getElementById('cover-art');
+    if (coverImg) {
+      coverImg.src = song.cover;
+    }
+
     audio.load();
     if (!audio.paused) {
       audio.play().then(() => {
@@ -296,6 +325,12 @@
         updateVisualization();
       });
     }
+
+    audio.addEventListener('loadedmetadata', () => {
+      if (audio.duration) {
+        totalTimeDisplay.textContent = formatTime(audio.duration);
+      }
+    }, { once: true });
   }
 
   playPauseBtn.addEventListener('click', () => {
@@ -387,13 +422,22 @@
     }
   });
 
-  let sliderTimeout;
-  const volumeIcon = document.querySelector('.volume-icon');
-  
   function updateVolumeIcon(volume) {
     const icon = volume <= 0 ? '🔇' : volume < 30 ? '🔈' : volume < 70 ? '🔉' : '🔊';
-    volumeIcon.textContent = icon;
+    volumeBtn.textContent = icon;
   }
+
+  volumeBtn.addEventListener('click', () => {
+    volSliderContainer.classList.toggle('show');
+    volumeBtn.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.volume-section')) {
+      volSliderContainer.classList.remove('show');
+      volumeBtn.classList.remove('active');
+    }
+  });
 
   volRange.addEventListener('input', (e) => {
     const v = parseFloat(e.target.value);
@@ -401,21 +445,10 @@
     updateVolumeIcon(v);
     localStorage.setItem(VOL_KEY, v);
     startVol = v;
-    
-    // Add visual feedback to the slider
-    volRange.style.setProperty('--percent', `${v}%`);
-    volRange.style.setProperty('--thumb-scale', '1.2');
-    clearTimeout(sliderTimeout);
-    sliderTimeout = setTimeout(() => {
-      volRange.style.setProperty('--thumb-scale', '1');
-      if (!volSliderWrap.matches(':hover')) {
-        volSliderWrap.classList.remove('show');
-        volSliderWrap.setAttribute('aria-hidden', 'true');
-      }
-    }, 2500);
+  
+    volRange.style.setProperty('--volume-level', `${v}%`);
   });
 
-  // Double click to reset to default volume
   volRange.addEventListener('dblclick', () => {
     const defaultVolume = 55;
     volRange.value = defaultVolume;
