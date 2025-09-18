@@ -83,6 +83,15 @@ audioPlayer.addEventListener('pause', () => {
     isPlaying = false;
 });
 
+const volumeSlider = document.getElementById('volumeSlider');
+
+volumeSlider.addEventListener('input', (e) => {
+    const volume = e.target.value / 100;
+    audioPlayer.volume = volume;
+});
+
+audioPlayer.volume = volumeSlider.value / 100;
+
 audioPlayer.addEventListener('error', (e) => {
     console.log('Error loading audio file:', e);
     playNextTrack();
