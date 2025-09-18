@@ -129,8 +129,6 @@
   }
 
   const spotifyClient = new SpotifyClient(SPOTIFY_CLIENT_ID);
-
-  // Create tracks from the URLs in SPOTIFY_TRACKS
   const songs = SPOTIFY_TRACKS.map(url => new SpotifyTrack(url, spotifyClient));
 
   class PlaylistManager {
@@ -786,4 +784,4 @@
   window.addEventListener('pagehide', saveState);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveState(); });
   window.addEventListener('unload', () => { clearInterval(saveTimer); saveState(); });
-})();   //updatexc233
+})();   // End of UPDATE
