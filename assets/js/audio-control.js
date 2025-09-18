@@ -91,12 +91,20 @@
         this.title = trackData.name;
         this.artist = trackData.artists.map(a => a.name).join(', ');
         this.duration = Math.round(trackData.duration_ms / 1000);
-        this.albumArt = trackData.album.images[0]?.url;
+        this.albumArt = trackData.album.images[0]?.url || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='; // Transparent fallback
         this.previewUrl = trackData.preview_url;
+
+        if (!this.previewUrl) {
+          console.warn('No preview URL available for this track');
+          this.title = 'Preview Unavailable';
+          this.artist = 'Try another track';
+        }
 
         this.updateUI();
       } catch (error) {
         console.warn('Could not fetch Spotify metadata:', error);
+        this.title = 'Error Loading Track';
+        this.artist = 'Please check the URL';
         this.updateUI();
       }
     }
@@ -379,10 +387,10 @@
         <div class="audio-content">
           <div class="audio-info">
             <div class="song-cover">
-              <img id="cover-art" src="${currentSong.cover}" alt="Album art" onerror="this.src='/assets/images/default-cover.png'">
+              <img id="cover-art" src="${currentSong.cover}" alt="Album art">
             </div>
             <div class="song-details">
-              <a href="https://open.spotify.com/track/${currentSong.spotifyId}" 
+              <a href="${currentSong.spotifyUrl}" 
                  target="_blank" 
                  rel="noopener"
                  class="vol-title spotify-link">
@@ -451,8 +459,13 @@
   } else {
     
     const srcEl = container.querySelector('#bg-audio-source');
-    if (srcEl && srcEl.src && !srcEl.src.includes(randomSong.audioUrl)) {
-      try { srcEl.src = randomSong.audioUrl; } catch (e) {}
+    if (srcEl && randomSong.audioUrl) {
+      try { 
+        srcEl.src = randomSong.audioUrl;
+        audio.load(); // Reload the audio element with the new source
+      } catch (e) {
+        console.warn('Error setting audio source:', e);
+      }
     }
   }
   let host = document.querySelector('.phawse-audio-host');
