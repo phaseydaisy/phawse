@@ -2,18 +2,128 @@
   if (window.__phawseAudioControlInstalled) return;
   window.__phawseAudioControlInstalled = true;
 
-  const songs = [
-    {
-      path: '/assets/music/letugo.mp3', 
-      title: 'Let U Go',
-      artist: 'lucidbeatz',
-      spotifyId: '40TZnaw4eDPChJNHw2Swf3',
-      duration: 184,
-      get cover() {
-        return this.path.replace('.mp3', '.png').replace('/music/', '/music/covers/');
+  
+  const SPOTIFY_CLIENT_ID = 'cf5622de811e44a583bb2a888a63a63e';
+  
+  const SPOTIFY_TRACKS = [
+    'https://open.spotify.com/track/40TZnaw4eDPChJNHw2Swf3',
+    'https://open.spotify.com/track/4tXlm992qvevZGLxNg9wms?si=e9ca2346fd794736',
+
+  ];
+  
+  class SpotifyClient {
+    constructor(clientId) {
+      this.clientId = clientId;
+      this.accessToken = null;
+      this.tokenExpiry = 0;
+    }
+
+    async getAccessToken() {
+      if (this.accessToken && Date.now() < this.tokenExpiry) {
+        return this.accessToken;
+      }
+
+      try {
+        const response = await fetch('https://accounts.spotify.com/api/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `grant_type=client_credentials&client_id=${this.clientId}`
+        });
+
+        const data = await response.json();
+        this.accessToken = data.access_token;
+        this.tokenExpiry = Date.now() + (data.expires_in * 1000);
+        return this.accessToken;
+      } catch (error) {
+        console.error('Failed to get Spotify access token:', error);
+        throw error;
       }
     }
-  ];
+
+    async getTrack(trackId) {
+      const token = await this.getAccessToken();
+      const response = await fetch(`https://api.spotify.com/v1/tracks/${trackId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      return response.json();
+    }
+
+    async getTrackFromUrl(url) {
+      const trackId = this.extractTrackId(url);
+      if (!trackId) throw new Error('Invalid Spotify URL');
+      return this.getTrack(trackId);
+    }
+
+    extractTrackId(url) {
+      try {
+        const spotifyUrl = new URL(url);
+        const path = spotifyUrl.pathname;
+        if (path.startsWith('/track/')) {
+          return path.split('/')[2].split('?')[0];
+        }
+        return null;
+      } catch (error) {
+        return null;
+      }
+    }
+  }
+  
+  class SpotifyTrack {
+    constructor(spotifyUrl, spotifyClient) {
+      this.spotifyUrl = spotifyUrl;
+      this.spotifyClient = spotifyClient;
+      this.title = 'Loading...';
+      this.artist = 'Loading...';
+      this.duration = 0;
+      this.albumArt = null;
+      this.previewUrl = null;
+      this.fetchSpotifyMetadata();
+    }
+
+    async fetchSpotifyMetadata() {
+      try {
+        const trackData = await this.spotifyClient.getTrackFromUrl(this.spotifyUrl);
+        
+        this.title = trackData.name;
+        this.artist = trackData.artists.map(a => a.name).join(', ');
+        this.duration = Math.round(trackData.duration_ms / 1000);
+        this.albumArt = trackData.album.images[0]?.url;
+        this.previewUrl = trackData.preview_url;
+
+        this.updateUI();
+      } catch (error) {
+        console.warn('Could not fetch Spotify metadata:', error);
+        this.updateUI();
+      }
+    }
+
+    updateUI() {
+      const titleEl = document.querySelector('.vol-title');
+      const artistEl = document.querySelector('.vol-sub');
+      const coverEl = document.getElementById('cover-art');
+      
+      if (titleEl) titleEl.textContent = this.title;
+      if (artistEl) artistEl.textContent = this.artist;
+      if (coverEl && this.albumArt) coverEl.src = this.albumArt;
+    }
+
+    get cover() {
+      return this.albumArt;
+    }
+
+    get audioUrl() {
+      return this.previewUrl;
+    }
+  }
+
+  const spotifyClient = new SpotifyClient(SPOTIFY_CLIENT_ID);
+
+  // Create tracks from the URLs in SPOTIFY_TRACKS
+  const songs = SPOTIFY_TRACKS.map(url => new SpotifyTrack(url, spotifyClient));
 
   class PlaylistManager {
     constructor(songs) {
@@ -341,8 +451,8 @@
   } else {
     
     const srcEl = container.querySelector('#bg-audio-source');
-    if (srcEl && srcEl.src && !srcEl.src.includes(randomSong.path)) {
-      try { srcEl.src = randomSong.path; } catch (e) {}
+    if (srcEl && srcEl.src && !srcEl.src.includes(randomSong.audioUrl)) {
+      try { srcEl.src = randomSong.audioUrl; } catch (e) {}
     }
   }
   let host = document.querySelector('.phawse-audio-host');
@@ -426,17 +536,18 @@
 
   let saved = localStorage.getItem(VOL_KEY);
   let startVol = saved !== null ? (parseFloat(saved) > 1 ? parseFloat(saved) : Math.round(parseFloat(saved) * 100)) : 55;
-  audio.volume = 0;
-
+  
   function fadeVolume(from, to, duration) {
     const start = performance.now();
     function step(now) {
       const t = Math.min(1, (now - start) / duration);
-      audio.volume = (from + (to - from) * t) / 100;
+      const volume = (from + (to - from) * t) / 100;
+      audio.volume = Math.max(0, Math.min(1, volume)); 
       if (t < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
+  audio.volume = startVol / 100;
 
   volRange.value = startVol;
   volRange.style.setProperty('--percent', `${startVol}%`);
@@ -482,10 +593,10 @@
   }, 1000);
   function loadSong(song) {
     const source = document.getElementById('bg-audio-source');
-    source.src = song.path;
+    source.src = song.audioUrl;
     document.querySelector('.vol-title').textContent = song.title;
     document.querySelector('.vol-sub').textContent = song.artist;
-    document.getElementById('open-spotify').href = `https://open.spotify.com/track/${song.spotifyId}`;
+    document.getElementById('open-spotify').href = song.spotifyUrl;
     
     const coverImg = document.getElementById('cover-art');
     if (coverImg) {
@@ -662,4 +773,4 @@
   window.addEventListener('pagehide', saveState);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveState(); });
   window.addEventListener('unload', () => { clearInterval(saveTimer); saveState(); });
-})();   //updatrccheck9
+})();   //updatexc233
