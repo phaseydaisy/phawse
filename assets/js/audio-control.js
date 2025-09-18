@@ -3,7 +3,7 @@
   window.__phawseAudioControlInstalled = true;
 
   const songs = [
-    { 
+    {
       path: '/assets/music/letugo.mp3', 
       title: 'Let U Go',
       artist: 'Phawse',
@@ -89,6 +89,161 @@
     container = document.createElement('div');
     container.id = 'phawse-audio-root';
     container.innerHTML = `
+    <style>
+      .audio-card {
+        max-inline-size: 320px;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 12px;
+        padding: 12px;
+        color: #fff;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      .audio-content {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .audio-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .song-cover {
+        flex-shrink: 0;
+      }
+      .song-cover img {
+        inline-size: 40px;
+        block-size: 40px;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+      .song-details {
+        flex-grow: 1;
+        min-inline-size: 0;
+      }
+      .vol-title {
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .vol-sub {
+        font-size: 12px;
+        opacity: 0.7;
+      }
+      .controls-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding-block: 4px;
+      }
+      .main-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .control-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        opacity: 0.7;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 8px;
+        transition: all 0.2s;
+      }
+      .play-btn {
+        background: none;
+        border: 1px solid rgba(255,255,255,0.3);
+        color: #fff;
+        inline-size: 36px;
+        block-size: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s;
+      }
+      .volume-slider {
+        -webkit-appearance: none;
+        inline-size: 100%;
+        block-size: 3px;
+        border-radius: 2px;
+        background: rgba(255,255,255,0.1);
+        outline: none;
+        transition: all 0.2s;
+      }
+      .volume-slider-container {
+        position: relative;
+        inline-size: 80px;
+      }
+      .volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        block-size: 10px;
+        inline-size: 10px;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .volume-slider::-moz-range-thumb {
+        block-size: 10px;
+        inline-size: 10px;
+        border-radius: 50%;
+        background: #fff;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.2s;
+      }
+      .volume-slider:hover::-webkit-slider-thumb {
+        transform: scale(1.2);
+      }
+      .volume-slider:hover::-moz-range-thumb {
+        transform: scale(1.2);
+      }
+      .progress-container {
+        margin-block: 8px;
+      }
+      .progress-bar {
+        block-size: 3px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 1.5px;
+        cursor: pointer;
+        position: relative;
+      }
+      .progress-bar:hover {
+        block-size: 5px;
+      }
+      .progress-current {
+        block-size: 100%;
+        background: #fff;
+        border-radius: 1.5px;
+        transition: width 0.1s linear;
+      }
+      .time-display {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        margin-block-start: 4px;
+        opacity: 0.7;
+      }
+      .control-btn:hover, .volume-btn:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      .play-btn:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: #fff;
+        transform: scale(1.05);
+      }
+      .active {
+        opacity: 1;
+        color: #1db954;
+      }
+    </style>
     <audio id="bg-audio" preload="auto">
       <source id="bg-audio-source" src="${currentSong.path}" type="audio/mpeg">
       Your browser does not support the audio element.
@@ -118,9 +273,9 @@
 
           <div class="controls-row">
             <div class="main-controls">
-              <button id="prev-track" class="control-btn flat-btn" aria-label="Previous track">⏮</button>
+              <button id="prev-track" class="control-btn flat-btn" aria-label="Previous track">←</button>
               <button id="play-pause" class="play-btn flat-btn" aria-label="Play/Pause">⏵</button>
-              <button id="next-track" class="control-btn flat-btn" aria-label="Next track">⏭</button>
+              <button id="next-track" class="control-btn flat-btn" aria-label="Next track">→</button>
             </div>
             
             <div class="volume-section">
