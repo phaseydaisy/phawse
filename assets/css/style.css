@@ -57,27 +57,28 @@ body {
     z-index: 1000;
 }
 
-.player-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.music-player {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
 }
 
 .player-box {
-    background: rgba(15, 15, 15, 0.75);
-    backdrop-filter: blur(8px);
-    border-radius: 15px;
-    padding: 10px;
+    background: rgba(15, 15, 15, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px;
     display: flex;
-    gap: 12px;
     align-items: center;
+    gap: 10px;
+    backdrop-filter: blur(8px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .cover-art {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 8px;
     overflow: hidden;
     position: relative;
@@ -109,7 +110,7 @@ body {
 }
 
 .spotify-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -119,6 +120,24 @@ body {
 }
 
 .cover-art:hover img {
+    transform: scale(1.1);
+}
+
+.play-pause-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.play-pause-btn:hover {
+    color: white;
     transform: scale(1.1);
 }
 
