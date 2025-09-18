@@ -50,6 +50,37 @@ body {
     background-size: 300% 300%, 200% 200%, 200% 200%, 300% 300%;
 }
 
+.spotify-player {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.spotify-player:hover {
+    transform: scale(1.02);
+}
+
+.spotify-player iframe {
+    border-radius: 12px;
+}
+
+@media (max-width: 768px) {
+    .spotify-player {
+        bottom: 10px;
+        right: 10px;
+        transform: scale(0.9);
+    }
+    
+    .spotify-player:hover {
+        transform: scale(0.92);
+    }
+}
+}
+
 @keyframes stars {
     0% {
         background-position: 0 0;
