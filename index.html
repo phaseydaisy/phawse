@@ -42,10 +42,16 @@
     </div>
   </div>
   <div class="music-player">
-    <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause music">
-      <span class="play-icon">▶</span>
-      <span class="pause-icon hidden">⏸</span>
-    </button>
+    <audio id="audio-player" preload="metadata"></audio>
+    <div class="player-container">
+      <div class="cover-art">
+        <img id="cover-image" src="/assets/music/covers/youandi.png" alt="Album cover">
+      </div>
+      <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause music">
+        <span class="play-icon">▶</span>
+        <span class="pause-icon hidden">⏸</span>
+      </button>
+    </div>
   </div>
   <script src="/assets/js/index.js"></script>
   <script src="/assets/js/audio-control.js"></script>
