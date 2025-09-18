@@ -4,6 +4,7 @@
 
   
   const SPOTIFY_CLIENT_ID = 'cf5622de811e44a583bb2a888a63a63e';
+  const SPOTIFY_CLIENT_SECRET = '180aec11458f46e19069cc4b854c33e6';
   
   const SPOTIFY_TRACKS = [
     'https://open.spotify.com/track/40TZnaw4eDPChJNHw2Swf3',
@@ -27,9 +28,10 @@
         const response = await fetch('https://accounts.spotify.com/api/token', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': 'Basic ' + btoa(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET)
           },
-          body: `grant_type=client_credentials&client_id=${this.clientId}`
+          body: 'grant_type=client_credentials'
         });
 
         const data = await response.json();
@@ -104,7 +106,10 @@
       } catch (error) {
         console.warn('Could not fetch Spotify metadata:', error);
         this.title = 'Error Loading Track';
-        this.artist = 'Please check the URL';
+        this.artist = 'Error';
+        this.duration = 0;
+        this.albumArt = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+        this.previewUrl = null;
         this.updateUI();
       }
     }
@@ -457,10 +462,12 @@
   } else {
     
     const srcEl = container.querySelector('#bg-audio-source');
-    if (srcEl && randomSong.audioUrl) {
+    if (srcEl && randomSong?.audioUrl) {
       try { 
         srcEl.src = randomSong.audioUrl;
-        audio.load(); // Reload the audio element with the new source
+        if (audio) {
+          audio.load();
+        }
       } catch (e) {
         console.warn('Error setting audio source:', e);
       }
@@ -784,4 +791,4 @@
   window.addEventListener('pagehide', saveState);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveState(); });
   window.addEventListener('unload', () => { clearInterval(saveTimer); saveState(); });
-})();   // End of UPDATE
+})();   // UPDATE of END
