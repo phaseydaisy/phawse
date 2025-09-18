@@ -791,4 +791,4 @@
   window.addEventListener('pagehide', saveState);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveState(); });
   window.addEventListener('unload', () => { clearInterval(saveTimer); saveState(); });
-})();   // UPDATE of END
+})();   // UPDATE of END /2
