@@ -8,8 +8,10 @@
       title: 'Let U Go',
       artist: 'Phawse',
       spotifyId: '40TZnaw4eDPChJNHw2Swf3',
-      duration: 184, // Duration in seconds
-      cover: '/assets/music/covers/letugo.jpg' // Optional cover art
+      duration: 184,
+      get cover() {
+        return this.path.replace('.mp3', '.png').replace('/music/', '/music/covers/');
+      }
     }
   ];
 
