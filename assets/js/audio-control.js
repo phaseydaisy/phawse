@@ -6,7 +6,7 @@
     {
       path: '/assets/music/letugo.mp3', 
       title: 'Let U Go',
-      artist: 'Phawse',
+      artist: 'lucidbeatz',
       spotifyId: '40TZnaw4eDPChJNHw2Swf3',
       duration: 184,
       get cover() {
@@ -91,8 +91,10 @@
     container.innerHTML = `
     <style>
       .audio-card {
-        max-inline-size: 320px;
-        background: rgba(0, 0, 0, 0.8);
+        max-inline-size: 280px;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         border-radius: 12px;
         padding: 12px;
         color: #fff;
@@ -101,7 +103,7 @@
       .audio-content {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 8px;
       }
       .audio-info {
         display: flex;
@@ -127,6 +129,14 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+      .spotify-link {
+        color: #fff;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .spotify-link:hover {
+        color: #1db954;
       }
       .vol-sub {
         font-size: 12px;
@@ -205,7 +215,8 @@
         transform: scale(1.2);
       }
       .progress-container {
-        margin-block: 8px;
+        margin-block: 4px;
+        padding-block: 6px;
       }
       .progress-bar {
         block-size: 3px;
@@ -213,11 +224,15 @@
         border-radius: 1.5px;
         cursor: pointer;
         position: relative;
+        transition: block-size 0.2s;
       }
       .progress-bar:hover {
-        block-size: 5px;
+        block-size: 4px;
       }
       .progress-current {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 0;
         block-size: 100%;
         background: #fff;
         border-radius: 1.5px;
@@ -226,9 +241,10 @@
       .time-display {
         display: flex;
         justify-content: space-between;
-        font-size: 12px;
+        font-size: 11px;
         margin-block-start: 4px;
-        opacity: 0.7;
+        opacity: 0.6;
+        color: rgba(255,255,255,0.9);
       }
       .control-btn:hover, .volume-btn:hover {
         opacity: 1;
@@ -256,7 +272,12 @@
               <img id="cover-art" src="${currentSong.cover}" alt="Album art" onerror="this.src='/assets/images/default-cover.png'">
             </div>
             <div class="song-details">
-              <div class="vol-title">${currentSong.title}</div>
+              <a href="https://open.spotify.com/track/${currentSong.spotifyId}" 
+                 target="_blank" 
+                 rel="noopener"
+                 class="vol-title spotify-link">
+                ${currentSong.title}
+              </a>
               <div class="vol-sub">${currentSong.artist}</div>
             </div>
           </div>
@@ -273,9 +294,7 @@
 
           <div class="controls-row">
             <div class="main-controls">
-              <button id="prev-track" class="control-btn flat-btn" aria-label="Previous track">←</button>
               <button id="play-pause" class="play-btn flat-btn" aria-label="Play/Pause">⏵</button>
-              <button id="next-track" class="control-btn flat-btn" aria-label="Next track">→</button>
             </div>
             
             <div class="volume-section">
@@ -527,6 +546,16 @@
   });
 
   audio.addEventListener('timeupdate', updateProgress);
+
+  // Add click handler for the progress bar
+  const progressBarElement = document.getElementById('progress-bar');
+  progressBarElement.addEventListener('click', (e) => {
+    const rect = progressBarElement.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = pos * audio.duration;
+    updateProgress();
+  });
+
   expandBtn.setAttribute('role', 'button');
   expandBtn.setAttribute('tabindex', '0');
   expandBtn.setAttribute('aria-pressed', 'false');
@@ -633,4 +662,4 @@
   window.addEventListener('pagehide', saveState);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveState(); });
   window.addEventListener('unload', () => { clearInterval(saveTimer); saveState(); });
-})();   //updatrccheck
+})();   //updatrccheck9
