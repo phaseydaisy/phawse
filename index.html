@@ -44,13 +44,31 @@
   <div class="music-player">
     <audio id="audio-player" preload="metadata"></audio>
     <div class="player-container">
-      <div class="cover-art">
-        <img id="cover-image" src="/assets/music/covers/youandi.png" alt="Album cover">
+      <div class="player-box">
+        <a href="https://open.spotify.com/playlist/0v5LP5VIEEmUzES7HEqONt?si=5867ac5210a64158" target="_blank" class="cover-art" title="Open in Spotify">
+          <img id="cover-image" src="/assets/music/covers/youandi.png" alt="Album cover">
+          <div class="spotify-hover">
+            <span class="spotify-icon">🎧</span>
+          </div>
+        </a>
+        <div class="controls-section">
+          <div class="song-info">
+            <span id="song-title">You and I</span>
+          </div>
+          <div class="controls">
+            <button id="prevBtn" class="control-btn" aria-label="Previous track">⏮</button>
+            <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause music">
+              <span class="play-icon">▶</span>
+              <span class="pause-icon hidden">⏸</span>
+            </button>
+            <button id="nextBtn" class="control-btn" aria-label="Next track">⏭</button>
+          </div>
+          <div class="volume-control">
+            <button id="muteBtn" class="control-btn" aria-label="Mute">🔊</button>
+            <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100">
+          </div>
+        </div>
       </div>
-      <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause music">
-        <span class="play-icon">▶</span>
-        <span class="pause-icon hidden">⏸</span>
-      </button>
     </div>
   </div>
   <script src="/assets/js/index.js"></script>
