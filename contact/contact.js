@@ -1,11 +1,37 @@
 function initContact() {
     const form = document.getElementById('contactForm');
     if (!form) return;
+    
+    if (form.__phawse_contact_initialized) return;
+    form.__phawse_contact_initialized = true;
+
     const submitBtn = form.querySelector('.submit-btn');
     let isSubmitting = false;
 
-    if (form.__phawse_contact_initialized) return;
-    form.__phawse_contact_initialized = true;
+    const inputs = form.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        if (input.value) {
+            input.parentElement.classList.add('active');
+        }
+        
+        input.addEventListener('focus', () => {
+            input.parentElement.classList.add('active');
+        });
+
+        input.addEventListener('blur', () => {
+            if (!input.value) {
+                input.parentElement.classList.remove('active');
+            }
+        });
+
+        input.addEventListener('input', () => {
+            if (input.value) {
+                input.parentElement.classList.add('active');
+            } else {
+                input.parentElement.classList.remove('active');
+            }
+        });
+    });
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -96,26 +122,10 @@ function initContact() {
             }, 3000);
         }
     });
-
-    const inputs = form.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        if (input.value) input.parentElement.classList.add('active');
-        
-        input.addEventListener('focus', () => {
-            input.parentElement.classList.add('active');
-        });
-
-        input.addEventListener('blur', () => {
-            if (!input.value) input.parentElement.classList.remove('active');
-        });
-    });
 }
+
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
     initContact();
 } else {
     document.addEventListener('DOMContentLoaded', initContact);
 }
-
-window.addEventListener('phawse:page-loaded', () => {
-    setTimeout(initContact, 40);
-});

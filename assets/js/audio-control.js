@@ -1,9 +1,13 @@
 const audioPlayer = document.getElementById('audio-player');
 const playPauseBtn = document.getElementById('playPauseBtn');
-const playIcon = playPauseBtn.querySelector('.play-icon');
-const pauseIcon = playPauseBtn.querySelector('.pause-icon');
+const playIcon = playPauseBtn ? playPauseBtn.querySelector('.play-icon') : null;
+const pauseIcon = playPauseBtn ? playPauseBtn.querySelector('.pause-icon') : null;
 let currentTrackIndex = 0;
 let isPlaying = false;
+
+if (!audioPlayer) {
+    console.warn('[audio-control] #audio-player element not found — audio controls disabled.');
+}
 
 
 const playlist = [
@@ -30,6 +34,7 @@ const playlist = [
 ];
 
 function loadTrack(index) {
+    if (!audioPlayer) return;
     if (playlist.length === 0) {
         console.log('Please add music files to the playlist');
         return;
@@ -39,8 +44,10 @@ function loadTrack(index) {
     const track = playlist[currentTrackIndex];
     audioPlayer.src = track.file;
     const coverImage = document.getElementById('cover-image');
-    coverImage.src = track.cover;
-    coverImage.alt = `Cover art for ${track.title}`;
+    if (coverImage) {
+        coverImage.src = track.cover;
+        coverImage.alt = `Cover art for ${track.title}`;
+    }
 }
 
 function playNextTrack() {
@@ -69,30 +76,32 @@ function togglePlayPause() {
     }
 }
 
-playPauseBtn.addEventListener('click', togglePlayPause);
-audioPlayer.addEventListener('ended', playNextTrack);
-audioPlayer.addEventListener('play', () => {
-    playIcon.classList.add('hidden');
-    pauseIcon.classList.remove('hidden');
-    isPlaying = true;
-});
+if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
+if (audioPlayer) {
+    audioPlayer.addEventListener('ended', playNextTrack);
+    audioPlayer.addEventListener('play', () => {
+        if (playIcon) playIcon.classList.add('hidden');
+        if (pauseIcon) pauseIcon.classList.remove('hidden');
+        isPlaying = true;
+    });
 
-audioPlayer.addEventListener('pause', () => {
-    playIcon.classList.remove('hidden');
-    pauseIcon.classList.add('hidden');
-    isPlaying = false;
-});
+    audioPlayer.addEventListener('pause', () => {
+        if (playIcon) playIcon.classList.remove('hidden');
+        if (pauseIcon) pauseIcon.classList.add('hidden');
+        isPlaying = false;
+    });
 
-const volumeSlider = document.getElementById('volumeSlider');
+    const volumeSlider = document.getElementById('volumeSlider');
+    if (volumeSlider) {
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            audioPlayer.volume = volume;
+        });
+        audioPlayer.volume = volumeSlider.value / 100;
+    }
 
-volumeSlider.addEventListener('input', (e) => {
-    const volume = e.target.value / 100;
-    audioPlayer.volume = volume;
-});
-
-audioPlayer.volume = volumeSlider.value / 100;
-
-audioPlayer.addEventListener('error', (e) => {
-    console.log('Error loading audio file:', e);
-    playNextTrack();
-});
+    audioPlayer.addEventListener('error', (e) => {
+        console.log('Error loading audio file:', e);
+        playNextTrack();
+    });
+}

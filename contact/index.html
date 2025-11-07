@@ -11,13 +11,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap">
-    <link rel="stylesheet" href="/assets/css/style.css">
-    <link rel="stylesheet" href="/contact/contact.css?v=1">
-    <script src="/assets/js/preventDevTools.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="contact.css?v=2">
 </head>
 <body>
     <div class="portal-container">
-        <a href="../" class="back-button">← Back</a>
+        <a href="../index.html" class="back-button">← Back</a>
         <div class="contact-form-container">
             <h1>Send me a message!</h1>
             <form id="contactForm" class="contact-form">
@@ -40,12 +39,6 @@
             </form>
         </div>
     </div>
-    <script src="/assets/js/index.js"></script>
-    <script src="/contact/contact.js?v=1"></script>
-    <script src="/assets/js/audio-control.js"></script>
-        <script>
-            try { if (typeof initContact === 'function') initContact(); } catch (e) { console.warn('initContact failed', e); }
-            try { window.dispatchEvent(new Event('phawse:page-loaded')); } catch (e) {}
-        </script>
+    <script src="contact.js?v=2"></script>
 </body>
 </html>
