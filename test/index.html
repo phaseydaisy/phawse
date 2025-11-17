@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeNexus - Advanced Code Playground</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-theme="dark">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-code-branch"></i>
+            <span>CodeNexus</span>
+        </div>
+        <div class="nav-center">
+            <div class="file-tabs" id="fileTabs">
+                <div class="file-tab active" data-file="main.js">
+                    <i class="fab fa-js-square"></i>
+                    <span>main.js</span>
+                    <button class="tab-close" aria-label="Close tab">&times;</button>
+                </div>
+            </div>
+            <button class="add-file-btn" id="addFileBtn" title="Add new file">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+        <div class="nav-actions">
+            <button class="nav-btn" id="themeToggle" title="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="nav-btn" id="settingsBtn" title="Settings">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="nav-btn premium" id="shareBtn" title="Share">
+                <i class="fas fa-share-nodes"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Explorer</h3>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            <div class="file-tree">
+                <div class="tree-item folder expanded">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Project</span>
+                    <div class="tree-children">
+                        <div class="tree-item file active" data-file="main.js">
+                            <i class="fab fa-js-square file-icon-js"></i>
+                            <span>main.js</span>
+                        </div>
+                        <div class="tree-item file" data-file="styles.css">
+                            <i class="fab fa-css3-alt file-icon-css"></i>
+                            <span>styles.css</span>
+                        </div>
+                        <div class="tree-item file" data-file="index.html">
+                            <i class="fab fa-html5 file-icon-html"></i>
+                            <span>index.html</span>
+                        </div>
+                        <div class="tree-item file" data-file="data.json">
+                            <i class="fas fa-brackets-curly file-icon-json"></i>
+                            <span>data.json</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="stats">
+                    <div class="stat-item">
+                        <i class="fas fa-file-code"></i>
+                        <span id="fileCount">4 files</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-database"></i>
+                        <span id="storageSize">2.4 KB</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Editor Area -->
+        <main class="editor-container">
+            <div class="editor-header">
+                <div class="editor-info">
+                    <span class="language-badge" id="languageBadge">JavaScript</span>
+                    <span class="encoding">UTF-8</span>
+                    <span class="line-info" id="lineInfo">Ln 1, Col 1</span>
+                </div>
+                <div class="editor-actions">
+                    <button class="editor-btn" id="formatBtn" title="Format code">
+                        <i class="fas fa-indent"></i>
+                    </button>
+                    <button class="editor-btn" id="copyBtn" title="Copy code">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="editor-btn" id="downloadBtn" title="Download">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="editor-btn primary" id="runBtn" title="Run code">
+                        <i class="fas fa-play"></i>
+                        Run
+                    </button>
+                </div>
+            </div>
+            <div class="editor-wrapper">
+                <div class="line-numbers" id="lineNumbers">1</div>
+                <textarea class="code-editor" id="codeEditor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off">// Welcome to CodeNexus - Advanced Code Playground
+// Try running this code!
+
+class ParticleSystem {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.particles = [];
+        this.mouse = { x: 0, y: 0 };
+        
+        canvas.addEventListener('mousemove', (e) => {
+            this.mouse.x = e.offsetX;
+            this.mouse.y = e.offsetY;
+        });
+    }
+    
+    createParticle(x, y) {
+        return {
+            x: x || Math.random() * this.canvas.width,
+            y: y || Math.random() * this.canvas.height,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
+            radius: Math.random() * 3 + 1,
+            color: `hsl(${Math.random() * 360}, 70%, 60%)`
+        };
+    }
+    
+    animate() {
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        if (this.particles.length < 100) {
+            this.particles.push(this.createParticle());
+        }
+        
+        this.particles.forEach((particle, index) => {
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+            
+            // Mouse interaction
+            const dx = this.mouse.x - particle.x;
+            const dy = this.mouse.y - particle.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < 100) {
+                particle.vx -= dx * 0.001;
+                particle.vy -= dy * 0.001;
+            }
+            
+            // Bounce off edges
+            if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+            if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+            
+            // Draw particle
+            this.ctx.beginPath();
+            this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = particle.color;
+            this.ctx.fill();
+            
+            // Connect nearby particles
+            this.particles.slice(index + 1).forEach(other => {
+                const dx = other.x - particle.x;
+                const dy = other.y - particle.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                
+                if (dist < 80) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(particle.x, particle.y);
+                    this.ctx.lineTo(other.x, other.y);
+                    this.ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / 80})`;
+                    this.ctx.lineWidth = 0.5;
+                    this.ctx.stroke();
+                }
+            });
+        });
+        
+        requestAnimationFrame(() => this.animate());
+    }
+}
+
+// Initialize
+const canvas = document.createElement('canvas');
+canvas.width = 800;
+canvas.height = 600;
+canvas.style.border = '2px solid #333';
+document.body.appendChild(canvas);
+
+const system = new ParticleSystem(canvas);
+system.animate();
+
+console.log('🎨 Particle system initialized!');</textarea>
+            </div>
+            <div class="editor-minimap" id="minimap"></div>
+        </main>
+
+        <!-- Output Panel -->
+        <section class="output-panel" id="outputPanel">
+            <div class="output-header">
+                <div class="output-tabs">
+                    <button class="output-tab active" data-tab="console">
+                        <i class="fas fa-terminal"></i>
+                        Console
+                    </button>
+                    <button class="output-tab" data-tab="preview">
+                        <i class="fas fa-eye"></i>
+                        Preview
+                    </button>
+                    <button class="output-tab" data-tab="problems">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Problems
+                        <span class="badge" id="problemCount">0</span>
+                    </button>
+                </div>
+                <div class="output-actions">
+                    <button class="output-btn" id="clearConsole" title="Clear console">
+                        <i class="fas fa-eraser"></i>
+                    </button>
+                    <button class="output-btn" id="toggleOutput" title="Minimize">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="output-content">
+                <div class="console-view active" id="consoleView">
+                    <div class="console-message info">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Welcome to CodeNexus Console. Run your code to see output.</span>
+                        <span class="timestamp">00:00:00</span>
+                    </div>
+                </div>
+                <div class="preview-view" id="previewView">
+                    <iframe id="previewFrame" sandbox="allow-scripts allow-modals"></iframe>
+                </div>
+                <div class="problems-view" id="problemsView">
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle"></i>
+                        <p>No problems detected</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="modal-close" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Editor</h3>
+                    <div class="setting-item">
+                        <label for="fontSizeInput">Font Size</label>
+                        <input type="range" id="fontSizeInput" min="12" max="24" value="14">
+                        <span id="fontSizeValue">14px</span>
+                    </div>
+                    <div class="setting-item">
+                        <label for="tabSizeInput">Tab Size</label>
+                        <select id="tabSizeInput">
+                            <option value="2">2 spaces</option>
+                            <option value="4" selected>4 spaces</option>
+                            <option value="8">8 spaces</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="autoSaveToggle">Auto Save</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="autoSaveToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Theme</h3>
+                    <div class="theme-grid">
+                        <button class="theme-card active" data-theme="dark">
+                            <div class="theme-preview dark-preview"></div>
+                            <span>Dark</span>
+                        </button>
+                        <button class="theme-card" data-theme="light">
+                            <div class="theme-preview light-preview"></div>
+                            <span>Light</span>
+                        </button>
+                        <button class="theme-card" data-theme="monokai">
+                            <div class="theme-preview monokai-preview"></div>
+                            <span>Monokai</span>
+                        </button>
+                        <button class="theme-card" data-theme="nord">
+                            <div class="theme-preview nord-preview"></div>
+                            <span>Nord</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Share Your Code</h2>
+                <button class="modal-close" id="closeShare">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="share-link">
+                    <input type="text" id="shareLinkInput" value="https://codenexus.dev/share/abc123" readonly>
+                    <button class="btn-primary" id="copyLinkBtn">
+                        <i class="fas fa-copy"></i>
+                        Copy
+                    </button>
+                </div>
+                <div class="share-options">
+                    <button class="share-btn github">
+                        <i class="fab fa-github"></i>
+                        GitHub Gist
+                    </button>
+                    <button class="share-btn twitter">
+                        <i class="fab fa-twitter"></i>
+                        Tweet
+                    </button>
+                    <button class="share-btn discord">
+                        <i class="fab fa-discord"></i>
+                        Discord
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
