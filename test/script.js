@@ -1,680 +1,588 @@
-// =============================================
-// CodeNexus - Advanced Code Playground
-// =============================================
+// ========================================
+// QUANTUM GALAXY EXPLORER
+// Advanced Interactive 3D Particle System
+// ========================================
 
-class CodePlayground {
+class Particle {
+    constructor(x, y, canvas) {
+        this.x = x;
+        this.y = y;
+        this.z = Math.random() * 1000;
+        this.vx = (Math.random() - 0.5) * 2;
+        this.vy = (Math.random() - 0.5) * 2;
+        this.vz = (Math.random() - 0.5) * 2;
+        this.size = Math.random() * 3 + 1;
+        this.canvas = canvas;
+        this.hue = Math.random() * 360;
+        this.brightness = Math.random() * 100;
+        this.life = 1;
+        this.angle = Math.random() * Math.PI * 2;
+        this.distance = Math.random() * 300 + 100;
+        this.orbitSpeed = (Math.random() - 0.5) * 0.02;
+    }
+
+    update(mode, centerX, centerY, gravity, speed, mouseX, mouseY, mouseDown) {
+        switch(mode) {
+            case 'orbit':
+                this.orbitUpdate(centerX, centerY, speed);
+                break;
+            case 'explode':
+                this.explodeUpdate(speed);
+                break;
+            case 'blackhole':
+                this.blackholeUpdate(centerX, centerY, gravity, speed);
+                break;
+            case 'mouse':
+                this.mouseUpdate(mouseX, mouseY, gravity, speed);
+                break;
+            case 'wave':
+                this.waveUpdate(centerX, centerY, speed);
+                break;
+        }
+
+        this.z += this.vz * speed;
+        
+        // Wrap around
+        if (this.z < 0) this.z = 1000;
+        if (this.z > 1000) this.z = 0;
+    }
+
+    orbitUpdate(centerX, centerY, speed) {
+        this.angle += this.orbitSpeed * speed;
+        this.x = centerX + Math.cos(this.angle) * this.distance;
+        this.y = centerY + Math.sin(this.angle) * this.distance * 0.5;
+        this.distance += Math.sin(this.angle * 3) * 0.5;
+    }
+
+    explodeUpdate(speed) {
+        this.vx *= 1.01;
+        this.vy *= 1.01;
+        this.x += this.vx * speed;
+        this.y += this.vy * speed;
+        this.life -= 0.01;
+    }
+
+    blackholeUpdate(centerX, centerY, gravity, speed) {
+        const dx = centerX - this.x;
+        const dy = centerY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const force = (gravity * 100) / (distance + 1);
+        
+        this.vx += (dx / distance) * force * speed;
+        this.vy += (dy / distance) * force * speed;
+        
+        this.vx *= 0.99;
+        this.vy *= 0.99;
+        
+        this.x += this.vx * speed;
+        this.y += this.vy * speed;
+    }
+
+    mouseUpdate(mouseX, mouseY, gravity, speed) {
+        const dx = this.x - mouseX;
+        const dy = this.y - mouseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const force = (gravity * 50) / (distance + 1);
+        
+        this.vx += (dx / distance) * force * speed;
+        this.vy += (dy / distance) * force * speed;
+        
+        this.vx *= 0.95;
+        this.vy *= 0.95;
+        
+        this.x += this.vx * speed;
+        this.y += this.vy * speed;
+    }
+
+    waveUpdate(centerX, centerY, speed) {
+        const dx = this.x - centerX;
+        const dy = this.y - centerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const wave = Math.sin(distance * 0.02 - Date.now() * 0.002) * 5;
+        
+        this.y += wave * speed;
+        this.x += Math.cos(this.angle) * speed;
+    }
+
+    draw(ctx, colorMode, trails = false) {
+        const scale = 1000 / (1000 - this.z);
+        const x2d = this.x * scale;
+        const y2d = this.y * scale;
+        const size = this.size * scale;
+
+        const alpha = trails ? 0.3 : 1;
+        ctx.globalAlpha = alpha * this.life;
+
+        const color = this.getColor(colorMode);
+        
+        // Glow effect
+        const gradient = ctx.createRadialGradient(x2d, y2d, 0, x2d, y2d, size * 3);
+        gradient.addColorStop(0, color);
+        gradient.addColorStop(1, 'transparent');
+        
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x2d, y2d, size * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Core
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x2d, y2d, size, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = 1;
+    }
+
+    getColor(mode) {
+        switch(mode) {
+            case 'rainbow':
+                return `hsl(${this.hue}, 100%, 60%)`;
+            case 'fire':
+                return `hsl(${this.hue % 60}, 100%, 50%)`;
+            case 'ice':
+                return `hsl(${180 + this.hue % 60}, 100%, 70%)`;
+            case 'cosmic':
+                return `hsl(${240 + this.hue % 120}, 80%, 60%)`;
+            case 'neon':
+                return `hsl(${this.hue}, 100%, 50%)`;
+            case 'matrix':
+                return `hsl(120, 100%, ${40 + this.brightness % 40}%)`;
+            default:
+                return `hsl(${this.hue}, 100%, 60%)`;
+        }
+    }
+}
+
+class GalaxyExplorer {
     constructor() {
-        this.currentFile = 'main.js';
-        this.files = {
-            'main.js': {
-                language: 'JavaScript',
-                icon: 'fab fa-js-square',
-                content: document.getElementById('codeEditor').value
-            },
-            'styles.css': {
-                language: 'CSS',
-                icon: 'fab fa-css3-alt',
-                content: '/* Add your CSS styles here */\n\nbody {\n    margin: 0;\n    padding: 0;\n    font-family: Arial, sans-serif;\n}\n\n.container {\n    max-width: 1200px;\n    margin: 0 auto;\n    padding: 20px;\n}'
-            },
-            'index.html': {
-                language: 'HTML',
-                icon: 'fab fa-html5',
-                content: '<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>My Page</title>\n</head>\n<body>\n    <h1>Hello World!</h1>\n</body>\n</html>'
-            },
-            'data.json': {
-                language: 'JSON',
-                icon: 'fas fa-brackets-curly',
-                content: '{\n    "name": "CodeNexus",\n    "version": "1.0.0",\n    "features": [\n        "Syntax Highlighting",\n        "Multiple Themes",\n        "Live Preview",\n        "Code Execution"\n    ]\n}'
-            }
-        };
+        this.canvas = document.getElementById('galaxy-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.audioCanvas = document.getElementById('audio-canvas');
+        this.audioCtx = this.audioCanvas.getContext('2d');
         
-        this.settings = {
-            theme: 'dark',
-            fontSize: 14,
-            tabSize: 4,
-            autoSave: true
-        };
+        this.particles = [];
+        this.particleCount = 5000;
+        this.mode = 'orbit';
+        this.colorMode = 'cosmic';
+        this.speed = 1;
+        this.gravity = 0.5;
+        this.isPaused = false;
+        this.trails = false;
+        this.showUI = true;
         
+        this.mouseX = 0;
+        this.mouseY = 0;
+        this.mouseDown = false;
+        
+        this.fps = 60;
+        this.lastTime = Date.now();
+        this.frames = 0;
+        
+        this.secretCode = '';
+        this.secretTarget = 'QUANTUM';
+        
+        this.resize();
         this.init();
+        this.setupEventListeners();
+        this.setupAudio();
+        this.animate();
+        
+        // Hide loading screen
+        setTimeout(() => {
+            document.getElementById('loading-screen').classList.add('hidden');
+        }, 2000);
     }
-    
+
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.audioCanvas.width = window.innerWidth;
+        this.audioCanvas.height = 150;
+        this.centerX = this.canvas.width / 2;
+        this.centerY = this.canvas.height / 2;
+    }
+
     init() {
-        this.cacheElements();
-        this.attachEventListeners();
-        this.updateLineNumbers();
-        this.loadSettings();
-        this.startAutoSave();
-        
-        // Add syntax highlighting simulation
-        this.applySyntaxHighlighting();
+        this.particles = [];
+        for (let i = 0; i < this.particleCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 300 + 100;
+            const x = this.centerX + Math.cos(angle) * distance;
+            const y = this.centerY + Math.sin(angle) * distance * 0.5;
+            this.particles.push(new Particle(x, y, this.canvas));
+        }
     }
-    
-    cacheElements() {
-        // Editor elements
-        this.editor = document.getElementById('codeEditor');
-        this.lineNumbers = document.getElementById('lineNumbers');
-        this.languageBadge = document.getElementById('languageBadge');
-        this.lineInfo = document.getElementById('lineInfo');
-        
-        // Navigation
-        this.themeToggle = document.getElementById('themeToggle');
-        this.settingsBtn = document.getElementById('settingsBtn');
-        this.shareBtn = document.getElementById('shareBtn');
-        
-        // Editor actions
-        this.formatBtn = document.getElementById('formatBtn');
-        this.copyBtn = document.getElementById('copyBtn');
-        this.downloadBtn = document.getElementById('downloadBtn');
-        this.runBtn = document.getElementById('runBtn');
-        
-        // Output panel
-        this.consoleView = document.getElementById('consoleView');
-        this.previewView = document.getElementById('previewView');
-        this.previewFrame = document.getElementById('previewFrame');
-        this.clearConsole = document.getElementById('clearConsole');
-        this.toggleOutput = document.getElementById('toggleOutput');
-        this.outputPanel = document.getElementById('outputPanel');
-        
-        // Modals
-        this.settingsModal = document.getElementById('settingsModal');
-        this.shareModal = document.getElementById('shareModal');
-        
-        // File tree
-        this.fileTree = document.querySelectorAll('.tree-item.file');
-        
-        // Sidebar
-        this.sidebar = document.getElementById('sidebar');
-        this.sidebarToggle = document.getElementById('sidebarToggle');
-        
-        // Toast container
-        this.toastContainer = document.getElementById('toastContainer');
-    }
-    
-    attachEventListeners() {
-        // Editor events
-        this.editor.addEventListener('input', () => {
-            this.updateLineNumbers();
-            this.updateLineInfo();
-            this.applySyntaxHighlighting();
-            this.files[this.currentFile].content = this.editor.value;
+
+    setupEventListeners() {
+        // Mouse events
+        window.addEventListener('mousemove', (e) => {
+            this.mouseX = e.clientX;
+            this.mouseY = e.clientY;
+            
+            // Update cursor
+            const cursor = document.getElementById('cursor-effect');
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
         });
-        
-        this.editor.addEventListener('scroll', () => {
-            this.lineNumbers.scrollTop = this.editor.scrollTop;
+
+        window.addEventListener('mousedown', (e) => {
+            this.mouseDown = true;
+            this.mode = 'mouse';
         });
-        
-        this.editor.addEventListener('click', () => this.updateLineInfo());
-        this.editor.addEventListener('keyup', () => this.updateLineInfo());
-        
-        // Navigation buttons
-        this.themeToggle.addEventListener('click', () => this.cycleTheme());
-        this.settingsBtn.addEventListener('click', () => this.openModal(this.settingsModal));
-        this.shareBtn.addEventListener('click', () => this.openModal(this.shareModal));
-        
-        // Editor action buttons
-        this.formatBtn.addEventListener('click', () => this.formatCode());
-        this.copyBtn.addEventListener('click', () => this.copyCode());
-        this.downloadBtn.addEventListener('click', () => this.downloadCode());
-        this.runBtn.addEventListener('click', () => this.runCode());
-        
-        // Output panel
-        this.clearConsole.addEventListener('click', () => this.clearConsoleOutput());
-        this.toggleOutput.addEventListener('click', () => this.toggleOutputPanel());
-        
-        // Output tabs
-        document.querySelectorAll('.output-tab').forEach(tab => {
-            tab.addEventListener('click', (e) => this.switchOutputTab(e.target.closest('.output-tab')));
+
+        window.addEventListener('mouseup', () => {
+            this.mouseDown = false;
+            if (this.mode === 'mouse') {
+                this.mode = 'orbit';
+            }
         });
-        
-        // File tree
-        this.fileTree.forEach(item => {
-            item.addEventListener('click', () => this.switchFile(item.dataset.file));
+
+        window.addEventListener('dblclick', (e) => {
+            this.createBurst(e.clientX, e.clientY);
         });
-        
-        // Sidebar toggle
-        this.sidebarToggle.addEventListener('click', () => this.toggleSidebar());
-        
-        // Settings modal
-        document.getElementById('closeSettings').addEventListener('click', () => this.closeModal(this.settingsModal));
-        document.getElementById('fontSizeInput').addEventListener('input', (e) => this.updateFontSize(e.target.value));
-        document.getElementById('tabSizeInput').addEventListener('change', (e) => this.updateTabSize(e.target.value));
-        document.getElementById('autoSaveToggle').addEventListener('change', (e) => this.toggleAutoSave(e.target.checked));
-        
-        // Theme cards
-        document.querySelectorAll('.theme-card').forEach(card => {
-            card.addEventListener('click', () => this.setTheme(card.dataset.theme));
+
+        // Keyboard events
+        window.addEventListener('keydown', (e) => {
+            switch(e.key.toLowerCase()) {
+                case ' ':
+                    this.isPaused = !this.isPaused;
+                    break;
+                case 'r':
+                    this.randomExplosion();
+                    break;
+                case 'b':
+                    this.bigBang();
+                    break;
+                case 'h':
+                    this.toggleUI();
+                    break;
+                default:
+                    this.checkSecretCode(e.key.toUpperCase());
+            }
         });
-        
-        // Share modal
-        document.getElementById('closeShare').addEventListener('click', () => this.closeModal(this.shareModal));
-        document.getElementById('copyLinkBtn').addEventListener('click', () => this.copyShareLink());
-        
-        // Close modals on backdrop click
-        [this.settingsModal, this.shareModal].forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) this.closeModal(modal);
+
+        // Wheel zoom
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            this.particles.forEach(p => {
+                p.z += e.deltaY * 0.5;
+                p.z = Math.max(0, Math.min(1000, p.z));
             });
+        }, { passive: false });
+
+        // Window resize
+        window.addEventListener('resize', () => {
+            this.resize();
         });
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => this.handleKeyboardShortcuts(e));
-    }
-    
-    updateLineNumbers() {
-        const lines = this.editor.value.split('\n').length;
-        this.lineNumbers.innerHTML = Array.from({ length: lines }, (_, i) => i + 1).join('\n');
-    }
-    
-    updateLineInfo() {
-        const pos = this.editor.selectionStart;
-        const textBeforeCursor = this.editor.value.substring(0, pos);
-        const line = textBeforeCursor.split('\n').length;
-        const col = textBeforeCursor.split('\n').pop().length + 1;
-        this.lineInfo.textContent = `Ln ${line}, Col ${col}`;
-    }
-    
-    applySyntaxHighlighting() {
-        // This is a simplified syntax highlighting simulation
-        // In production, you'd use a library like Prism.js or CodeMirror
-        const lang = this.files[this.currentFile].language;
-        this.languageBadge.textContent = lang;
-    }
-    
-    cycleTheme() {
-        const themes = ['dark', 'light', 'monokai', 'nord'];
-        const currentIndex = themes.indexOf(this.settings.theme);
-        const nextIndex = (currentIndex + 1) % themes.length;
-        this.setTheme(themes[nextIndex]);
-    }
-    
-    setTheme(theme) {
-        this.settings.theme = theme;
-        document.body.dataset.theme = theme;
-        
-        // Update theme cards
-        document.querySelectorAll('.theme-card').forEach(card => {
-            card.classList.toggle('active', card.dataset.theme === theme);
+
+        // Control panel
+        document.getElementById('particle-count').addEventListener('input', (e) => {
+            this.particleCount = parseInt(e.target.value);
+            document.getElementById('particle-count-value').textContent = this.particleCount;
+            this.init();
         });
-        
-        // Update theme toggle icon
-        const icons = {
-            dark: 'fa-moon',
-            light: 'fa-sun',
-            monokai: 'fa-palette',
-            nord: 'fa-snowflake'
-        };
-        this.themeToggle.querySelector('i').className = `fas ${icons[theme]}`;
-        
-        this.showToast('Theme Changed', `Switched to ${theme} theme`, 'success');
-        this.saveSettings();
+
+        document.getElementById('speed').addEventListener('input', (e) => {
+            this.speed = parseFloat(e.target.value);
+            document.getElementById('speed-value').textContent = this.speed.toFixed(1) + 'x';
+        });
+
+        document.getElementById('gravity').addEventListener('input', (e) => {
+            this.gravity = parseFloat(e.target.value);
+            document.getElementById('gravity-value').textContent = this.gravity.toFixed(1);
+        });
+
+        document.getElementById('color-mode').addEventListener('change', (e) => {
+            this.colorMode = e.target.value;
+        });
+
+        document.getElementById('explode-btn').addEventListener('click', () => {
+            this.mode = 'explode';
+            this.particles.forEach(p => p.life = 1);
+            setTimeout(() => { this.mode = 'orbit'; this.init(); }, 3000);
+        });
+
+        document.getElementById('blackhole-btn').addEventListener('click', () => {
+            this.mode = 'blackhole';
+            document.getElementById('current-mode').textContent = 'Black Hole';
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            this.mode = 'orbit';
+            this.init();
+            document.getElementById('current-mode').textContent = 'Orbit';
+        });
+
+        document.getElementById('music-btn').addEventListener('click', () => {
+            this.toggleMusic();
+        });
+
+        document.getElementById('trails-btn').addEventListener('click', () => {
+            this.trails = !this.trails;
+        });
     }
-    
-    formatCode() {
-        try {
-            const lang = this.files[this.currentFile].language;
-            let formatted = this.editor.value;
+
+    setupAudio() {
+        this.audioContext = null;
+        this.analyser = null;
+        this.dataArray = null;
+        this.musicPlaying = false;
+    }
+
+    toggleMusic() {
+        if (!this.audioContext) {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.analyser = this.audioContext.createAnalyser();
+            this.analyser.fftSize = 256;
             
-            if (lang === 'JSON') {
-                const parsed = JSON.parse(this.editor.value);
-                formatted = JSON.stringify(parsed, null, this.settings.tabSize);
-            } else if (lang === 'JavaScript') {
-                // Simple indentation fix
-                formatted = this.simpleFormat(this.editor.value);
-            }
+            const bufferLength = this.analyser.frequencyBinCount;
+            this.dataArray = new Uint8Array(bufferLength);
             
-            this.editor.value = formatted;
-            this.files[this.currentFile].content = formatted;
-            this.updateLineNumbers();
-            this.showToast('Code Formatted', 'Your code has been formatted', 'success');
-        } catch (error) {
-            this.showToast('Format Error', error.message, 'error');
+            // Create oscillators for ambient music
+            this.createAmbientMusic();
         }
-    }
-    
-    simpleFormat(code) {
-        // Basic formatting for demo purposes
-        const lines = code.split('\n');
-        let indentLevel = 0;
-        const indentSize = this.settings.tabSize;
         
-        return lines.map(line => {
-            const trimmed = line.trim();
-            
-            if (trimmed.match(/^[}\]]/)) {
-                indentLevel = Math.max(0, indentLevel - 1);
-            }
-            
-            const formatted = ' '.repeat(indentLevel * indentSize) + trimmed;
-            
-            if (trimmed.match(/[{[]$/)) {
-                indentLevel++;
-            }
-            
-            return formatted;
-        }).join('\n');
-    }
-    
-    copyCode() {
-        navigator.clipboard.writeText(this.editor.value).then(() => {
-            this.showToast('Copied!', 'Code copied to clipboard', 'success');
-        }).catch(() => {
-            this.showToast('Copy Failed', 'Could not copy to clipboard', 'error');
-        });
-    }
-    
-    downloadCode() {
-        const blob = new Blob([this.editor.value], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = this.currentFile;
-        a.click();
-        URL.revokeObjectURL(url);
-        this.showToast('Downloaded', `${this.currentFile} downloaded`, 'success');
-    }
-    
-    runCode() {
-        this.logToConsole('Running code...', 'info');
-        
-        const lang = this.files[this.currentFile].language;
-        
-        if (lang === 'JavaScript') {
-            this.runJavaScript();
-        } else if (lang === 'HTML') {
-            this.runHTML();
+        if (this.musicPlaying) {
+            this.audioContext.suspend();
+            this.musicPlaying = false;
         } else {
-            this.logToConsole(`Cannot execute ${lang} files directly`, 'warn');
+            this.audioContext.resume();
+            this.musicPlaying = true;
         }
     }
-    
-    runJavaScript() {
-        const originalConsole = {
-            log: console.log,
-            warn: console.warn,
-            error: console.error
-        };
+
+    createAmbientMusic() {
+        const notes = [261.63, 293.66, 329.63, 392.00, 440.00]; // C, D, E, G, A
         
-        // Override console methods to capture output
-        console.log = (...args) => {
-            this.logToConsole(args.join(' '), 'log');
-            originalConsole.log(...args);
-        };
-        console.warn = (...args) => {
-            this.logToConsole(args.join(' '), 'warn');
-            originalConsole.warn(...args);
-        };
-        console.error = (...args) => {
-            this.logToConsole(args.join(' '), 'error');
-            originalConsole.error(...args);
-        };
-        
-        try {
-            // Execute the code
-            eval(this.editor.value);
-            this.logToConsole('Code executed successfully', 'info');
-        } catch (error) {
-            this.logToConsole(`Error: ${error.message}`, 'error');
-            this.addProblem(error.message, 'error');
-        } finally {
-            // Restore console methods
-            console.log = originalConsole.log;
-            console.warn = originalConsole.warn;
-            console.error = originalConsole.error;
-        }
-    }
-    
-    runHTML() {
-        const htmlContent = this.editor.value;
-        const cssContent = this.files['styles.css']?.content || '';
-        const jsContent = this.files['main.js']?.content || '';
-        
-        const fullHTML = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <style>${cssContent}</style>
-            </head>
-            <body>
-                ${htmlContent}
-                <script>${jsContent}<\/script>
-            </body>
-            </html>
-        `;
-        
-        this.previewFrame.srcdoc = fullHTML;
-        this.switchOutputTab(document.querySelector('.output-tab[data-tab="preview"]'));
-        this.logToConsole('HTML preview updated', 'info');
-    }
-    
-    logToConsole(message, type = 'log') {
-        const messageEl = document.createElement('div');
-        messageEl.className = `console-message ${type}`;
-        
-        const icons = {
-            log: 'fa-terminal',
-            info: 'fa-info-circle',
-            warn: 'fa-exclamation-triangle',
-            error: 'fa-times-circle'
-        };
-        
-        const timestamp = new Date().toLocaleTimeString();
-        
-        messageEl.innerHTML = `
-            <i class="fas ${icons[type]}"></i>
-            <span>${this.escapeHtml(message)}</span>
-            <span class="timestamp">${timestamp}</span>
-        `;
-        
-        this.consoleView.appendChild(messageEl);
-        this.consoleView.scrollTop = this.consoleView.scrollHeight;
-    }
-    
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-    
-    clearConsoleOutput() {
-        this.consoleView.innerHTML = '';
-        this.logToConsole('Console cleared', 'info');
-    }
-    
-    toggleOutputPanel() {
-        this.outputPanel.classList.toggle('minimized');
-        const icon = this.toggleOutput.querySelector('i');
-        icon.className = this.outputPanel.classList.contains('minimized') 
-            ? 'fas fa-chevron-up' 
-            : 'fas fa-chevron-down';
-    }
-    
-    switchOutputTab(tab) {
-        const targetTab = tab.dataset.tab;
-        
-        // Update tab active states
-        document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        // Update view active states
-        document.querySelectorAll('.console-view, .preview-view, .problems-view').forEach(v => {
-            v.classList.remove('active');
-        });
-        document.getElementById(`${targetTab}View`).classList.add('active');
-    }
-    
-    addProblem(message, severity = 'error') {
-        const problemsView = document.getElementById('problemsView');
-        const badge = document.getElementById('problemCount');
-        
-        // Remove empty state if exists
-        const emptyState = problemsView.querySelector('.empty-state');
-        if (emptyState) emptyState.remove();
-        
-        const problemEl = document.createElement('div');
-        problemEl.className = `console-message ${severity}`;
-        problemEl.innerHTML = `
-            <i class="fas fa-exclamation-circle"></i>
-            <span>${this.escapeHtml(message)}</span>
-            <span class="timestamp">${this.currentFile}</span>
-        `;
-        
-        problemsView.appendChild(problemEl);
-        
-        const count = problemsView.querySelectorAll('.console-message').length;
-        badge.textContent = count;
-        badge.style.display = count > 0 ? 'inline-block' : 'none';
-    }
-    
-    switchFile(filename) {
-        // Save current file content
-        this.files[this.currentFile].content = this.editor.value;
-        
-        // Switch to new file
-        this.currentFile = filename;
-        this.editor.value = this.files[filename].content;
-        this.languageBadge.textContent = this.files[filename].language;
-        
-        // Update UI
-        this.updateLineNumbers();
-        this.updateLineInfo();
-        this.applySyntaxHighlighting();
-        
-        // Update file tree active states
-        document.querySelectorAll('.tree-item.file').forEach(item => {
-            item.classList.toggle('active', item.dataset.file === filename);
-        });
-        
-        this.showToast('File Switched', `Now editing ${filename}`, 'success');
-    }
-    
-    toggleSidebar() {
-        this.sidebar.classList.toggle('collapsed');
-        const icon = this.sidebarToggle.querySelector('i');
-        icon.className = this.sidebar.classList.contains('collapsed') 
-            ? 'fas fa-chevron-right' 
-            : 'fas fa-chevron-left';
-    }
-    
-    openModal(modal) {
-        modal.classList.add('active');
-    }
-    
-    closeModal(modal) {
-        modal.classList.remove('active');
-    }
-    
-    updateFontSize(size) {
-        this.settings.fontSize = parseInt(size);
-        this.editor.style.fontSize = `${size}px`;
-        this.lineNumbers.style.fontSize = `${size}px`;
-        document.getElementById('fontSizeValue').textContent = `${size}px`;
-        this.saveSettings();
-    }
-    
-    updateTabSize(size) {
-        this.settings.tabSize = parseInt(size);
-        this.editor.style.tabSize = size;
-        this.saveSettings();
-    }
-    
-    toggleAutoSave(enabled) {
-        this.settings.autoSave = enabled;
-        this.saveSettings();
-        this.showToast('Auto Save', enabled ? 'Enabled' : 'Disabled', 'info');
-    }
-    
-    copyShareLink() {
-        const input = document.getElementById('shareLinkInput');
-        input.select();
-        navigator.clipboard.writeText(input.value).then(() => {
-            this.showToast('Link Copied!', 'Share link copied to clipboard', 'success');
+        notes.forEach((freq, i) => {
+            const osc = this.audioContext.createOscillator();
+            const gain = this.audioContext.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, this.audioContext.currentTime);
+            
+            gain.gain.setValueAtTime(0.02, this.audioContext.currentTime);
+            
+            osc.connect(gain);
+            gain.connect(this.analyser);
+            this.analyser.connect(this.audioContext.destination);
+            
+            osc.start();
+            
+            // Modulate frequency for ambient effect
+            setInterval(() => {
+                if (this.musicPlaying) {
+                    osc.frequency.setValueAtTime(
+                        freq * (1 + Math.sin(Date.now() * 0.001 + i) * 0.1),
+                        this.audioContext.currentTime
+                    );
+                }
+            }, 100);
         });
     }
-    
-    handleKeyboardShortcuts(e) {
-        // Ctrl/Cmd + S: Save (preventDefault to avoid browser save)
-        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-            e.preventDefault();
-            this.saveFiles();
-            this.showToast('Saved', 'All files saved', 'success');
+
+    createBurst(x, y) {
+        for (let i = 0; i < 100; i++) {
+            const particle = new Particle(x, y, this.canvas);
+            particle.vx = (Math.random() - 0.5) * 10;
+            particle.vy = (Math.random() - 0.5) * 10;
+            this.particles.push(particle);
         }
         
-        // Ctrl/Cmd + R: Run
-        if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
-            e.preventDefault();
-            this.runCode();
-        }
-        
-        // Ctrl/Cmd + /: Toggle comment (basic implementation)
-        if ((e.ctrlKey || e.metaKey) && e.key === '/') {
-            e.preventDefault();
-            this.toggleComment();
-        }
-        
-        // Ctrl/Cmd + D: Duplicate line
-        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-            e.preventDefault();
-            this.duplicateLine();
+        // Remove old particles
+        if (this.particles.length > this.particleCount + 100) {
+            this.particles = this.particles.slice(-this.particleCount);
         }
     }
-    
-    toggleComment() {
-        const start = this.editor.selectionStart;
-        const end = this.editor.selectionEnd;
-        const text = this.editor.value;
-        const beforeCursor = text.substring(0, start);
-        const lineStart = beforeCursor.lastIndexOf('\n') + 1;
-        const lineEnd = text.indexOf('\n', end);
-        const line = text.substring(lineStart, lineEnd === -1 ? text.length : lineEnd);
-        
-        const commented = line.trim().startsWith('//');
-        const newLine = commented ? line.replace('//', '') : '//' + line;
-        
-        this.editor.value = text.substring(0, lineStart) + newLine + text.substring(lineEnd === -1 ? text.length : lineEnd);
-        this.updateLineNumbers();
+
+    randomExplosion() {
+        this.particles.forEach(p => {
+            p.hue = Math.random() * 360;
+            p.vx = (Math.random() - 0.5) * 5;
+            p.vy = (Math.random() - 0.5) * 5;
+        });
+        this.mode = 'explode';
+        setTimeout(() => { this.mode = 'orbit'; }, 2000);
     }
-    
-    duplicateLine() {
-        const start = this.editor.selectionStart;
-        const text = this.editor.value;
-        const beforeCursor = text.substring(0, start);
-        const lineStart = beforeCursor.lastIndexOf('\n') + 1;
-        const lineEnd = text.indexOf('\n', start);
-        const line = text.substring(lineStart, lineEnd === -1 ? text.length : lineEnd);
+
+    bigBang() {
+        this.showEasterEgg('💥 BIG BANG! 💥');
+        this.particles = [];
         
-        this.editor.value = text.substring(0, lineEnd === -1 ? text.length : lineEnd) + '\n' + line + text.substring(lineEnd === -1 ? text.length : lineEnd);
-        this.updateLineNumbers();
+        // Create expanding sphere
+        for (let i = 0; i < this.particleCount; i++) {
+            const particle = new Particle(this.centerX, this.centerY, this.canvas);
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 15 + 5;
+            particle.vx = Math.cos(angle) * speed;
+            particle.vy = Math.sin(angle) * speed;
+            particle.hue = Math.random() * 360;
+            this.particles.push(particle);
+        }
+        
+        this.mode = 'explode';
+        setTimeout(() => {
+            this.mode = 'orbit';
+            this.init();
+        }, 4000);
     }
-    
-    showToast(title, message, type = 'info') {
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
+
+    toggleUI() {
+        this.showUI = !this.showUI;
+        const panels = document.querySelectorAll('.glass-panel');
+        panels.forEach(panel => {
+            panel.classList.toggle('hidden-ui');
+        });
+    }
+
+    checkSecretCode(key) {
+        this.secretCode += key;
+        if (this.secretCode.length > this.secretTarget.length) {
+            this.secretCode = this.secretCode.slice(-this.secretTarget.length);
+        }
         
-        const icons = {
-            success: 'fa-check-circle',
-            error: 'fa-times-circle',
-            warning: 'fa-exclamation-triangle',
-            info: 'fa-info-circle'
-        };
+        if (this.secretCode === this.secretTarget) {
+            this.activateQuantumMode();
+            this.secretCode = '';
+        }
+    }
+
+    activateQuantumMode() {
+        this.showEasterEgg('🌟 QUANTUM MODE ACTIVATED! 🌟');
         
-        toast.innerHTML = `
-            <i class="fas ${icons[type]}"></i>
-            <div class="toast-content">
-                <div class="toast-title">${title}</div>
-                <div class="toast-message">${message}</div>
-            </div>
-        `;
+        // Rainbow color cycling
+        let colorIndex = 0;
+        const colors = ['rainbow', 'fire', 'ice', 'neon', 'matrix', 'cosmic'];
         
-        this.toastContainer.appendChild(toast);
+        const interval = setInterval(() => {
+            this.colorMode = colors[colorIndex % colors.length];
+            colorIndex++;
+        }, 500);
+        
+        // Crazy mode
+        this.mode = 'wave';
+        this.speed = 2;
         
         setTimeout(() => {
-            toast.style.animation = 'slideInRight 0.3s ease reverse';
-            setTimeout(() => toast.remove(), 300);
+            clearInterval(interval);
+            this.mode = 'orbit';
+            this.speed = 1;
+            this.colorMode = 'cosmic';
+        }, 10000);
+    }
+
+    showEasterEgg(message) {
+        const eggMsg = document.getElementById('easter-egg-msg');
+        eggMsg.textContent = message;
+        eggMsg.classList.add('show');
+        
+        setTimeout(() => {
+            eggMsg.classList.remove('show');
         }, 3000);
     }
-    
-    saveSettings() {
-        localStorage.setItem('codeNexusSettings', JSON.stringify(this.settings));
-    }
-    
-    loadSettings() {
-        const saved = localStorage.getItem('codeNexusSettings');
-        if (saved) {
-            this.settings = { ...this.settings, ...JSON.parse(saved) };
-            this.setTheme(this.settings.theme);
-            this.updateFontSize(this.settings.fontSize);
-            this.updateTabSize(this.settings.tabSize);
-            document.getElementById('fontSizeInput').value = this.settings.fontSize;
-            document.getElementById('tabSizeInput').value = this.settings.tabSize;
-            document.getElementById('autoSaveToggle').checked = this.settings.autoSave;
+
+    drawAudioVisualizer() {
+        if (!this.analyser || !this.musicPlaying) {
+            this.audioCtx.clearRect(0, 0, this.audioCanvas.width, this.audioCanvas.height);
+            return;
+        }
+
+        this.analyser.getByteFrequencyData(this.dataArray);
+
+        this.audioCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        this.audioCtx.fillRect(0, 0, this.audioCanvas.width, this.audioCanvas.height);
+
+        const barWidth = (this.audioCanvas.width / this.dataArray.length) * 2.5;
+        let x = 0;
+
+        for (let i = 0; i < this.dataArray.length; i++) {
+            const barHeight = (this.dataArray[i] / 255) * this.audioCanvas.height;
+            
+            const hue = (i / this.dataArray.length) * 360;
+            this.audioCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+            
+            this.audioCtx.fillRect(
+                x,
+                this.audioCanvas.height - barHeight,
+                barWidth,
+                barHeight
+            );
+            
+            x += barWidth + 1;
         }
     }
-    
-    saveFiles() {
-        this.files[this.currentFile].content = this.editor.value;
-        localStorage.setItem('codeNexusFiles', JSON.stringify(this.files));
+
+    updateStats() {
+        const now = Date.now();
+        this.frames++;
+        
+        if (now - this.lastTime >= 1000) {
+            this.fps = this.frames;
+            this.frames = 0;
+            this.lastTime = now;
+            
+            document.getElementById('fps').textContent = this.fps;
+            document.getElementById('active-particles').textContent = this.particles.length;
+        }
     }
-    
-    startAutoSave() {
-        setInterval(() => {
-            if (this.settings.autoSave) {
-                this.saveFiles();
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+
+        if (this.isPaused) return;
+
+        // Clear with trail effect
+        if (this.trails) {
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            this.ctx.fillStyle = 'rgb(0, 0, 0)';
+            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        }
+
+        // Update and draw particles
+        this.particles.forEach((particle, index) => {
+            particle.update(
+                this.mode,
+                this.centerX,
+                this.centerY,
+                this.gravity,
+                this.speed,
+                this.mouseX,
+                this.mouseY,
+                this.mouseDown
+            );
+            particle.draw(this.ctx, this.colorMode, this.trails);
+            
+            // Remove dead particles
+            if (particle.life <= 0) {
+                this.particles.splice(index, 1);
             }
-        }, 30000); // Auto-save every 30 seconds
+        });
+
+        // Draw center attractor
+        if (this.mode === 'blackhole') {
+            const gradient = this.ctx.createRadialGradient(
+                this.centerX, this.centerY, 0,
+                this.centerX, this.centerY, 50
+            );
+            gradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+            gradient.addColorStop(0.5, 'rgba(138, 43, 226, 0.5)');
+            gradient.addColorStop(1, 'transparent');
+            
+            this.ctx.fillStyle = gradient;
+            this.ctx.beginPath();
+            this.ctx.arc(this.centerX, this.centerY, 50, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+
+        this.drawAudioVisualizer();
+        this.updateStats();
     }
 }
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', () => {
-    const playground = new CodePlayground();
-    
-    // Add welcome animation
-    setTimeout(() => {
-        playground.showToast('Welcome!', 'CodeNexus is ready to code', 'success');
-    }, 500);
-    
-    // Simulate typing effect for demo
-    const demoText = document.getElementById('codeEditor').value;
-    let currentIndex = 0;
-    
-    // Optional: Add particles background effect
-    createParticleBackground();
+// Initialize when DOM is loaded
+window.addEventListener('DOMContentLoaded', () => {
+    new GalaxyExplorer();
 });
-
-// Particle background effect
-function createParticleBackground() {
-    const canvas = document.createElement('canvas');
-    canvas.style.position = 'fixed';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = '0';
-    canvas.style.opacity = '0.3';
-    
-    document.body.prepend(canvas);
-    
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
-    const particles = [];
-    const particleCount = 50;
-    
-    for (let i = 0; i < particleCount; i++) {
-        particles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            radius: Math.random() * 2 + 1
-        });
-    }
-    
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'rgba(100, 150, 255, 0.5)';
-        
-        particles.forEach(p => {
-            p.x += p.vx;
-            p.y += p.vy;
-            
-            if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-            if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-            
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-            ctx.fill();
-        });
-        
-        requestAnimationFrame(animate);
-    }
-    
-    animate();
-    
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-}
