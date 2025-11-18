@@ -1,7 +1,26 @@
 .redirect-text {
     color: white;
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    margin-bottom: 2.5rem;
+    font-weight: 600;
+    text-shadow: 
+        0 0 20px rgba(255, 20, 147, 0.5),
+        0 4px 15px rgba(0, 0, 0, 0.8);
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { 
+        text-shadow: 
+            0 0 20px rgba(255, 20, 147, 0.5),
+            0 4px 15px rgba(0, 0, 0, 0.8);
+    }
+    50% { 
+        text-shadow: 
+            0 0 35px rgba(255, 20, 147, 0.8),
+            0 0 50px rgba(138, 43, 226, 0.6),
+            0 4px 15px rgba(0, 0, 0, 0.8);
+    }
 }
 
 .portal-container {

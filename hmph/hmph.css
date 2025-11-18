@@ -5,45 +5,106 @@
 }
 
 .portal-container .definition-card, .definition-card {
-    background: rgba(20, 20, 20, 0.95);
-    /* stronger specificity and important fallback in case other styles briefly override it */
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 8px;
-    padding: 2rem;
+    background: linear-gradient(135deg, rgba(30, 20, 40, 0.98), rgba(40, 30, 50, 0.98));
+    border: 3px solid;
+    border-image: linear-gradient(135deg, rgba(255, 20, 147, 0.6), rgba(138, 43, 226, 0.6), rgba(0, 191, 255, 0.6)) 1;
+    border-radius: 20px;
+    padding: 3rem;
     margin: 0 auto;
-    max-width: 600px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    max-width: 700px;
+    backdrop-filter: blur(25px) saturate(150%);
+    box-shadow: 
+        0 20px 70px rgba(0, 0, 0, 0.6),
+        0 0 80px rgba(255, 20, 147, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.definition-card::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.4), rgba(138, 43, 226, 0.4));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    filter: blur(25px);
+}
+
+.definition-card:hover::before {
+    opacity: 1;
+}
+
+.definition-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 25px 90px rgba(255, 20, 147, 0.4),
+        0 0 100px rgba(138, 43, 226, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .word-type {
-    color: #9f86c0;
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.9), rgba(138, 43, 226, 0.9));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
     font-style: italic;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
 }
 
 .definition {
     color: white;
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .example {
-    color: #a89ec9;
+    color: rgba(255, 255, 255, 0.85);
     font-style: italic;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    padding-left: 1rem;
-    border-left: 2px solid #9f86c0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    border-left: 4px solid;
+    border-image: linear-gradient(180deg, rgba(255, 20, 147, 0.8), rgba(138, 43, 226, 0.8)) 1;
+    background: linear-gradient(90deg, rgba(255, 20, 147, 0.05), transparent);
+    padding: 1rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    box-shadow: inset 0 0 20px rgba(255, 20, 147, 0.1);
 }
 
 .back-btn {
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
 
 h1 {
-    font-size: 4rem !important;
-    text-shadow: 0 0 20px rgba(159, 134, 192, 0.5) !important;
+    font-size: 4.5rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 4px !important;
+    text-shadow: 
+        0 0 40px rgba(255, 20, 147, 0.8) !important,
+        0 0 80px rgba(138, 43, 226, 0.6) !important,
+        0 8px 30px rgba(0, 0, 0, 0.9) !important;
+    filter: drop-shadow(0 0 30px rgba(255, 20, 147, 0.5)) !important;
+    animation: title-pulse 4s ease-in-out infinite !important;
+}
+
+@keyframes title-pulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 30px rgba(255, 20, 147, 0.5));
+    }
+    50% {
+        transform: scale(1.02);
+        filter: drop-shadow(0 0 50px rgba(255, 20, 147, 0.8)) drop-shadow(0 0 80px rgba(138, 43, 226, 0.6));
+    }
 }

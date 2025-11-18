@@ -3,7 +3,7 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
-    background: #0f0f0f;
+    background: #0a0a0f;
     position: relative;
     overflow-x: hidden;
     display: flex;
@@ -14,9 +14,16 @@ body {
 .portal-container {
     position: relative;
     width: 100%;
-    max-width: 600px;
-    padding: 2rem;
+    max-width: 650px;
+    padding: 2.5rem;
     z-index: 1;
+}
+
+@keyframes cosmic-drift {
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 100% 75%; }
+    50% { background-position: 200% 50%; }
+    75% { background-position: 100% 25%; }
 }
 
 .portal-container::before {
@@ -27,49 +34,86 @@ body {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 50% 50%, rgba(76, 161, 175, 0.1), transparent 60%),
-        radial-gradient(circle at 85% 30%, rgba(148, 93, 196, 0.15), transparent 55%),
-        radial-gradient(circle at 15% 70%, rgba(59, 178, 184, 0.15), transparent 50%);
+        radial-gradient(circle at 40% 40%, rgba(255, 20, 147, 0.12), transparent 45%),
+        radial-gradient(circle at 70% 60%, rgba(0, 191, 255, 0.1), transparent 50%),
+        radial-gradient(circle at 30% 80%, rgba(138, 43, 226, 0.15), transparent 55%);
     z-index: -1;
-    animation: pulse 20s ease infinite;
+    animation: cosmic-drift 25s ease infinite;
+    background-size: 300% 300%;
 }
 
 .back-button {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 24px;
+    left: 24px;
     color: #fff;
     text-decoration: none;
-    font-size: 1.1rem;
-    opacity: 0.7;
-    transition: all 0.3s ease;
+    font-size: 1.15rem;
+    font-weight: 600;
+    opacity: 0.85;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 100;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 8px 16px;
-    border-radius: 20px;
-    backdrop-filter: blur(5px);
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.15), rgba(138, 43, 226, 0.15));
+    padding: 12px 24px;
+    border-radius: 25px;
+    backdrop-filter: blur(20px) saturate(150%);
+    border: 2px solid rgba(255, 20, 147, 0.3);
+    box-shadow: 
+        0 6px 20px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(255, 20, 147, 0.2);
 }
 
 .back-button:hover {
     opacity: 1;
-    background: rgba(0, 0, 0, 0.5);
-    transform: translateX(2px);
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.3), rgba(138, 43, 226, 0.3));
+    transform: translateX(-5px) scale(1.05);
+    box-shadow: 
+        0 10px 35px rgba(255, 20, 147, 0.4),
+        0 0 50px rgba(138, 43, 226, 0.3);
+    border-color: rgba(255, 20, 147, 0.6);
 }
 
 .contact-form-container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transform: perspective(1000px) rotateX(0deg);
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s;
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.08), rgba(138, 43, 226, 0.08));
+    backdrop-filter: blur(25px) saturate(150%);
+    border-radius: 25px;
+    padding: 3rem;
+    box-shadow: 
+        0 15px 50px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(255, 20, 147, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid;
+    border-image: linear-gradient(135deg, rgba(255, 20, 147, 0.4), rgba(138, 43, 226, 0.4)) 1;
+    transform: perspective(1200px) rotateX(0deg);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+.contact-form-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.3), rgba(138, 43, 226, 0.3));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    filter: blur(20px);
+}
+
+.contact-form-container:hover::before {
+    opacity: 1;
 }
 
 .contact-form-container:hover {
-    transform: perspective(1000px) rotateX(2deg);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    transform: perspective(1200px) rotateX(3deg) translateY(-8px);
+    box-shadow: 
+        0 20px 70px rgba(255, 20, 147, 0.35),
+        0 0 80px rgba(138, 43, 226, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 @keyframes formAppear {
@@ -90,14 +134,23 @@ body {
 h1 {
     color: #fff;
     text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-    background: linear-gradient(90deg, #76c7c0, #a45de4, #2ecc71, #3498db);
-    background-size: 200% 200%;
+    margin-bottom: 2.5rem;
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    background: linear-gradient(
+        135deg, 
+        rgba(255, 20, 147, 0.95), 
+        rgba(138, 43, 226, 0.95), 
+        rgba(0, 191, 255, 0.95)
+    );
+    background-size: 300% 300%;
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
-    animation: gradient-move 3s ease-in-out infinite;
+    animation: gradient-move 6s ease-in-out infinite;
+    text-shadow: 0 0 40px rgba(255, 20, 147, 0.6);
+    filter: drop-shadow(0 4px 15px rgba(138, 43, 226, 0.4));
 }
 
 .form-group {
@@ -107,27 +160,34 @@ h1 {
 
 input, textarea {
     width: 100%;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.05), rgba(138, 43, 226, 0.05));
+    border: 2px solid rgba(255, 20, 147, 0.2);
+    border-radius: 12px;
     color: #fff;
-    font-size: 1rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(5px);
+    font-size: 1.05rem;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 textarea {
-    min-height: 150px;
+    min-height: 160px;
     resize: vertical;
 }
 
 input:focus, textarea:focus {
     outline: none;
-    border-color: #a45de4;
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 20px rgba(164, 93, 228, 0.2);
-    transform: translateY(-1px);
+    border-color: rgba(255, 20, 147, 0.8);
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.1), rgba(138, 43, 226, 0.1));
+    box-shadow: 
+        0 0 30px rgba(255, 20, 147, 0.3),
+        0 0 50px rgba(138, 43, 226, 0.2),
+        0 6px 25px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
 }
 
 @keyframes floatingInput {
@@ -151,11 +211,12 @@ input:focus, textarea:focus {
 
 label {
     position: absolute;
-    left: 12px;
-    top: 12px;
-    color: rgba(255, 255, 255, 0.6);
-    transition: all 0.3s ease;
+    left: 16px;
+    top: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
+    font-weight: 500;
 }
 
 input:focus ~ label,
@@ -163,47 +224,79 @@ input:not(:placeholder-shown) ~ label,
 .form-group.active label,
 textarea:focus ~ label,
 textarea:not(:placeholder-shown) ~ label {
-    top: -20px;
-    left: 0;
+    top: -24px;
+    left: 8px;
     font-size: 0.9rem;
-    color: #a45de4;
+    color: rgba(255, 20, 147, 0.95);
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(255, 20, 147, 0.5);
 }
 
 .submit-btn {
     width: 100%;
-    padding: 1rem;
-    background: linear-gradient(90deg, #76c7c0, #a45de4);
-    border: none;
-    border-radius: 8px;
+    padding: 1.3rem;
+    background: linear-gradient(135deg, rgba(255, 20, 147, 0.9), rgba(138, 43, 226, 0.9), rgba(0, 191, 255, 0.9));
+    border: 2px solid rgba(255, 20, 147, 0.5);
+    border-radius: 12px;
     color: #fff;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
-    background-size: 200% 100%;
-    background-position: 0% 0%;
+    background-size: 300% 300%;
+    background-position: 0% 50%;
+    box-shadow: 
+        0 8px 25px rgba(255, 20, 147, 0.3),
+        0 0 40px rgba(138, 43, 226, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.submit-btn:hover::before {
+    width: 400px;
+    height: 400px;
 }
 
 .submit-btn:hover {
-    transform: translateY(-2px) scale(1.01);
-    background-position: 100% 0%;
-    box-shadow: 0 10px 30px rgba(164, 93, 228, 0.3);
+    transform: translateY(-6px) scale(1.02);
+    background-position: 100% 50%;
+    box-shadow: 
+        0 15px 45px rgba(255, 20, 147, 0.5),
+        0 0 60px rgba(138, 43, 226, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 20, 147, 0.8);
+    letter-spacing: 2.5px;
 }
 
 .submit-btn:active {
-    transform: translateY(0) scale(0.98);
+    transform: translateY(-2px) scale(0.98);
 }
 
 @keyframes successPulse {
     0% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+        box-shadow: 0 0 0 0 rgba(0, 255, 127, 0.5);
     }
-    70% {
-        box-shadow: 0 0 0 15px rgba(46, 204, 113, 0);
+    50% {
+        box-shadow: 0 0 0 25px rgba(0, 255, 127, 0);
     }
     100% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+        box-shadow: 0 0 0 0 rgba(0, 255, 127, 0);
     }
 }
 
@@ -211,22 +304,22 @@ textarea:not(:placeholder-shown) ~ label {
     0%, 100% {
         transform: translateX(0);
     }
-    25% {
-        transform: translateX(-10px);
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-12px);
     }
-    75% {
-        transform: translateX(10px);
+    20%, 40%, 60%, 80% {
+        transform: translateX(12px);
     }
 }
 
 .submit-success {
-    background: linear-gradient(90deg, #2ecc71, #27ae60);
-    animation: successPulse 1.5s ease-out;
+    background: linear-gradient(135deg, rgba(0, 255, 127, 0.9), rgba(46, 204, 113, 0.9));
+    animation: successPulse 2s ease-out infinite;
 }
 
 .submit-error {
-    background: linear-gradient(90deg, #e74c3c, #c0392b);
-    animation: errorShake 0.5s ease-in-out;
+    background: linear-gradient(135deg, rgba(255, 71, 87, 0.9), rgba(231, 76, 60, 0.9));
+    animation: errorShake 0.6s ease-in-out;
 }
 
 .success-message,
