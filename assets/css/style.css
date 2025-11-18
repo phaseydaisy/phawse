@@ -718,8 +718,7 @@ body::-webkit-scrollbar {
         rgba(0, 191, 255, 0.2) 0%, 
         rgba(0, 229, 255, 0.15) 50%,
         rgba(255, 136, 0, 0.2) 100%);
-    border: 2px solid;
-    border-image: linear-gradient(90deg, #00bfff, #ff8800, #00bfff) 1;
+    border: none;
     border-radius: 15px;
     backdrop-filter: blur(20px) saturate(180%);
     text-decoration: none;
