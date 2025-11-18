@@ -1,177 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velocity - Advanced Web Experience</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crimson Portal</title>
+  <link rel="icon" href="https://cdn.discordapp.com/attachments/1312641194810933258/1414362852944384101/IMG_6468.png?ex=68bf4b8d&is=68bdfa0d&hm=da7e549fbbe9c88f251353ed817029fbf58c059889f620850fca9f62040974fb&" type="image/png">
+  <link rel="shortcut icon" href="https://cdn.discordapp.com/attachments/1312641194810933258/1414362852944384101/IMG_6468.png?ex=68bf4b8d&is=68bdfa0d&hm=da7e549fbbe9c88f251353ed817029fbf58c059889f620850fca9f62040974fb&" type="image/png">
+  <link rel="preload" href="assets/css/style.css" as="style">
+  <link rel="preload" href="assets/js/index.js" as="script">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="404/404.js"></script>
 </head>
 <body>
-    <div class="cursor-glow"></div>
-    
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <span class="logo-text">VELOCITY</span>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link active">Home</a></li>
-                <li><a href="features.html" class="nav-link">Features</a></li>
-                <li><a href="gallery.html" class="nav-link">Gallery</a></li>
-                <li><a href="contact.html" class="nav-link">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+  <canvas id="particle-canvas"></canvas>
+  <div class="portal-container">
+    <h1 class="animated-title">🔥 Crimson Links 🔥</h1>
+    <div class="portal-buttons">
+      <a href="https://www.youtube.com/watch?v=XnygT6ANLzQ&t=29s" class="btn portal-btn btn-animated" target="_blank" data-tilt>
+        <span>✌️ GUESS WHAT</span>
+      </a>
+      <a href="https://www.youtube.com/watch?v=1Sz8haYkXhs" class="btn portal-btn btn-animated" target="_blank" data-tilt>
+        <span>4️⃣2️⃣</span>
+      </a>
+    </div>
+    <div style="margin-top: 3rem; text-align: center; display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;">
+      <a href="contact/" class="btn portal-btn btn-animated" data-tilt>
+        <span>✉️ Send me a message!</span>
+      </a>
+      <a href="https://www.youtube.com/watch?v=AY8PlUVleU8" class="btn portal-btn btn-animated" target="_blank" data-tilt>
+        <span>🌙 Can I see you tomorrow night?</span>
+      </a>
+    </div>
+    <div class="additional-content">
+      <div class="bottom-section">
+        <a href="hmph/" class="btn portal-btn btn-animated" data-tilt>
+          <span>😤 Hmph.</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="music-player">
+    <audio id="audio-player" preload="metadata"></audio>
+    <div class="player-box">
+      <a href="https://open.spotify.com/playlist/0v5LP5VIEEmUzES7HEqONt?si=5867ac5210a64158" target="_blank" class="cover-art" title="Open in Spotify">
+        <img id="cover-image" src="assets/music/covers/youandi.png" alt="Album cover">
+        <div class="spotify-hover">
+          <span class="spotify-icon">🎧</span>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-background">
-            <div class="animated-bg"></div>
-        </div>
-        <div class="hero-content">
-            <h1 class="hero-title">
-                <span class="word">Welcome</span>
-                <span class="word">to</span>
-                <span class="word">the</span>
-                <span class="word">Future</span>
-            </h1>
-            <p class="hero-subtitle">Experience cutting-edge design with seamless animations</p>
-            <div class="hero-buttons">
-                <button class="btn btn-primary">Get Started</button>
-                <button class="btn btn-secondary">Learn More</button>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="mouse">
-                <div class="wheel"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features-preview">
-        <div class="container">
-            <h2 class="section-title" data-scroll>Featured Capabilities</h2>
-            <div class="features-grid">
-                <div class="feature-card" data-scroll>
-                    <div class="feature-icon">⚡</div>
-                    <h3>Lightning Fast</h3>
-                    <p>Optimized performance for instant loading and smooth interactions</p>
-                </div>
-                <div class="feature-card" data-scroll>
-                    <div class="feature-icon">🎨</div>
-                    <h3>Modern Design</h3>
-                    <p>Contemporary aesthetics with fluid animations and transitions</p>
-                </div>
-                <div class="feature-card" data-scroll>
-                    <div class="feature-icon">🔒</div>
-                    <h3>Secure</h3>
-                    <p>Built with security best practices and encrypted connections</p>
-                </div>
-                <div class="feature-card" data-scroll>
-                    <div class="feature-icon">📱</div>
-                    <h3>Responsive</h3>
-                    <p>Perfect experience across all devices and screen sizes</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item" data-scroll>
-                    <div class="stat-number" data-target="10000">0</div>
-                    <div class="stat-label">Active Users</div>
-                </div>
-                <div class="stat-item" data-scroll>
-                    <div class="stat-number" data-target="500">0</div>
-                    <div class="stat-label">Projects</div>
-                </div>
-                <div class="stat-item" data-scroll>
-                    <div class="stat-number" data-target="99">0</div>
-                    <div class="stat-label">Satisfaction %</div>
-                </div>
-                <div class="stat-item" data-scroll>
-                    <div class="stat-number" data-target="24">0</div>
-                    <div class="stat-label">Support 7/</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive Section -->
-    <section class="interactive-section">
-        <div class="container">
-            <h2 class="section-title" data-scroll>Interactive Elements</h2>
-            <div class="interactive-grid">
-                <div class="interactive-card" data-scroll>
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <h3>Hover Me</h3>
-                            <p>Interactive 3D Card</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="interactive-card" data-scroll>
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <h3>Click Me</h3>
-                            <p>Ripple Effect</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="interactive-card" data-scroll>
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <h3>Explore</h3>
-                            <p>Smooth Animations</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>VELOCITY</h3>
-                    <p>Pushing the boundaries of web design</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="features.html">Features</a></li>
-                        <li><a href="gallery.html">Gallery</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Connect</h4>
-                    <div class="social-links">
-                        <a href="#" class="social-link">Twitter</a>
-                        <a href="#" class="social-link">GitHub</a>
-                        <a href="#" class="social-link">LinkedIn</a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Velocity. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+      </a>
+      <button id="playPauseBtn" class="play-pause-btn" aria-label="Play/Pause music">
+        <span class="play-icon">▶</span>
+        <span class="pause-icon hidden">⏸</span>
+      </button>
+      <div class="volume-control">
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="100" value="100">
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/index.js"></script>
+  <script src="assets/js/audio-control.js"></script>
 </body>
 </html>

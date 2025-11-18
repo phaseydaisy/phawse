@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script src="/assets/js/preventDevTools.js"></script>
+    <script>
+        (function() {
+            var repoPath = '/phawse';
+            var isGitHubPages = location.hostname.endsWith('github.io');
+            var basePath = isGitHubPages ? repoPath : '';
+            var errorPath = basePath + '/404/';
+            
+            if (!window.location.pathname.includes('/404/')) {
+                window.location.replace(errorPath);
+            }
+        })();
+    </script>
+</head>
+<body>
+    Redirecting...
+</body>
+</html>

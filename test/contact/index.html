@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Phase</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📞</text></svg>"
+        type="image/svg+xml">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📞</text></svg>"
+        type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="contact.css?v=2">
+</head>
+<body>
+    <div class="portal-container">
+    <a href="../" class="back-button">← Back</a>
+        <div class="contact-form-container">
+            <h1>Send me a message!</h1>
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" required>
+                    <label for="name">Your Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="discord" name="discord">
+                    <label for="discord">Your Discord Username/ID (optional)</label>
+                </div>
+                <div class="form-group">
+                    <textarea id="message" name="message" required></textarea>
+                    <label for="message">Your Message</label>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <span>Send Message</span>
+                    <div class="button-loader"></div>
+                </button>
+            </form>
+        </div>
+    </div>
+    <script src="contact.js?v=2"></script>
+</body>
+</html>
