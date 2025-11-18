@@ -5,31 +5,35 @@
 }
 
 .portal-container .definition-card, .definition-card {
-    background: rgba(17, 24, 39, 0.8);
-    border: 2px solid rgba(99, 102, 241, 0.4);
-    border-radius: 16px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.04) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
     padding: 3rem;
     margin: 0 auto;
     max-width: 700px;
-    backdrop-filter: blur(40px) saturate(180%);
+    backdrop-filter: blur(50px) saturate(180%);
     box-shadow: 
-        0 20px 70px rgba(0, 0, 0, 0.7),
-        0 0 80px rgba(99, 102, 241, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 8px 32px rgba(147, 51, 234, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
     transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .definition-card:hover {
-    transform: translateY(-6px) scale(1.01);
+    transform: translateY(-8px) scale(1.01);
     box-shadow: 
-        0 25px 90px rgba(99, 102, 241, 0.4),
-        0 0 100px rgba(168, 85, 247, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: rgba(99, 102, 241, 0.6);
+        0 24px 80px rgba(147, 51, 234, 0.3),
+        0 12px 40px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
 }
 
 .word-type {
-    background: linear-gradient(135deg, #ffffff, #c7d2fe);
+    background: linear-gradient(135deg, #ffffff, rgba(147, 51, 234, 0.8));
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -38,7 +42,7 @@
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+    filter: drop-shadow(0 0 20px rgba(147, 51, 234, 0.3));
 }
 
 .definition {
@@ -52,17 +56,18 @@
 }
 
 .example {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
     font-style: italic;
     font-size: 1.1rem;
     line-height: 1.7;
-    padding-left: 1.5rem;
     font-family: 'Inter', sans-serif;
-    border-left: 3px solid rgba(99, 102, 241, 0.6);
-    background: rgba(99, 102, 241, 0.05);
+    border-left: 3px solid rgba(147, 51, 234, 0.5);
+    background: linear-gradient(90deg, 
+        rgba(147, 51, 234, 0.08) 0%,
+        rgba(59, 130, 246, 0.05) 100%);
     padding: 1rem 1.5rem;
-    border-radius: 0 8px 8px 0;
-    box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.1);
+    border-radius: 0 12px 12px 0;
+    box-shadow: inset 0 0 30px rgba(147, 51, 234, 0.1);
 }
 
 .back-btn {
