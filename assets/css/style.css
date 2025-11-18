@@ -3,7 +3,7 @@ body {
     padding: 0;
     min-height: 100vh;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #000000;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
     position: relative;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -78,15 +78,15 @@ body {
     width: 100vw;
     height: 100vh;
     background: 
-        radial-gradient(circle at 20% 30%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 70% 20%, rgba(168, 85, 247, 0.13) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+        radial-gradient(circle at 20% 30%, rgba(147, 51, 234, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.22) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 70% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
     background-size: 200% 200%, 250% 250%, 220% 220%, 280% 280%, 300% 300%;
     animation: gradient-mesh 30s ease-in-out infinite;
     z-index: 0;
-    filter: blur(60px);
+    filter: blur(80px);
 }
 
 .portal-container::after {
@@ -96,7 +96,7 @@ body {
     width: 100vw;
     height: 100vh;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-    opacity: 0.4;
+    opacity: 0.15;
     mix-blend-mode: overlay;
     animation: noise-grain 8s ease-in-out infinite;
     z-index: 1;
@@ -105,50 +105,45 @@ body {
 
 .music-player {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 32px;
+    right: 32px;
     z-index: 1000;
 }
 
-.music-player {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-}
-
-/* --- Player: compact neon glass design --- */
+/* Modern Minimal Music Player */
 .player-box {
-    background: linear-gradient(135deg, rgba(255, 20, 147, 0.08), rgba(138, 43, 226, 0.08));
-    border: 2px solid;
-    border-image: linear-gradient(135deg, rgba(255, 20, 147, 0.4), rgba(138, 43, 226, 0.4)) 1;
-    border-radius: 18px;
-    padding: 12px 14px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.12) 0%,
+        rgba(255, 255, 255, 0.08) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    gap: 16px;
+    backdrop-filter: blur(60px) saturate(180%);
+    -webkit-backdrop-filter: blur(60px) saturate(180%);
     box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        0 0 30px rgba(255, 20, 147, 0.2);
+        0 12px 40px rgba(0, 0, 0, 0.25),
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
     position: relative;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    min-width: 280px;
+    min-width: 320px;
 }
 
-.player-box::before {
-    content: '';
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, rgba(255, 20, 147, 0.3), rgba(138, 43, 226, 0.3));
-    z-index: -1;
-    opacity: 0;
+.player-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 24px rgba(147, 51, 234, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.12);
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.1) 100%);
+}
     transition: opacity 0.4s ease;
     filter: blur(15px);
 }
@@ -165,32 +160,39 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* compact volume area: expand on hover */
 .volume-control {
-    width: 36px; /* show only icon by default */
+    width: 42px;
     overflow: hidden;
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: width 260ms cubic-bezier(.2,.9,.2,1), opacity 180ms;
-    opacity: 0.95;
+    gap: 12px;
+    transition: width 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .player-box:hover .volume-control {
-    width: 110px; /* expand slider */
+    width: 140px;
 }
 
 .volume-slider {
-    width: 88px;
-    height: 8px;
+    width: 100px;
+    height: 6px;
     -webkit-appearance: none;
     appearance: none;
-    background: linear-gradient(90deg, rgba(255, 20, 147, 0.8) 0%, rgba(138, 43, 226, 0.8) 50%, rgba(0, 191, 255, 0.8) 100%);
+    background: linear-gradient(90deg, 
+        rgba(147, 51, 234, 0.9) 0%, 
+        rgba(59, 130, 246, 0.9) 100%);
     border-radius: 999px;
     outline: none;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.3s ease;
     box-shadow: 
-        0 2px 10px rgba(255, 20, 147, 0.3),
+        0 2px 8px rgba(147, 51, 234, 0.3),
+        inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.volume-slider:hover {
+    height: 8px;
+    box-shadow: 
+        0 4px 12px rgba(147, 51, 234, 0.5),
         inset 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -307,11 +309,10 @@ body {
     text-decoration: none;
     flex-shrink: 0;
     box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(255, 20, 147, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        0 0 0 2px rgba(255, 255, 255, 0.1);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    border: 2px solid rgba(255, 20, 147, 0.3);
+    border: none;
 }
 
 .cover-art::before {
@@ -321,7 +322,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 20, 147, 0.3), rgba(138, 43, 226, 0.3));
+    background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2));
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 1;
@@ -334,32 +335,51 @@ body {
 .cover-art img { width:100%; height:100%; object-fit:cover; display:block; position: relative; z-index: 0; }
 
 .cover-art:hover { 
-    transform: translateY(-8px) scale(1.1) rotate(3deg); 
+    transform: scale(1.08) rotate(-2deg); 
     box-shadow: 
-        0 15px 45px rgba(255, 20, 147, 0.5),
-        0 0 40px rgba(138, 43, 226, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 20, 147, 0.6);
+        0 8px 24px rgba(147, 51, 234, 0.4),
+        0 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
 .spotify-hover { display:none; }
 
 .play-pause-btn {
-    background: transparent;
+    background: linear-gradient(135deg, 
+        rgba(147, 51, 234, 0.9),
+        rgba(59, 130, 246, 0.9));
     border: none;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 18px;
-    padding: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 16px;
+    padding: 0;
+    box-shadow: 
+        0 4px 16px rgba(147, 51, 234, 0.4),
+        0 2px 8px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .play-pause-btn:hover {
-    color: white;
     transform: scale(1.1);
+    color: white;
+    box-shadow: 
+        0 8px 24px rgba(147, 51, 234, 0.6),
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, 
+        rgba(147, 51, 234, 1),
+        rgba(59, 130, 246, 1));
+}
+
+.play-pause-btn:active {
+    transform: scale(1.05);
 }
 
 .controls-section {
@@ -540,10 +560,10 @@ h1 {
     background: linear-gradient(
         135deg, 
         #ffffff 0%,
-        #e0e7ff 25%,
-        #c7d2fe 50%,
-        #a5b4fc 75%,
-        #ffffff 100%
+        #f0f0ff 25%,
+        #e8e8ff 50%,
+        #ffffff 75%,
+        #fafafa 100%
     );
     background-size: 200% 200%;
     background-clip: text;
@@ -552,15 +572,29 @@ h1 {
     -webkit-text-fill-color: transparent;
     animation: gradient-shift 12s ease infinite;
     text-shadow: 
-        0 0 60px rgba(255, 255, 255, 0.5),
-        0 0 100px rgba(99, 102, 241, 0.3),
-        0 10px 40px rgba(0, 0, 0, 0.9);
+        0 0 80px rgba(255, 255, 255, 0.9),
+        0 0 120px rgba(255, 255, 255, 0.6),
+        0 0 160px rgba(147, 51, 234, 0.4),
+        0 4px 20px rgba(0, 0, 0, 0.8);
     transform: scale(1);
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     border: none;
-    padding: 0;
+    padding: 1.5rem 3rem;
     position: relative;
-    filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.4));
+    filter: drop-shadow(0 0 60px rgba(255, 255, 255, 0.8));
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    backdrop-filter: blur(10px);
+}
+
+h1::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15), transparent 70%);
+    filter: blur(40px);
+    z-index: -1;
+    border-radius: 50%;
 }
 
 h1:hover {
@@ -598,34 +632,34 @@ body::-webkit-scrollbar {
 .portal-container .orb {
     position: fixed;
     border-radius: 50%;
-    filter: blur(40px);
-    opacity: 0.4;
+    filter: blur(50px);
+    opacity: 0.5;
     pointer-events: none;
     z-index: 0;
 }
 
 .portal-container .orb-1 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.4), transparent);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(147, 51, 234, 0.6), rgba(99, 102, 241, 0.3), transparent);
     top: 10%;
     left: 5%;
     animation: orb-drift 25s ease-in-out infinite;
 }
 
 .portal-container .orb-2 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.3), transparent);
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.5), rgba(168, 85, 247, 0.4), transparent);
     top: 60%;
     right: 10%;
     animation: orb-drift 30s ease-in-out infinite reverse;
 }
 
 .portal-container .orb-3 {
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(236, 72, 153, 0.35), transparent);
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.5), rgba(147, 51, 234, 0.3), transparent);
     bottom: 15%;
     left: 50%;
     animation: orb-drift 35s ease-in-out infinite;
