@@ -1,6 +1,5 @@
-// Cute interactions only (no audio/Spotify)
+ 
 
-// Smooth scroll for internal links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     e.preventDefault();
@@ -14,12 +13,12 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// Add loading animation
+
 window.addEventListener('load', () => {
   document.body.classList.add('loaded');
 });
 
-// Enhanced card interactions
+
 document.querySelectorAll('.link-card').forEach(card => {
   card.addEventListener('mouseenter', function() {
     this.style.setProperty('--hover-x', '0');
@@ -36,7 +35,7 @@ document.querySelectorAll('.link-card').forEach(card => {
   });
 });
 
-// Intersection Observer for scroll animations
+ 
 const observerOptions = {
   threshold: 0.1,
   rootMargin: '0px 0px -50px 0px'
@@ -51,14 +50,14 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-// Observe all cards
+
 document.querySelectorAll('.link-card').forEach(el => {
   observer.observe(el);
 });
 
-// No keyboard audio shortcuts needed
 
-// Add subtle parallax effect to gradient orbs
+
+
 let ticking = false;
 
 document.addEventListener('mousemove', (e) => {
