@@ -1,95 +1,86 @@
-const canvas = document.createElement('canvas');
+// Cute interactions only (no audio/Spotify)
 
-// Mouse Particle Trail System
-const particles = [];
-const maxParticles = 100;
-
-class Particle {
-    constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.size = Math.random() * 5 + 2;
-        this.speedX = Math.random() * 3 - 1.5;
-        this.speedY = Math.random() * 3 - 1.5;
-        this.color = `hsl(${Math.random() * 60 + 240}, 100%, ${Math.random() * 30 + 60}%)`;
-        this.life = 1;
-        this.decay = Math.random() * 0.02 + 0.01;
+// Smooth scroll for internal links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
-
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.life -= this.decay;
-        this.size *= 0.98;
-    }
-}
-
-function createParticle(x, y) {
-    if (particles.length < maxParticles) {
-        particles.push(new Particle(x, y));
-    }
-}
-
-function animateParticles() {
-    const particleContainer = document.querySelector('.particle-container');
-    
-    particles.forEach((particle, index) => {
-        particle.update();
-        
-        if (particle.life <= 0) {
-            particles.splice(index, 1);
-        }
-    });
-    
-    if (particleContainer) {
-        particleContainer.innerHTML = '';
-        particles.forEach(particle => {
-            const particleEl = document.createElement('div');
-            particleEl.className = 'particle';
-            particleEl.style.left = particle.x + 'px';
-            particleEl.style.top = particle.y + 'px';
-            particleEl.style.width = particle.size + 'px';
-            particleEl.style.height = particle.size + 'px';
-            particleEl.style.background = particle.color;
-            particleEl.style.opacity = particle.life;
-            particleContainer.appendChild(particleEl);
-        });
-    }
-    
-    requestAnimationFrame(animateParticles);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const particleContainer = document.createElement('div');
-    particleContainer.className = 'particle-container';
-    document.body.appendChild(particleContainer);
-    animateParticles();
+  });
 });
+
+// Add loading animation
+window.addEventListener('load', () => {
+  document.body.classList.add('loaded');
+});
+
+// Enhanced card interactions
+document.querySelectorAll('.link-card').forEach(card => {
+  card.addEventListener('mouseenter', function() {
+    this.style.setProperty('--hover-x', '0');
+    this.style.setProperty('--hover-y', '0');
+  });
+  
+  card.addEventListener('mousemove', function(e) {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    this.style.setProperty('--hover-x', `${x}px`);
+    this.style.setProperty('--hover-y', `${y}px`);
+  });
+});
+
+// Intersection Observer for scroll animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+// Observe all cards
+document.querySelectorAll('.link-card').forEach(el => {
+  observer.observe(el);
+});
+
+// No keyboard audio shortcuts needed
+
+// Add subtle parallax effect to gradient orbs
+let ticking = false;
 
 document.addEventListener('mousemove', (e) => {
-    for (let i = 0; i < 2; i++) {
-        createParticle(e.clientX, e.clientY);
-    }
-});
-
-document.addEventListener('click', handleLinkClick);
-
-window.addEventListener('popstate', (e) => {
-    
-    const url = new URL(location.href);
-    fetch(url.href, { credentials: 'same-origin' }).then(r => r.text()).then(html => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const replaced = extractAndReplaceContent(doc);
-        if (!replaced) {
-            
-            location.reload();
-            return;
-        }
-        const newTitle = doc.querySelector('title');
-        if (newTitle) document.title = newTitle.textContent;
-        window.scrollTo(0,0);
-    }).catch(() => {
-        location.reload();
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      const orbs = document.querySelectorAll('.gradient-orb');
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      orbs.forEach((orb, index) => {
+        const speed = (index + 1) * 10;
+        const x = (mouseX - 0.5) * speed;
+        const y = (mouseY - 0.5) * speed;
+        
+        orb.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      
+      ticking = false;
     });
+    
+    ticking = true;
+  }
 });
+
+console.log('💖 Cute version loaded!');
