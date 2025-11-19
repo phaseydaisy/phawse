@@ -56,11 +56,6 @@ function initContact() {
                         inline: true
                     },
                     {
-                        name: "🎮 Discord",
-                        value: form.discord.value.trim() || 'Not provided',
-                        inline: true
-                    },
-                    {
                         name: "📝 Message",
                         value: form.message.value.trim()
                     }
