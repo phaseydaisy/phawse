@@ -129,6 +129,40 @@ body {
   animation: fadeInUp 0.8s ease-out;
 }
 
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  margin-bottom: var(--spacing-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  backdrop-filter: blur(10px);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
 .main-title {
   font-family: 'Urbanist', sans-serif;
   font-size: clamp(2.5rem, 8vw, 4.5rem);
@@ -146,6 +180,12 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline-block;
+}
+
+.title-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--text);
+  font-weight: 900;
 }
 
 .subtitle {
@@ -259,6 +299,8 @@ body {
   color: #ffd6e8;
 }
 
+/* Music player removed for cute preview */
+
 /* Footer */
 .footer {
   text-align: center;
@@ -306,6 +348,16 @@ body {
   
   .card-content h3 {
     font-size: 1.125rem;
+  }
+  
+  .player-main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .album-cover {
+    width: 100%;
+    height: 200px;
   }
 }
 

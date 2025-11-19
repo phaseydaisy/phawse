@@ -1,14 +1,6 @@
-// Visible countdown to redirect
-(function(){
-    const display = document.getElementById('count');
-    let seconds = parseInt(display?.textContent || '5', 10);
-    const tick = () => {
-        seconds -= 1;
-        if (display) display.textContent = String(seconds);
-        if (seconds <= 0) {
-            window.location.href = '/';
-            return;
-        }
-    };
-    setInterval(tick, 1000);
-})();
+// cute sparkle on load
+document.addEventListener('DOMContentLoaded',()=>{
+  const text=document.querySelector('.redirect-text');
+  if(!text) return;
+  let dots=0;setInterval(()=>{dots=(dots+1)%4;text.textContent=`redirecting you back home in 3 seconds${'.'.repeat(dots)}`;},500);
+});
