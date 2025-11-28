@@ -1,10 +1,7 @@
-/* Cute & Sweet vibe */
-
-/* Variables */
 :root {
-  --primary: #ffc0d9; /* pink */
-  --secondary: #a0e7e5; /* minty blue */
-  --accent: #d7c9ff; /* lilac */
+  --primary: #ffc0d9;
+  --secondary: #a0e7e5;
+  --accent: #d7c9ff;
   --background: #0b0f14;
   --surface: rgba(255,255,255,0.06);
   --surface-light: rgba(255,255,255,0.10);
@@ -28,7 +25,6 @@
   --spacing-xl: 3rem;
 }
 
-/* Reset & Base */
 * {
   margin: 0;
   padding: 0;
@@ -45,7 +41,6 @@ body {
   position: relative;
 }
 
-/* Background Elements */
 .background-grid {
   position: fixed;
   top: 0;
@@ -110,7 +105,6 @@ body {
   }
 }
 
-/* Container */
 .container {
   position: relative;
   z-index: 1;
@@ -122,7 +116,6 @@ body {
   flex-direction: column;
 }
 
-/* Hero Section */
 .hero-section {
   text-align: center;
   margin-bottom: var(--spacing-xl);
@@ -251,6 +244,9 @@ body {
 .link-card.accent { background: linear-gradient(135deg, rgba(160,231,229,.12), rgba(255,192,217,.08)); border-color: rgba(160,231,229,.35); }
 .link-card.accent:hover { border-color: rgba(160,231,229,.55); box-shadow: 0 12px 40px rgba(160,231,229,.2), 0 0 60px rgba(255,192,217,.15); }
 
+.link-card.hmph-special { background: linear-gradient(135deg, rgba(255,220,170,.12), rgba(255,200,150,.08)); border-color: rgba(255,210,160,.35); }
+.link-card.hmph-special:hover { border-color: rgba(255,210,160,.55); box-shadow: 0 12px 40px rgba(255,200,150,.25), 0 0 60px rgba(255,220,170,.2); }
+
 .card-icon {
   font-size: 2rem;
   width: 60px;
@@ -299,9 +295,6 @@ body {
   color: #ffd6e8;
 }
 
-/* Music player removed for cute preview */
-
-/* Footer */
 .footer {
   text-align: center;
   padding: var(--spacing-lg) 0;
@@ -310,7 +303,6 @@ body {
   animation: fadeInUp 0.8s ease-out 0.6s backwards;
 }
 
-/* Animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -322,7 +314,6 @@ body {
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .container {
     padding: var(--spacing-lg) var(--spacing-sm);
@@ -361,7 +352,6 @@ body {
   }
 }
 
-/* Smooth scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }

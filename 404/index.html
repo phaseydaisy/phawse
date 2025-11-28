@@ -3,17 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>oopsie! wrong path bestie</title>
+  <title>404 - Page Not Found</title>
   <link rel="icon" href="https://cdn.discordapp.com/attachments/1312641194810933258/1414362852944384101/IMG_6468.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Urbanist:wght@700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="404.css">
-  <meta http-equiv="refresh" content="3;url=../">
+  <link rel="stylesheet" href="404.css?v=2">
 </head>
 <body>
+  <div class="background-grid"></div>
+  <div class="gradient-orb orb-1"></div>
+  <div class="gradient-orb orb-2"></div>
+  <div class="gradient-orb orb-3"></div>
+
   <div class="portal-container">
-    <h1>oopsie! wrong path bestie</h1>
-    <p class="redirect-text">redirecting you back home in 3 seconds...</p>
-    <a href="../" class="btn portal-btn">🏠 Go Home Now</a>
+    <div class="error-code">404</div>
+    <h1>Oopsie! Wrong Path Bestie</h1>
+    <p class="error-message">This page doesn't exist... yet! Maybe you took a wrong turn? 🤔</p>
+    <p class="redirect-text">Redirecting you back home in <span id="countdown">3</span> seconds...</p>
+    <a href="../" class="home-button">
+      <span class="button-icon">🏠</span>
+      <span>Go Home Now</span>
+      <span class="button-arrow">→</span>
+    </a>
   </div>
   <script src="404.js"></script>
 </body>
