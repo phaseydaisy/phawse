@@ -17,7 +17,7 @@ function initContactCute(){
           {name:"👤 From",value:name,inline:true},
           {name:"📝 Message",value:message}
         ],
-        footer:{text:"Sent from test4 preview"}
+        footer:{text:"Sent from phawse.lol Contact Form"}
       }]
     };
     try{
