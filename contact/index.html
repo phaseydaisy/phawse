@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send me a message!</title>
+  <link rel="icon" href="https://cdn.discordapp.com/attachments/1312641194810933258/1414362852944384101/IMG_6468.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Urbanist:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="contact.css">
+  <meta name="robots" content="noindex">
+  <style>body{overflow:visible}</style>
+</head>
+<body>
+  <a href="../" class="back-button">← Back</a>
+  <div class="contact-wrap">
+    <h1 class="cute-title">✉️ Send me a message!</h1>
+    <form id="contactForm" class="cute-form">
+      <div class="form-row">
+        <label for="name">Your Name</label>
+        <input id="name" name="name" type="text" required placeholder="e.g. Timmy">
+      </div>
+      <div class="form-row">
+        <label for="message">Your Message</label>
+        <textarea id="message" name="message" required placeholder="say hi! anything you like"></textarea>
+      </div>
+      <button type="submit" class="cute-btn">Send Message 💌</button>
+    </form>
+    <p class="tiny-note">simple & sweet</p>
+  </div>
+
+  <script src="contact.js"></script>
+</body>
+</html>

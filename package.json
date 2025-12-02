@@ -1,0 +1,14 @@
+{
+  "name": "phawse",
+  "version": "1.0.0",
+  "description": "Personal website",
+  "scripts": {
+    "minify": "uglifyjs assets/js/index.js -o dist/bundle.min.js && cleancss -o dist/styles.min.css assets/css/style.css",
+    "build": "node -e \"require('fs').mkdirSync('dist', { recursive: true })\" && npm run minify"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.2",
+    "javascript-obfuscator": "^4.1.1",
+    "uglify-js": "^3.17.4"
+  }
+}
