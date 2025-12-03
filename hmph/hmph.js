@@ -32,7 +32,6 @@ hmphBtn.addEventListener('click', () => {
     hmphTitle.style.animation = 'hmphBounce 0.5s ease';
   }, 10);
   
-  // Slide out animation
   exampleText.classList.add('slide-out');
   
   setTimeout(() => {
