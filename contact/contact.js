@@ -8,18 +8,22 @@ function initContactCute(){
     e.preventDefault();
     btn.disabled=true;const name=form.name.value.trim();const message=form.message.value.trim();
     if(!name||!message){show('error','Please fill everything');btn.disabled=false;return;}
+
     const payload={
       content:"<@1161104305080762449>",
       embeds:[{
-        title:"💌 New Cute Message",
+        title:"💌 New Message from phawse.lol",
+        description:`You've received a new message from your contact form!`,
         color:0xFFC0D9,
         fields:[
-          {name:"👤 From",value:name,inline:true},
-          {name:"📝 Message",value:message}
+          {name:"👤 Name",value:`\`\`\`${name}\`\`\``,inline:false},
+          {name:"💬 Message",value:message,inline:false}
         ],
-        footer:{text:"Sent from phawse.lol Contact Form"}
+        footer:{text:"phawse.lol Contact Form"},
+        timestamp:new Date().toISOString()
       }]
     };
+    
     try{
       const WORKER_URL='https://discord-webhook-proxy.kaidenlorse1.workers.dev/';
       const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
