@@ -21,8 +21,8 @@ function initContactCute(){
       }]
     };
     try{
-      const WEBHOOK_URL='https://discord.com/api/webhooks/1415402565197107333/okWqkhR_yaJm_PZRbT3zyoGXTXflMjmfLUAZnOIs6wd9kade8hW5LO7D_2hkLIzcxTgI';
-      const res=await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const WORKER_URL='https://discord-webhook-proxy.kaidenlorse1.workers.dev/';
+      const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       if(!res.ok) throw new Error('send failed');
       form.reset();
       show('success','Message sent! ✨');
