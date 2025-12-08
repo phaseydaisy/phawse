@@ -16,7 +16,6 @@ body {
   position: relative;
 }
 
-/* Animated Background */
 .background-animation {
   position: fixed;
   top: 0;
@@ -161,7 +160,6 @@ p {
   pointer-events: none;
 }
 
-/* Buttons */
 .link-btn {
   width: 100%;
   padding: 16px 24px;
