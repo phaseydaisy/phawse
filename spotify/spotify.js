@@ -8,7 +8,6 @@ function initSpotifyLink() {
   const retryBtn = document.getElementById('retryBtn');
   const discordIdInput = document.getElementById('discordId');
 
-  // Check if we're on the callback page (after Spotify redirect)
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   const state = urlParams.get('state');
@@ -21,23 +20,18 @@ function initSpotifyLink() {
   }
 
   if (code && state) {
-    // We're on callback, handle it
     handleCallback(code, state);
     return;
   }
 
-  // Check if user ID is provided in URL (from Discord bot)
   if (userId && /^\d+$/.test(userId)) {
-    // Hide input section, show loading
     document.getElementById('inputSection').classList.add('hidden');
     document.getElementById('loadingMessage').classList.remove('hidden');
     
-    // Auto-start auth with provided user ID
     setTimeout(() => startAuth(userId), 500);
     return;
   }
 
-  // Normal landing page - set up link button
   linkBtn.addEventListener('click', () => startAuth());
   retryBtn.addEventListener('click', () => {
     errorSection.classList.add('hidden');
@@ -54,7 +48,6 @@ function initSpotifyLink() {
 function startAuth(providedUserId = null) {
   let discordId = providedUserId;
   
-  // If not provided, get from input field
   if (!discordId) {
     discordId = document.getElementById('discordId').value.trim();
   }
@@ -69,7 +62,6 @@ function startAuth(providedUserId = null) {
     return;
   }
 
-  // Redirect to worker auth endpoint
   window.location.href = `${WORKER_URL}/auth?user=${discordId}`;
 }
 
@@ -78,14 +70,12 @@ async function handleCallback(code, discordUserId) {
   linkSection.innerHTML = '<p>Linking your Spotify account...</p>';
 
   try {
-    // The worker will handle the token exchange
     const response = await fetch(`${WORKER_URL}/callback?code=${code}&state=${discordUserId}`);
     
     if (!response.ok) {
       throw new Error('Failed to link Spotify account');
     }
 
-    // Try to get user info to show
     const userResponse = await fetch(`${WORKER_URL}/user?user=${discordUserId}`);
     const userData = await userResponse.json();
 
@@ -110,7 +100,6 @@ function showError(message) {
   document.getElementById('errorSection').classList.remove('hidden');
 }
 
-// Initialize when page loads
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initSpotifyLink);
 } else {
