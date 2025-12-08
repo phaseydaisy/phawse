@@ -41,6 +41,8 @@ function showSuccess(spotifyName) {
     nameElement.textContent = spotifyName;
   }
   document.getElementById('successSection')?.classList.remove('hidden');
+  // Hide URL parameters for cleaner appearance
+  window.history.replaceState({}, document.title, window.location.pathname);
 }
 
 function showError(message) {
