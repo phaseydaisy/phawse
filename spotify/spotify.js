@@ -2,11 +2,10 @@ const WORKER_URL = 'https://spotify-oauth.kaidenlorse1.workers.dev';
 
 function initSpotifyLink() {
   const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get('code');
   const state = urlParams.get('state');
-  const error = urlParams.get('error');
   const success = urlParams.get('success');
   const name = urlParams.get('name');
+  const error = urlParams.get('error');
 
   if (success === 'true' && name) {
     showSuccess(decodeURIComponent(name));
@@ -15,11 +14,6 @@ function initSpotifyLink() {
 
   if (error) {
     showError(decodeURIComponent(error));
-    return;
-  }
-
-  if (code && state) {
-    handleCallback(code, state);
     return;
   }
 
@@ -37,26 +31,6 @@ function startAuth(state) {
     return;
   }
   window.location.href = `${WORKER_URL}/auth?state=${encodeURIComponent(state)}`;
-}
-
-async function handleCallback(code, state) {
-  const linkSection = document.getElementById('linkSection');
-  if (linkSection) {
-    linkSection.innerHTML = '<div class="loader"></div><p>Linking your Spotify account...</p>';
-  }
-
-  try {
-    const response = await fetch(`${WORKER_URL}/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`);
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || 'Failed to link Spotify account');
-    }
-    const data = await response.json();
-    showSuccess(data.spotify_name || 'Unknown User');
-  } catch (err) {
-    console.error(err);
-    showError(err.message || 'Failed to complete linking process. Please try again from `/spotify link` in Discord.');
-  }
 }
 
 function showSuccess(spotifyName) {
