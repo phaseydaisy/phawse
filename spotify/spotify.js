@@ -23,11 +23,11 @@ function initSpotifyLink() {
     return;
   }
 
-  // If we have a state, auto-start auth flow
+  // If we have a state (from Discord /spotify link), auto-start auth flow immediately
   if (state) {
     document.getElementById('inputSection')?.classList.add('hidden');
     document.getElementById('loadingMessage')?.classList.remove('hidden');
-    setTimeout(() => startAuth(state), 300);
+    startAuth(state);
     return;
   }
 
