@@ -1,11 +1,6 @@
 const WORKER_URL = 'https://spotify-oauth.kaidenlorse1.workers.dev';
 
 function initSpotifyLink() {
-  const linkSection = document.getElementById('linkSection');
-  const successSection = document.getElementById('successSection');
-  const errorSection = document.getElementById('errorSection');
-  const retryBtn = document.getElementById('retryBtn');
-
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   const state = urlParams.get('state');
@@ -16,25 +11,17 @@ function initSpotifyLink() {
     return;
   }
 
-  // Handle OAuth callback
   if (code && state) {
     handleCallback(code, state);
     return;
   }
 
-  // If we have a state (from Discord /spotify link), auto-start auth flow immediately
   if (state) {
     startAuth(state);
     return;
   }
 
-  // If no state, user likely opened the page directly
   showError('Invalid or missing session. Please run `/spotify link` in Discord to start linking.');
-  if (retryBtn) {
-    retryBtn.addEventListener('click', () => {
-      showError('Please start from `/spotify link` in Discord.');
-    });
-  }
 }
 
 function startAuth(state) {
@@ -42,37 +29,46 @@ function startAuth(state) {
     showError('Missing session. Please start from `/spotify link` in Discord.');
     return;
   }
-  // Automatically redirect to Spotify OAuth - state contains the user ID mapping on the server
   window.location.href = `${WORKER_URL}/auth?state=${encodeURIComponent(state)}`;
 }
 
 async function handleCallback(code, state) {
   const linkSection = document.getElementById('linkSection');
-  linkSection.innerHTML = '<p>Linking your Spotify account...</p>';
+  if (linkSection) {
+    linkSection.innerHTML = '<div class="loader"></div><p>Linking your Spotify account...</p>';
+  }
 
   try {
     const response = await fetch(`${WORKER_URL}/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`);
     if (!response.ok) {
-      throw new Error('Failed to link Spotify account');
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Failed to link Spotify account');
     }
-    showSuccess('Spotify connected!');
+    const data = await response.json();
+    showSuccess(data.spotify_name || 'Unknown User');
   } catch (err) {
     console.error(err);
-    showError('Failed to complete linking process. Please try again from `/spotify link` in Discord.');
+    showError(err.message || 'Failed to complete linking process. Please try again from `/spotify link` in Discord.');
   }
 }
 
 function showSuccess(spotifyName) {
   document.getElementById('linkSection')?.classList.add('hidden');
   document.getElementById('errorSection')?.classList.add('hidden');
-  document.getElementById('spotifyName').textContent = spotifyName;
+  const nameElement = document.getElementById('spotifyName');
+  if (nameElement) {
+    nameElement.textContent = spotifyName;
+  }
   document.getElementById('successSection')?.classList.remove('hidden');
 }
 
 function showError(message) {
   document.getElementById('linkSection')?.classList.add('hidden');
   document.getElementById('successSection')?.classList.add('hidden');
-  document.getElementById('errorMessage').textContent = message;
+  const errorElement = document.getElementById('errorMessage');
+  if (errorElement) {
+    errorElement.textContent = message;
+  }
   document.getElementById('errorSection')?.classList.remove('hidden');
 }
 
