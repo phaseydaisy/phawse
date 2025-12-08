@@ -4,7 +4,6 @@ function initSpotifyLink() {
   const linkSection = document.getElementById('linkSection');
   const successSection = document.getElementById('successSection');
   const errorSection = document.getElementById('errorSection');
-  const linkBtn = document.getElementById('linkBtn');
   const retryBtn = document.getElementById('retryBtn');
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -25,8 +24,6 @@ function initSpotifyLink() {
 
   // If we have a state (from Discord /spotify link), auto-start auth flow immediately
   if (state) {
-    document.getElementById('inputSection')?.classList.add('hidden');
-    document.getElementById('loadingMessage')?.classList.remove('hidden');
     startAuth(state);
     return;
   }
@@ -35,20 +32,17 @@ function initSpotifyLink() {
   showError('Invalid or missing session. Please run `/spotify link` in Discord to start linking.');
   if (retryBtn) {
     retryBtn.addEventListener('click', () => {
-      errorSection.classList.add('hidden');
-      linkSection.classList.remove('hidden');
+      showError('Please start from `/spotify link` in Discord.');
     });
-  }
-  if (linkBtn) {
-    linkBtn.addEventListener('click', () => showError('Please start from `/spotify link` in Discord.'));
   }
 }
 
 function startAuth(state) {
   if (!state) {
-    alert('Missing session. Please start from `/spotify link` in Discord.');
+    showError('Missing session. Please start from `/spotify link` in Discord.');
     return;
   }
+  // Automatically redirect to Spotify OAuth - state contains the user ID mapping on the server
   window.location.href = `${WORKER_URL}/auth?state=${encodeURIComponent(state)}`;
 }
 
