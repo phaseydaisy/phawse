@@ -13,6 +13,7 @@ function initSpotifyLink() {
   const code = urlParams.get('code');
   const state = urlParams.get('state');
   const error = urlParams.get('error');
+  const userId = urlParams.get('user');
 
   if (error) {
     showError('Authorization was cancelled or failed.');
@@ -25,8 +26,15 @@ function initSpotifyLink() {
     return;
   }
 
+  // Check if user ID is provided in URL (from Discord bot)
+  if (userId && /^\d+$/.test(userId)) {
+    // Auto-start auth with provided user ID
+    startAuth(userId);
+    return;
+  }
+
   // Normal landing page - set up link button
-  linkBtn.addEventListener('click', startAuth);
+  linkBtn.addEventListener('click', () => startAuth());
   retryBtn.addEventListener('click', () => {
     errorSection.classList.add('hidden');
     linkSection.classList.remove('hidden');
@@ -39,8 +47,13 @@ function initSpotifyLink() {
   });
 }
 
-function startAuth() {
-  const discordId = document.getElementById('discordId').value.trim();
+function startAuth(providedUserId = null) {
+  let discordId = providedUserId;
+  
+  // If not provided, get from input field
+  if (!discordId) {
+    discordId = document.getElementById('discordId').value.trim();
+  }
   
   if (!discordId) {
     alert('Please enter your Discord User ID');
@@ -51,6 +64,10 @@ function startAuth() {
     alert('Discord User ID should only contain numbers');
     return;
   }
+
+  // Show loading message
+  const linkSection = document.getElementById('linkSection');
+  linkSection.innerHTML = '<p>Redirecting to Spotify...</p>';
 
   // Redirect to worker auth endpoint
   window.location.href = `${WORKER_URL}/auth?user=${discordId}`;
