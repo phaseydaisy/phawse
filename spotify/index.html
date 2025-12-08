@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Link Spotify - phawse.lol</title>
+  <link rel="stylesheet" href="spotify.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="icon">🎵</div>
+      <h1>Link Your Spotify</h1>
+      <p>Connect your Spotify account to use music features in our Discord bot!</p>
+      
+      <div id="linkSection">
+        <input type="text" id="discordId" placeholder="Enter your Discord User ID" class="input-field">
+        <button id="linkBtn" class="link-btn">Connect Spotify</button>
+        <p class="help-text">Don't know your Discord ID? Enable Developer Mode in Discord settings, then right-click your profile.</p>
+      </div>
+
+      <div id="successSection" class="hidden">
+        <div class="success-icon">✅</div>
+        <h2>Spotify Linked!</h2>
+        <p id="spotifyName"></p>
+        <p>You can close this page and return to Discord.</p>
+      </div>
+
+      <div id="errorSection" class="hidden">
+        <div class="error-icon">❌</div>
+        <h2>Something went wrong</h2>
+        <p id="errorMessage"></p>
+        <button id="retryBtn" class="link-btn">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="spotify.js"></script>
+</body>
+</html>

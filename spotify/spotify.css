@@ -1,0 +1,148 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: linear-gradient(135deg, #1DB954 0%, #191414 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px 30px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+h1 {
+  font-size: 32px;
+  color: #191414;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 28px;
+  color: #191414;
+  margin: 20px 0 10px;
+}
+
+p {
+  color: #666;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #1DB954;
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.1);
+}
+
+.link-btn {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  background: #1DB954;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.link-btn:hover {
+  background: #1ed760;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(29, 185, 84, 0.3);
+}
+
+.link-btn:active {
+  transform: translateY(0);
+}
+
+.link-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.help-text {
+  font-size: 13px;
+  color: #999;
+  margin-top: 15px;
+  margin-bottom: 0;
+}
+
+.success-icon,
+.error-icon {
+  font-size: 64px;
+  margin-bottom: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+#successSection p,
+#errorSection p {
+  margin-bottom: 15px;
+}
+
+#spotifyName {
+  font-weight: 600;
+  color: #1DB954;
+  font-size: 18px;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 30px 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .icon {
+    font-size: 48px;
+  }
+}
