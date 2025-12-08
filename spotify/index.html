@@ -14,9 +14,15 @@
       <p>Connect your Spotify account to use music features in our Discord bot!</p>
       
       <div id="linkSection">
-        <input type="text" id="discordId" placeholder="Enter your Discord User ID" class="input-field">
-        <button id="linkBtn" class="link-btn">Connect Spotify</button>
-        <p class="help-text">Don't know your Discord ID? Enable Developer Mode in Discord settings, then right-click your profile.</p>
+        <div id="loadingMessage" class="hidden">
+          <div class="icon">⏳</div>
+          <p>Redirecting to Spotify...</p>
+        </div>
+        <div id="inputSection">
+          <input type="text" id="discordId" placeholder="Enter your Discord User ID" class="input-field">
+          <button id="linkBtn" class="link-btn">Connect Spotify</button>
+          <p class="help-text">Don't know your Discord ID? Enable Developer Mode in Discord settings, then right-click your profile.</p>
+        </div>
       </div>
 
       <div id="successSection" class="hidden">

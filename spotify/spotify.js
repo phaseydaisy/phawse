@@ -28,8 +28,12 @@ function initSpotifyLink() {
 
   // Check if user ID is provided in URL (from Discord bot)
   if (userId && /^\d+$/.test(userId)) {
+    // Hide input section, show loading
+    document.getElementById('inputSection').classList.add('hidden');
+    document.getElementById('loadingMessage').classList.remove('hidden');
+    
     // Auto-start auth with provided user ID
-    startAuth(userId);
+    setTimeout(() => startAuth(userId), 500);
     return;
   }
 
@@ -64,10 +68,6 @@ function startAuth(providedUserId = null) {
     alert('Discord User ID should only contain numbers');
     return;
   }
-
-  // Show loading message
-  const linkSection = document.getElementById('linkSection');
-  linkSection.innerHTML = '<p>Redirecting to Spotify...</p>';
 
   // Redirect to worker auth endpoint
   window.location.href = `${WORKER_URL}/auth?user=${discordId}`;
