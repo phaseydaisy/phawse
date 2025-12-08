@@ -5,9 +5,16 @@ function initSpotifyLink() {
   const code = urlParams.get('code');
   const state = urlParams.get('state');
   const error = urlParams.get('error');
+  const success = urlParams.get('success');
+  const name = urlParams.get('name');
+
+  if (success === 'true' && name) {
+    showSuccess(decodeURIComponent(name));
+    return;
+  }
 
   if (error) {
-    showError('Authorization was cancelled or failed.');
+    showError(decodeURIComponent(error));
     return;
   }
 
