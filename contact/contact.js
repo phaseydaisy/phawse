@@ -16,7 +16,7 @@ function initContactCute(){
         description:`You've received a new message from your contact form!`,
         color:0xFFC0D9,
         fields:[
-          {name:"👤 Name",value:`\`\`\`${name}\`\`\``,inline:false},
+          {name:"👤 Name",value: name,inline:false},
           {name:"💬 Message",value:message,inline:false}
         ],
         footer:{text:"phawse.lol Contact Form"},
