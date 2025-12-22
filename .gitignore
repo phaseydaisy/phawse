@@ -1,0 +1,7 @@
+/uploadv/*
+!uploadv/template.html
+!uploadv/styles.css
+!uploadv/upload.html
+!uploadv/index.html
+!uploadv/README.md
+!uploadv/server.js

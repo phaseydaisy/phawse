@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Upload</title>
+  <link rel="stylesheet" href="/uploadv/styles.css">
+</head>
+<body>
+  <main class="container">
+    <section class="hero-section">
+      <div class="profile-badge">Uploads</div>
+      <h1 class="hero-title">Share Clips</h1>
+      <p class="muted">Get a shareable URL that Discord will embed when pasted in chat.</p>
+    </section>
+
+    <section class="card" id="uploader">
+      <form id="uploadForm" class="form">
+        <label class="field">Title
+          <input class="input" name="title" required placeholder="Short title for the clip" maxlength="200">
+        </label>
+
+        <label class="field">Description
+          <textarea class="textarea" name="description" rows="3" placeholder="Short description (shown in embeds)" maxlength="500"></textarea>
+        </label>
+
+        <label class="field fileField">Video file
+          <input class="input" type="file" name="video" accept="video/*" required>
+        </label>
+
+        <label class="field fileField">Optional thumbnail (jpg/png)
+          <input class="input" type="file" name="thumb" accept="image/jpeg,image/png">
+        </label>
+
+        <div class="actions">
+          <button class="btn primary" type="submit">Upload</button>
+          <button class="btn" type="reset">Reset</button>
+        </div>
+
+        <div class="progress" id="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+      </form>
+
+      <div id="result" class="result" aria-live="polite" role="status"></div>
+    </section>
+
+    <footer class="footer muted">Tip: use a short title — the URL will use it to generate the path (e.g. <code>/uploadv/my-clip/</code>).</footer>
+  </main>
+
+<script>
+const form = document.getElementById('uploadForm');
+const result = document.getElementById('result');
+const progress = document.getElementById('progress');
+const bar = document.getElementById('bar');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  result.textContent = '';
+  progress.style.display = 'block';
+  bar.style.width = '0%';
+
+  const fd = new FormData(form);
+  try {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/uploadv/api/upload', true);
+    xhr.upload.onprogress = (ev) => {
+      if (ev.lengthComputable) {
+        const pct = Math.round(ev.loaded / ev.total * 100);
+        bar.style.width = pct + '%';
+      }
+    };
+    xhr.onload = () => {
+      progress.style.display = 'none';
+      if (xhr.status >= 200 && xhr.status < 300) {
+        const data = JSON.parse(xhr.responseText);
+        result.innerHTML = `Created: <a href="${data.url}" target="_blank" rel="noopener">${data.url}</a> <button id="copy">Copy</button>`;
+        document.getElementById('copy').addEventListener('click', () => navigator.clipboard.writeText(data.url));
+        form.reset();
+        bar.style.width = '0%';
+      } else {
+        result.textContent = 'Upload failed: ' + xhr.responseText;
+      }
+    };
+    xhr.onerror = () => { progress.style.display = 'none'; result.textContent = 'Upload failed: network error'; };
+    xhr.send(fd);
+  } catch (err) {
+    progress.style.display = 'none';
+    result.textContent = 'Upload failed: ' + err.message;
+  }
+});
+</script>
+</body>
+</html>

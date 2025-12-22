@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>{TITLE} — Clip</title>
+  <meta property="og:title" content="{TITLE}">
+  <meta property="og:description" content="{DESCRIPTION}">
+  <meta property="og:type" content="video.other">
+  <meta property="og:image" content="{SITE_URL}/uploadv/{slug}/thumb.jpg">
+  <meta property="og:video" content="{SITE_URL}/uploadv/{slug}/video.mp4">
+  <meta property="og:video:secure_url" content="{SITE_URL}/uploadv/{slug}/video.mp4">
+  <meta property="og:video:type" content="video/mp4">
+  <meta property="og:video:width" content="1280">
+  <meta property="og:video:height" content="720">
+  <link rel="canonical" href="{SITE_URL}/uploadv/{slug}/">
+
+  <meta name="twitter:card" content="player">
+  <meta name="twitter:title" content="{TITLE}">
+  <meta name="twitter:description" content="{DESCRIPTION}">
+  <meta name="twitter:image" content="{SITE_URL}/uploadv/{slug}/thumb.jpg">
+  <meta name="twitter:player" content="{SITE_URL}/uploadv/{slug}/index.html">
+  <meta name="twitter:player:width" content="1280">
+  <meta name="twitter:player:height" content="720">
+
+  <style>body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;padding:1rem;display:grid;gap:1rem;max-inline-size:900px;margin-inline-start:auto;margin-inline-end:auto}video{max-inline-size:100%;block-size:auto;border:1px solid #ddd;border-radius:6px}</style>
+</head>
+<body>
+  <h1>{TITLE}</h1>
+  <p>{DESCRIPTION}</p>
+
+  <video src="video.mp4" controls poster="thumb.jpg">Your browser does not support the video element.</video>
+
+  <p style="font-size:.9rem;color:#666">Share <a href="{SITE_URL}/uploadv/{slug}/">{SITE_URL}/uploadv/{slug}/</a> to embed this clip in Discord.</p>
+</body>
+</html>

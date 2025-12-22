@@ -4,7 +4,8 @@
   "description": "Personal website",
   "scripts": {
     "minify": "uglifyjs assets/js/index.js -o dist/bundle.min.js && cleancss -o dist/styles.min.css assets/css/style.css",
-    "build": "node -e \"require('fs').mkdirSync('dist', { recursive: true })\" && npm run minify"
+    "build": "node -e \"require('fs').mkdirSync('dist', { recursive: true })\" && npm run minify",
+    "start:upload": "node uploadv/server.js"
   },
   "devDependencies": {
     "clean-css-cli": "^5.6.2",
