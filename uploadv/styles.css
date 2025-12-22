@@ -19,6 +19,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',R
 .field label{font-weight:600;margin-block-end:.4rem}
 .input,.textarea{padding:.65rem;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
 .input[type=file]{padding:.5rem 0}
+.dropzone{border-radius:12px;border:1px dashed rgba(255,255,255,0.06);padding:1rem;display:flex;align-items:center;justify-content:center;background:transparent;cursor:pointer}
+.dropzone.dragover{border-color:rgba(255,192,217,0.5);background:linear-gradient(135deg, rgba(255,192,217,0.03), transparent)}
+.dropzone-inner{display:flex;flex-direction:column;gap:.5rem;align-items:center}
+.drop-icon{font-size:2rem}
+#fileInfo{margin-top:.5rem;color:var(--muted);font-size:.95rem}
+.progress{height:8px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden;margin-top:.75rem;display:none}
+.bar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%} 
 .actions{display:flex;gap:.6rem;align-items:center;margin-block-start:.6rem}
 .btn{padding:.6rem 1rem;border-radius:10px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--primary),var(--accent));color:#08111a;font-weight:700}
 .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit}

@@ -37,17 +37,17 @@ body {
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-block-size: 100vh;
   position: relative;
 }
 
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
   background: 
     radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3), transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.3), transparent 50%),
@@ -57,10 +57,10 @@ body::before {
 
 .background-grid {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
   background-image: 
     linear-gradient(rgba(138, 201, 255, 0.05) 2px, transparent 2px),
     linear-gradient(90deg, rgba(138, 201, 255, 0.05) 2px, transparent 2px),
@@ -88,22 +88,22 @@ body::before {
 }
 
 .orb-1 {
-  width: 600px;
-  height: 600px;
+  inline-size: 600px;
+  block-size: 600px;
   background: radial-gradient(circle, #ff6ec4 0%, #7873f5 50%, transparent 70%);
   animation: morphOrb1 15s ease-in-out infinite;
 }
 
 .orb-2 {
-  width: 500px;
-  height: 500px;
+  inline-size: 500px;
+  block-size: 500px;
   background: radial-gradient(circle, #8ac9ff 0%, #c780fa 50%, transparent 70%);
   animation: morphOrb2 18s ease-in-out infinite;
 }
 
 .orb-3 {
-  width: 450px;
-  height: 450px;
+  inline-size: 450px;
+  block-size: 450px;
   background: radial-gradient(circle, #ffd27d 0%, #ff9a76 50%, transparent 70%);
   animation: morphOrb3 20s ease-in-out infinite;
 }
@@ -156,10 +156,10 @@ body::before {
 body::after {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  block-size: 100%;
   background-image: 
     radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.3), transparent),
     radial-gradient(2px 2px at 60% 70%, rgba(255, 255, 255, 0.3), transparent),
@@ -184,17 +184,17 @@ body::after {
 .container {
   position: relative;
   z-index: 1;
-  max-width: 800px;
+  max-inline-size: 800px;
   margin: 0 auto;
   padding: var(--spacing-xl) var(--spacing-md);
-  min-height: 100vh;
+  min-block-size: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .hero-section {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-block-end: var(--spacing-xl);
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -206,7 +206,7 @@ body::after {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 100px;
-  margin-bottom: var(--spacing-lg);
+  margin-block-end: var(--spacing-lg);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-muted);
@@ -214,8 +214,8 @@ body::after {
 }
 
 .status-indicator {
-  width: 8px;
-  height: 8px;
+  inline-size: 8px;
+  block-size: 8px;
   background: #22c55e;
   border-radius: 50%;
   animation: pulse-dot 2s ease-in-out infinite;
@@ -237,7 +237,7 @@ body::after {
   font-size: clamp(2.5rem, 8vw, 4.5rem);
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: var(--spacing-sm);
+  margin-block-end: var(--spacing-sm);
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -260,14 +260,14 @@ body::after {
 .subtitle {
   font-size: 1.125rem;
   color: var(--text-muted);
-  max-width: 500px;
+  max-inline-size: 500px;
   margin: 0 auto;
 }
 
 /* Links Section */
 .links-section {
   flex: 1;
-  margin-bottom: var(--spacing-xl);
+  margin-block-end: var(--spacing-xl);
 }
 
 .links-grid {
@@ -325,8 +325,8 @@ body::after {
 
 .card-icon {
   font-size: 2rem;
-  width: 60px;
-  height: 60px;
+  inline-size: 60px;
+  block-size: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -348,7 +348,7 @@ body::after {
   font-family: 'Urbanist', sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
+  margin-block-end: 0.25rem;
   color: var(--text);
 }
 
@@ -408,8 +408,8 @@ body::after {
   }
   
   .card-icon {
-    width: 50px;
-    height: 50px;
+    inline-size: 50px;
+    block-size: 50px;
     font-size: 1.5rem;
   }
   
@@ -423,13 +423,13 @@ body::after {
   }
   
   .album-cover {
-    width: 100%;
-    height: 200px;
+    inline-size: 100%;
+    block-size: 200px;
   }
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  inline-size: 8px;
 }
 
 ::-webkit-scrollbar-track {
