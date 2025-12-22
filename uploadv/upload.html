@@ -26,17 +26,14 @@
 
         <label class="field">
           <div id="dropzone" class="dropzone" tabindex="0">
-            <input id="videoInput" class="input" type="file" name="video" accept="video/*" required>
+            <input id="videoInput" class="input" type="file" name="video" accept="video/*" style="display:none">
             <div class="dropzone-inner">
               <div class="drop-icon">📤</div>
-              <div><strong>Drag & drop a video here</strong> or <button type="button" id="chooseFile" class="btn ghost">choose a file</button></div>
+              <div><strong id="dropLabel">Drag & drop a video here</strong></div>
+              <div><button type="button" id="chooseFile" class="btn">Choose a file</button></div>
               <div id="fileInfo" class="note" aria-live="polite"></div>
             </div>
           </div>
-        </label>
-
-        <label class="field fileField">Optional thumbnail (jpg/png)
-          <input class="input" type="file" name="thumb" accept="image/jpeg,image/png">
         </label>
 
         <div class="actions">
@@ -54,43 +51,54 @@
 const dropzone = document.getElementById('dropzone');
 const videoInput = document.getElementById('videoInput');
 const chooseFile = document.getElementById('chooseFile');
+const dropLabel = document.getElementById('dropLabel');
 const fileInfo = document.getElementById('fileInfo');
 const progressText = document.getElementById('progressText');
 const form = document.getElementById('uploadForm');
 const result = document.getElementById('result');
 const progress = document.getElementById('progress');
 const bar = document.getElementById('bar');
+let selectedVideo = null;
 
 function formatBytes(bytes){if(bytes===0)return'0 B';const k=1024;const dm=1;const sizes=['B','KB','MB','GB'];const i=Math.floor(Math.log(bytes)/Math.log(k));return parseFloat((bytes/Math.pow(k,i)).toFixed(dm))+' '+sizes[i]}
 
-dropzone.addEventListener('click',()=>videoInput.click());
 chooseFile.addEventListener('click',()=>videoInput.click());
 
-dropzone.addEventListener('dragover',(e)=>{e.preventDefault();dropzone.classList.add('dragover')});
-dropzone.addEventListener('dragleave',()=>{dropzone.classList.remove('dragover')});
-dropzone.addEventListener('drop',(e)=>{e.preventDefault();dropzone.classList.remove('dragover');const f=(e.dataTransfer.files&&e.dataTransfer.files[0]);if(f){videoInput.files= e.dataTransfer.files;fileInfo.textContent = f.name + ' • ' + formatBytes(f.size)}});
+dropzone.addEventListener('dragover',(e)=>{e.preventDefault();dropzone.classList.add('dragover');dropLabel.textContent='Release to upload'});
 
-videoInput.addEventListener('change',()=>{const f=videoInput.files[0];if(f)fileInfo.textContent = f.name + ' • ' + formatBytes(f.size)});
+dropzone.addEventListener('dragleave',()=>{dropzone.classList.remove('dragover');dropLabel.textContent='Drag & drop a video here'});
+
+dropzone.addEventListener('drop',(e)=>{e.preventDefault();dropzone.classList.remove('dragover');dropLabel.textContent='Drag & drop a video here';const f=(e.dataTransfer.files&&e.dataTransfer.files[0]);if(f){selectedVideo = f;fileInfo.textContent = f.name + ' • ' + formatBytes(f.size)}});
+
+videoInput.addEventListener('change',()=>{const f=videoInput.files[0];if(f){selectedVideo = f;fileInfo.textContent = f.name + ' • ' + formatBytes(f.size)}});
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   result.textContent = '';
+  if (!selectedVideo) { result.textContent = 'Please choose a video file first.'; return }
+
   progress.style.display = 'block';
   bar.style.width = '0%';
-  progressText.textContent = '';
-  const fd = new FormData(form);
+  progressText.textContent = 'Starting upload...';
+
+  const fd = new FormData();
+  const titleField = form.querySelector('[name="title"]');
+  if (titleField && titleField.value) fd.append('title', titleField.value);
+  const descField = form.querySelector('[name="description"]');
+  if (descField && descField.value) fd.append('description', descField.value);
+  fd.append('video', selectedVideo, selectedVideo.name);
+
   try {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/uploadv/api/upload', true);
-    let startTime = 0;
+    let startTime = Date.now();
     xhr.upload.onprogress = (ev) => {
       if (ev.lengthComputable) {
         const pct = Math.round(ev.loaded / ev.total * 100);
         bar.style.width = pct + '%';
         const now = Date.now();
-        if(!startTime) startTime = now;
-        const seconds = (now - startTime) / 1000;
-        const speed = seconds > 0 ? (ev.loaded / seconds) : 0;
+        const seconds = Math.max(0.001, (now - startTime) / 1000);
+        const speed = (ev.loaded / seconds);
         const speedText = (speed / 1024).toFixed(1) + ' KB/s';
         progressText.textContent = pct + '% — ' + speedText;
       }
@@ -103,6 +111,7 @@ form.addEventListener('submit', async (e) => {
         result.innerHTML = `Created: <a href="${data.url}" target="_blank" rel="noopener">${data.url}</a> <button id="copy">Copy</button>`;
         document.getElementById('copy').addEventListener('click',()=>navigator.clipboard.writeText(data.url));
         form.reset();
+        selectedVideo = null;
         fileInfo.textContent = '';
         bar.style.width = '0%';
       } else {

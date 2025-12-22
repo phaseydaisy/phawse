@@ -8,7 +8,7 @@ Upload UI and auto-clip pages
    http://localhost:3000/uploadv/upload.html
 
 How it works
-- Uploads save to `uploadv/<slug>/` with `video.<ext>` and optional `thumb.<ext>`.
+- Uploads save to `uploadv/<slug>/` with `video.<ext>`.
 - Each upload is automatically deleted after 7 days to keep storage bounded.
 - An `index.html` is generated from `uploadv/template.html` with proper Open Graph meta tags so Discord will embed the clip when you paste the URL.
 
