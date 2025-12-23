@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Upload · phawse</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    .upload-panel { max-width:680px; margin:3rem auto; padding:2rem; background:rgba(255,255,255,0.02); border-radius:12px; }
+    .upload-preview { margin-top:1rem; }
+    .upload-meta { margin-top:.5rem; color:var(--muted); }
+    .btn-primary { display:inline-block; margin-top:1rem; }
+    .drop-zone.drag-over { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.02); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero-section">
+      <h1 class="main-title"><span class="title-gradient">📤 Upload</span></h1>
+      <p class="subtitle">Upload and host videos on <strong>phawse.lol</strong> (Cloudflare Worker + R2)</p>
+    </header>
+
+    <section class="links-section">
+      <div class="upload-panel">
+        <div id="dropZone" class="drop-zone" style="padding:2rem; border:2px dashed rgba(255,255,255,0.06); border-radius:8px; text-align:center;">
+          <p style="margin:0 0 .5rem 0">Drag & drop a <strong>video</strong> file here, or <button id="chooseBtn" class="btn">Choose file</button></p>
+          <input id="fileInput" type="file" accept="video/*" style="display:none" aria-describedby="uploadHint">
+          <div id="uploadHint" class="upload-meta">Uploads are stored at <code>phawse.lol</code>/<code>/upload/clip/&lt;id&gt;</code>. Max 5 GB. (Browser uses presigned PUT URLs; ensure R2 CORS allows PUT from this domain.)</div>
+        </div>
+
+        <div id="progressContainer" style="display:none; margin-top:1rem;">
+          <progress id="uploadProgress" value="0" max="100" style="width:100%"></progress>
+          <div style="display:flex; gap:8px; margin-top:6px;">
+            <button id="cancelBtn" class="btn">Cancel</button>
+            <div id="progressText" class="upload-meta" style="margin-left:auto"></div>
+          </div>
+        </div>
+
+        <div id="result" class="upload-preview" style="margin-top:1rem;"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2025 · made with monkey</p>
+    </footer>
+  </div>
+
+  <script src="/upload/uploadv.js"></script>
+</body>
+</html>
