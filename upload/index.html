@@ -6,11 +6,10 @@
   <title>Upload · phawse</title>
   <link rel="stylesheet" href="/assets/css/style.css">
   <style>
-    .upload-panel { max-width:680px; margin:3rem auto; padding:2rem; background:rgba(255,255,255,0.02); border-radius:12px; }
-    .upload-preview { margin-top:1rem; }
-    .upload-meta { margin-top:.5rem; color:var(--muted); }
-    .btn-primary { display:inline-block; margin-top:1rem; }
-    .drop-zone.drag-over { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.02); }
+    /* keep a little page-specific spacing tweaks */
+    .upload-panel { margin-block-start: 0.75rem; }
+    .drop-actions { display:flex; gap:0.6rem; justify-content:center; margin-top:12px; }
+    .result-actions { display:flex; gap:8px; margin-top:8px; align-items:center; }
   </style>
 </head>
 <body>
@@ -22,21 +21,25 @@
 
     <section class="links-section">
       <div class="upload-panel">
-        <div id="dropZone" class="drop-zone" style="padding:2rem; border:2px dashed rgba(255,255,255,0.06); border-radius:8px; text-align:center;">
-          <p style="margin:0 0 .5rem 0">Drag & drop a <strong>video</strong> file here, or <button id="chooseBtn" class="btn">Choose file</button></p>
+        <div id="dropZone" class="drop-zone">
+          <p>Drag & drop a <strong>video</strong> file here</p>
+          <div class="drop-actions">
+            <button id="chooseBtn" class="btn btn-primary">Choose file</button>
+            <button id="pasteBtn" class="btn btn-ghost" onclick="document.getElementById('fileInput').click()">Browse</button>
+          </div>
           <input id="fileInput" type="file" accept="video/*" style="display:none" aria-describedby="uploadHint">
-          <div id="uploadHint" class="upload-meta">Uploads are stored at <code>phawse.lol</code>/<code>/upload/clip/&lt;id&gt;</code>. Max 5 GB. (Browser uses presigned PUT URLs; ensure R2 CORS allows PUT from this domain.)</div>
+          <div id="uploadHint" class="upload-meta">Uploads are stored at <a href="/upload/">phawse.lol/upload/</a><code>clip/&lt;id&gt;</code>. Max 5 GB. (Uses presigned PUT URLs.)</div>
         </div>
 
-        <div id="progressContainer" style="display:none; margin-top:1rem;">
-          <progress id="uploadProgress" value="0" max="100" style="width:100%"></progress>
-          <div style="display:flex; gap:8px; margin-top:6px;">
+        <div id="progressContainer" style="display:none;">
+          <progress id="uploadProgress" value="0" max="100"></progress>
+          <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
             <button id="cancelBtn" class="btn">Cancel</button>
-            <div id="progressText" class="upload-meta" style="margin-left:auto"></div>
+            <div id="progressText" class="upload-meta" style="margin-inline-start:auto"></div>
           </div>
         </div>
 
-        <div id="result" class="upload-preview" style="margin-top:1rem;"></div>
+        <div id="result" class="upload-preview"></div>
       </div>
     </section>
 

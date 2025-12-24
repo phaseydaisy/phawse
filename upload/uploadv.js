@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const cancelBtn = document.getElementById('cancelBtn');
   const result = document.getElementById('result');
 
-  // MAX 5 GB
-  const MAX_BYTES = 5 * 1024 * 1024 * 1024; // 5 GB
+  const MAX_BYTES = 5 * 1024 * 1024 * 1024;
   let currentXhr = null;
 
   chooseBtn.addEventListener('click', ()=> fileInput.click());
@@ -65,7 +64,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       return;
     }
 
-    // show preview
     const info = document.createElement('div');
     info.className = 'upload-meta';
     info.textContent = `${f.name} · ${Math.round(f.size/1024)} KB · ${f.type || 'n/a'}`;
@@ -76,8 +74,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     vid.style.maxWidth = '100%';
     vid.src = URL.createObjectURL(f);
     result.appendChild(vid);
-
-    // start upload
     uploadFile(f);
   }
 
@@ -86,7 +82,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     progressEl.value = 0;
     progressText.textContent = 'Requesting upload URL...';
 
-    // Request a presigned PUT URL
     let signed;
     try {
       const res = await fetch('/upload/api/signed', {
@@ -118,6 +113,47 @@ document.addEventListener('DOMContentLoaded', ()=>{
       }
     };
 
+    async function fallbackUpload(file){
+      progressText.textContent = 'Uploading via proxy...';
+      const xhr2 = new XMLHttpRequest();
+      currentXhr = xhr2;
+
+      xhr2.upload.onprogress = (e)=>{
+        if (e.lengthComputable){
+          const pct = Math.round(e.loaded / e.total * 100);
+          progressEl.value = pct;
+          progressText.textContent = `${pct}% (${Math.round(e.loaded/1024)} KB)`;
+        }
+      };
+
+      xhr2.onload = async ()=>{
+        currentXhr = null;
+        if (xhr2.status >= 200 && xhr2.status < 300){
+          try {
+            const json = JSON.parse(xhr2.responseText);
+            if (!json || !json.id) throw new Error('Invalid response');
+            showResultLink(json);
+          } catch (err){
+            showError('Fallback upload failed: ' + (err.message || xhr2.responseText));
+          }
+        } else {
+          showError(`Fallback upload failed: ${xhr2.status} ${xhr2.statusText}`);
+        }
+        progressContainer.style.display = 'none';
+      };
+
+      xhr2.onerror = ()=>{
+        currentXhr = null;
+        showError('Network error during fallback upload.');
+        progressContainer.style.display = 'none';
+      };
+
+      const form = new FormData();
+      form.append('file', file, file.name);
+      xhr2.open('POST', '/upload/api/upload');
+      xhr2.send(form);
+    }
+
     xhr.onload = async ()=>{
       currentXhr = null;
       if (xhr.status >= 200 && xhr.status < 300){
@@ -132,16 +168,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
         } catch (err){
           showError('Upload succeeded but failed to finalize: ' + err.message);
         }
+        progressContainer.style.display = 'none';
       } else {
-        showError(`Upload failed: ${xhr.status} ${xhr.statusText}`);
+        await fallbackUpload(file);
       }
-      progressContainer.style.display = 'none';
     };
 
     xhr.onerror = ()=>{
       currentXhr = null;
-      showError('Network error during upload.');
-      progressContainer.style.display = 'none';
+      fallbackUpload(file);
     };
 
     xhr.open('PUT', putUrl);
@@ -169,12 +204,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
     a.style.wordBreak = 'break-all';
 
     const copyBtn = document.createElement('button');
-    copyBtn.className = 'btn';
+    copyBtn.className = 'btn btn-primary';
     copyBtn.textContent = 'Copy link';
     copyBtn.onclick = ()=> navigator.clipboard.writeText(url);
 
     const openBtn = document.createElement('button');
-    openBtn.className = 'btn';
+    openBtn.className = 'btn btn-primary';
     openBtn.textContent = 'Open';
     openBtn.onclick = ()=> window.open(url, '_blank');
 
