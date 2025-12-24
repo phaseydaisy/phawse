@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const MAX_BYTES = 5 * 1024 * 1024 * 1024;
   let currentXhr = null;
 
+  function formatMB(bytes, dp = 1){ return `${(bytes / (1024*1024)).toFixed(dp)} MB`; }
+
   chooseBtn.addEventListener('click', ()=> fileInput.click());
 
   ['dragenter','dragover'].forEach(ev => {
@@ -66,7 +68,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const info = document.createElement('div');
     info.className = 'upload-meta';
-    info.textContent = `${f.name} · ${Math.round(f.size/1024)} KB · ${f.type || 'n/a'}`;
+    info.textContent = `${f.name} · ${formatMB(f.size,2)} · ${f.type || 'n/a'}`;
     result.appendChild(info);
 
     const vid = document.createElement('video');
@@ -109,9 +111,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
       if (e.lengthComputable){
         const pct = Math.round(e.loaded / e.total * 100);
         progressEl.value = pct;
-        progressText.textContent = `${pct}% (${Math.round(e.loaded/1024)} KB)`;
+        const loadedStr = formatMB(e.loaded, 1);
+        const totalStr = formatMB(e.total, 1);
+        progressText.textContent = `${pct}% (${loadedStr} / ${totalStr})`;
+      } else {
+        const loadedStr = formatMB(e.loaded, 1);
+        progressText.textContent = `${loadedStr}`;
       }
-    };
+    }; 
 
     async function fallbackUpload(file){
       progressText.textContent = 'Uploading via proxy...';
@@ -122,7 +129,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if (e.lengthComputable){
           const pct = Math.round(e.loaded / e.total * 100);
           progressEl.value = pct;
-          progressText.textContent = `${pct}% (${Math.round(e.loaded/1024)} KB)`;
+          const loadedStr = formatMB(e.loaded, 1);
+          const totalStr = formatMB(e.total, 1);
+          progressText.textContent = `${pct}% (${loadedStr} / ${totalStr})`;
+        } else {
+          const loadedStr = formatMB(e.loaded, 1);
+          progressText.textContent = `${loadedStr}`;
         }
       };
 
