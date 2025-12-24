@@ -428,6 +428,30 @@ body::after {
   color: var(--text-muted);
 }
 
+.back-button {
+  position: fixed;
+  inset-block-start: 18px;
+  inset-inline-start: 18px;
+  z-index: 30;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--text);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  font-weight: 700;
+  font-size: 18px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.back-button:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(0,0,0,0.55); }
+.drop-actions { display:flex; gap:0.6rem; justify-content:center; margin-block-start:14px; }
+.btn-primary { padding: 0.8rem 1.05rem; border-radius: 12px; font-size: 0.95rem; }
+#uploadHint { margin-top: .6rem; font-size: .95rem; color: var(--text-muted); }
+
 .upload-panel {
   max-inline-size: 820px;
   margin: 1.75rem auto;
@@ -447,14 +471,14 @@ body::after {
   background: linear-gradient(180deg, rgba(255,255,255,0.006), transparent 60%);
 }
 .drop-zone p { margin: 0; color: var(--text-muted); }
-.drop-zone .hint { font-size: 0.9rem; color: var(--text-muted); margin-top: .5rem; }
+.drop-zone .hint { font-size: 0.9rem; color: var(--text-muted); margin-block-start: .5rem; }
 .drop-zone.drag-over { border-color: rgba(255,192,217,0.32); background: rgba(255,192,217,0.02); box-shadow: 0 10px 30px rgba(255,192,217,0.03) inset; }
 
 .upload-meta { color: var(--text-muted); font-size: .95rem; }
 .upload-preview { margin-block-start: 1rem; }
 
 #progressContainer { margin-block-start: 1rem; }
-#uploadProgress { inline-size: 100%; height: 12px; appearance: none; border-radius: 8px; overflow: hidden; }
+#uploadProgress { inline-size: 100%; block-size: 12px; appearance: none; border-radius: 8px; overflow: hidden; }
 #uploadProgress::-webkit-progress-bar { background: rgba(255,255,255,0.04); }
 #uploadProgress::-webkit-progress-value { background: linear-gradient(90deg,#ff9ac0,#d7c9ff); }
 

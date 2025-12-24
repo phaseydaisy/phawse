@@ -6,13 +6,13 @@
   <title>Upload · phawse</title>
   <link rel="stylesheet" href="/assets/css/style.css">
   <style>
-    /* keep a little page-specific spacing tweaks */
     .upload-panel { margin-block-start: 0.75rem; }
-    .drop-actions { display:flex; gap:0.6rem; justify-content:center; margin-top:12px; }
-    .result-actions { display:flex; gap:8px; margin-top:8px; align-items:center; }
+    .drop-actions { display:flex; gap:0.6rem; justify-content:center; margin-block-start:12px; }
+    .result-actions { display:flex; gap:8px; margin-block-start:8px; align-items:center; }
   </style>
 </head>
 <body>
+  <a href="https://phawse.lol" class="back-button" aria-label="Back to phawse.lol">←</a>
   <div class="container">
     <header class="hero-section">
       <h1 class="main-title"><span class="title-gradient">📤 Upload</span></h1>
@@ -24,16 +24,15 @@
         <div id="dropZone" class="drop-zone">
           <p>Drag & drop a <strong>video</strong> file here</p>
           <div class="drop-actions">
-            <button id="chooseBtn" class="btn btn-primary">Choose file</button>
-            <button id="pasteBtn" class="btn btn-ghost" onclick="document.getElementById('fileInput').click()">Browse</button>
+            <button id="chooseBtn" class="btn btn-primary">Choose a video</button>
           </div>
           <input id="fileInput" type="file" accept="video/*" style="display:none" aria-describedby="uploadHint">
-          <div id="uploadHint" class="upload-meta">Uploads are stored at <a href="/upload/">phawse.lol/upload/</a><code>clip/&lt;id&gt;</code>. Max 5 GB. (Uses presigned PUT URLs.)</div>
+          <div id="uploadHint" class="upload-meta">Max 5 GB • Accepted: video files</div>
         </div>
 
         <div id="progressContainer" style="display:none;">
           <progress id="uploadProgress" value="0" max="100"></progress>
-          <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+          <div style="display:flex; gap:8px; margin-block-start:8px; align-items:center;">
             <button id="cancelBtn" class="btn">Cancel</button>
             <div id="progressText" class="upload-meta" style="margin-inline-start:auto"></div>
           </div>
