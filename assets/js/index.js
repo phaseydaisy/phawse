@@ -16,6 +16,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 window.addEventListener('load', () => {
   document.body.classList.add('loaded');
+  setTimeout(() => {
+    createFireworks();
+  }, 500);
 });
 
 
@@ -189,13 +192,7 @@ function createFireworks() {
   animate();
   
   window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-}
-
-window.addEventListener('load', () => {
-  setTimeout(() => {
+ etTimeout(() => {
     createFireworks();
   }, 500);
 });
