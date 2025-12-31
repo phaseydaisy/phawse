@@ -82,9 +82,7 @@ document.addEventListener('mousemove', (e) => {
   }
 });
 
-console.log('💖 Cute version loaded!');
 
-// New Year's Fireworks
 function createFireworks() {
   const canvas = document.createElement('canvas');
   canvas.id = 'fireworks-canvas';
@@ -168,7 +166,6 @@ function createFireworks() {
     }
   }
   
-  // Launch fireworks sequence
   const launchSequence = [
     { delay: 0, x: 0.2, y: 0.3 },
     { delay: 200, x: 0.8, y: 0.25 },
@@ -197,7 +194,6 @@ function createFireworks() {
   });
 }
 
-// Trigger fireworks on page load
 window.addEventListener('load', () => {
   setTimeout(() => {
     createFireworks();
