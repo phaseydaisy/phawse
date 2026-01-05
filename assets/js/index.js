@@ -192,7 +192,8 @@ function createFireworks() {
   animate();
   
   window.addEventListener('resize', () => {
- etTimeout(() => {
-    createFireworks();
-  }, 500);
-});
+    setTimeout(() => {
+      createFireworks();
+    }, 500);
+  });
+}
