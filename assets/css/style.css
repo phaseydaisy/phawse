@@ -265,6 +265,32 @@ body::after {
   color: var(--text-muted);
   max-inline-size: 500px;
   margin: 0 auto;
+  margin-block-end: var(--spacing-lg);
+}
+
+.comments-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1.5px solid var(--secondary);
+  border-radius: 100px;
+  color: var(--secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.comments-button:hover {
+  background: rgba(160, 231, 229, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(160, 231, 229, 0.2);
+}
+
+.comments-icon {
+  font-size: 1.1rem;
 }
 
 /* Links Section */
